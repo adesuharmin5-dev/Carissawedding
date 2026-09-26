@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, viewport-fit=cover">
+  <meta name="theme-color" content="#FAF8F5">
+  <title>Formulir Booking Klien — CARISSA Profesional Make Up Artist &amp; Wedding Organizer</title>
+  <link rel="icon" type="image/png" href="./logo.png" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #FAF8F5;
+      --surface: #FFFFFF;
+      --surface-subtle: #F5F1EB;
+      --text-primary: #1C1917;
+      --text-secondary: #57534E;
+      --text-muted: #78716C;
+      --accent: #9A5B3E;
+      --accent-hover: #824A30;
+      --accent-soft: #F6ECE6;
+      --border: #E7E2DA;
+      --border-strong: #D6CFC5;
+      --success: #15803D;
+      --success-bg: #F0FDF4;
+      --success-border: #BBF7D0;
+      --danger: #B91C1C;
+      --radius-lg: 16px;
+      --radius-md: 10px;
+      --radius-sm: 8px;
+      --shadow: 0 2px 12px rgba(28, 25, 23, 0.04), 0 1px 3px rgba(28, 25, 23, 0.03);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text-primary);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 24px 16px 48px;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 580px;
+    }
+
+    /* Editorial Header */
+    .header {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    .logo-box {
+      width: 64px;
+      height: 64px;
+      margin: 0 auto 12px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 6px;
+      box-shadow: var(--shadow);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .logo-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      border-radius: 10px;
+    }
+
+    .brand-eyebrow {
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 4px;
+    }
+
+    .brand-title {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: clamp(1.35rem, 4vw, 1.65rem);
+      font-weight: 700;
+      color: var(--text-primary);
+      letter-spacing: -0.01em;
+      margin-bottom: 6px;
+    }
+
+    .brand-desc {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      max-width: 440px;
+      margin: 0 auto;
+    }
+
+    /* Card */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 22px 20px;
+      margin-bottom: 16px;
+      box-shadow: var(--shadow);
+    }
+
+    @media (min-width: 640px) {
+      .card {
+        padding: 26px 28px;
+      }
+    }
+
+    .card-title {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      padding-bottom: 12px;
+      margin-bottom: 16px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    /* Segmented Category Picker */
+    .segment-group {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+
+    .segment-option {
+      position: relative;
+      cursor: pointer;
+    }
+
+    .segment-option input {
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .segment-box {
+      display: flex;
+      flex-direction: column;
+      padding: 12px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-md);
+      background: var(--surface);
+      transition: all 0.15s ease;
+    }
+
+    .segment-option input:checked + .segment-box {
+      border-color: var(--accent);
+      background: var(--accent-soft);
+    }
+
+    .segment-title {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .segment-sub {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    /* Form Controls */
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    .form-group:last-child {
+      margin-bottom: 0;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-bottom: 16px;
+    }
+
+    .form-row:last-child {
+      margin-bottom: 0;
+    }
+
+    @media (max-width: 520px) {
+      .form-row {
+        grid-template-columns: 1fr;
+        gap: 16px;
+      }
+    }
+
+    label {
+      display: block;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 6px;
+    }
+
+    .req {
+      color: var(--danger);
+      margin-left: 2px;
+    }
+
+    .opt {
+      font-weight: 400;
+      color: var(--text-muted);
+      font-size: 0.74rem;
+      margin-left: 4px;
+    }
+
+    input[type="text"],
+    input[type="tel"],
+    input[type="date"],
+    input[type="time"],
+    select,
+    textarea {
+      width: 100%;
+      background-color: var(--surface);
+      border: 1px solid var(--border-strong);
+      border-radius: var(--radius-md);
+      padding: 11px 14px;
+      font-size: 16px; /* Prevents iOS zoom on focus */
+      font-family: inherit;
+      color: var(--text-primary);
+      outline: none;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease;
+      min-height: 44px;
+    }
+
+    @media (min-width: 640px) {
+      input[type="text"],
+      input[type="tel"],
+      input[type="date"],
+      input[type="time"],
+      select,
+      textarea {
+        font-size: 0.9rem;
+      }
+    }
+
+    input::placeholder,
+    textarea::placeholder {
+      color: var(--text-muted);
+      opacity: 0.7;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(154, 91, 62, 0.12);
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 76px;
+      line-height: 1.45;
+    }
+
+    /* Terms Box */
+    .terms-box {
+      background: var(--surface-subtle);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 16px 18px;
+      margin-bottom: 20px;
+    }
+
+    .terms-heading {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-secondary);
+      margin-bottom: 8px;
+    }
+
+    .terms-list {
+      list-style: none;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 5px;
+    }
+
+    @media (min-width: 520px) {
+      .terms-list {
+        grid-template-columns: 1fr 1fr;
+        gap: 6px 16px;
+      }
+    }
+
+    .terms-list li {
+      font-size: 0.78rem;
+      color: var(--text-secondary);
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+    }
+
+    .terms-list li::before {
+      content: "•";
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    button,
+    [type="button"],
+    [type="submit"],
+    [type="reset"],
+    .btn-save {
+      display: inline-flex;
+      text-align: center !important;
+      justify-content: center !important;
+      align-items: center !important;
+    }
+
+    .segment-box {
+      display: flex;
+      text-align: center !important;
+      justify-content: center !important;
+      align-items: center !important;
+    }
+
+    /* Single Primary Save Button */
+    .btn-save {
+      width: 100%;
+      min-height: 50px;
+      padding: 14px 24px;
+      border-radius: var(--radius-md);
+      background-color: var(--accent);
+      color: #FFFFFF;
+      font-size: 0.95rem;
+      font-weight: 600;
+      font-family: inherit;
+      border: none;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      gap: 8px;
+      box-shadow: 0 2px 8px rgba(154, 91, 62, 0.22);
+      transition: background-color 0.15s ease, transform 0.1s ease;
+    }
+
+    .btn-save:hover {
+      background-color: var(--accent-hover);
+    }
+
+    .btn-save:active {
+      transform: scale(0.99);
+    }
+
+    .btn-save:disabled {
+      opacity: 0.65;
+      cursor: not-allowed;
+    }
+
+    /* Success Banner */
+    .success-banner {
+      display: none;
+      background: var(--success-bg);
+      border: 1px solid var(--success-border);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .success-banner.active {
+      display: block;
+      animation: fadeIn 0.25s ease;
+    }
+
+    .success-code {
+      display: inline-block;
+      font-family: monospace;
+      font-size: 0.82rem;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 6px;
+      background: #DCFCE7;
+      color: var(--success);
+      margin-bottom: 6px;
+    }
+
+    .success-title {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #14532D;
+      margin-bottom: 4px;
+    }
+
+    .success-desc {
+      font-size: 0.82rem;
+      color: #166534;
+    }
+
+    /* Toast */
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      background-color: var(--text-primary);
+      color: #FFFFFF;
+      padding: 11px 20px;
+      border-radius: 999px;
+      font-size: 0.84rem;
+      font-weight: 500;
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.25s ease;
+      z-index: 9999;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.18);
+      text-align: center;
+      width: max-content;
+      max-width: 92vw;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <header class="header" style="background: #FFFFFF; border: 1px solid var(--border); border-radius: var(--radius); padding: 20px 18px 18px; box-shadow: var(--shadow);">
+    <div style="text-align: center;">
+      <img src="./carissa-logo-crop.jpg" alt="CARISSA" style="width: 185px; max-width: 65%; height: auto; display: block; margin: 0 auto;" onerror="this.src='./logo.png'" />
+      <div style="font-family: 'Times New Roman', Times, serif; font-size: 0.88rem; color: #000000; margin-top: 8px; line-height: 1.5;">
+        <div>Jl. Cipasir Pancasila RT 03/09 Ds. Linggar Kec. Rancaekek Kab. Bandung</div>
+        <div style="margin-top: 2px;">Contac Person : 081394218860 (Whatsapp) IG: @carissa.weddingorganizer</div>
+      </div>
+    </div>
+    <div style="border-top: 1px solid var(--border); margin-top: 12px; padding-top: 10px;">
+      <div class="brand-eyebrow">Formulir Reservasi Resmi</div>
+      <h1 class="brand-title" style="font-size: 1.15rem; margin-bottom: 4px;">CARISSA Profesional Make Up Artist &amp; Wedding Organizer</h1>
+      <p class="brand-desc">Isi data reservasi acara Anda di bawah ini. Data akan otomatis tersimpan dan terkirim ke panel admin kami.</p>
+    </div>
+  </header>
+
+  <!-- Inline Confirmation Banner -->
+  <div id="successBanner" class="success-banner" role="status" aria-live="polite">
+    <span id="successCodeBadge" class="success-code">CMS-0000</span>
+    <h2 class="success-title">Data Booking Berhasil Disimpan</h2>
+    <p class="success-desc">Reservasi Anda telah otomatis masuk ke sistem Panel Admin CARISSA Profesional Make Up Artist &amp; Wedding Organizer.</p>
+  </div>
+
+  <form id="bookingForm" onsubmit="handleFormSubmit(event)">
+    <!-- 1. Data Klien & Jadwal -->
+    <div class="card">
+      <div class="card-title">Informasi Klien &amp; Jadwal Acara</div>
+
+      <label>Kategori Acara <span class="req">*</span></label>
+      <div class="segment-group">
+        <label class="segment-option">
+          <input type="radio" name="category" value="wedding" checked onchange="handleCategoryChange()" />
+          <span class="segment-box">
+            <span class="segment-title">Pernikahan (Wedding)</span>
+            <span class="segment-sub">Akad, Resepsi &amp; WO</span>
+          </span>
+        </label>
+        <label class="segment-option">
+          <input type="radio" name="category" value="reguler" onchange="handleCategoryChange()" />
+          <span class="segment-box">
+            <span class="segment-title">Reguler / Event</span>
+            <span class="segment-sub">Wisuda, Lamaran, Pesta</span>
+          </span>
+        </label>
+      </div>
+
+      <div class="form-group">
+        <label for="rek">Nama Pemilik Rekening (Pengirim DP) <span class="req">*</span></label>
+        <input id="rek" type="text" placeholder="Contoh: Nopa Anggraeni" required autocomplete="name" />
+      </div>
+
+      <div class="form-row" id="coupleRow">
+        <div class="form-group" id="cpwGroup">
+          <label for="cpw" id="cpwLabel">Nama Pengantin Wanita (CPW) <span class="req">*</span></label>
+          <input id="cpw" type="text" placeholder="Contoh: Nopa Anggraeni" required />
+        </div>
+        <div class="form-group" id="cppGroup">
+          <label for="cpp">Nama Pengantin Pria (CPP) <span class="opt">(Opsional)</span></label>
+          <input id="cpp" type="text" placeholder="Contoh: Recka Syaba" />
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="tanggal">Tanggal Acara <span class="req">*</span></label>
+          <input id="tanggal" type="date" required />
+        </div>
+        <div class="form-group">
+          <label for="jam">Jam Akad / Mulai Rias <span class="req">*</span></label>
+          <input id="jam" type="time" value="08:00" required />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="alamat">Alamat Lengkap Lokasi Acara <span class="req">*</span></label>
+        <textarea id="alamat" rows="2" placeholder="Nama gedung / jalan, RT/RW, desa/kelurahan, kecamatan, patokan lokasi" required></textarea>
+      </div>
+    </div>
+
+    <!-- 2. Paket & Kontak -->
+    <div class="card">
+      <div class="card-title">Paket Layanan &amp; Kontak</div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="paket">Pilihan Paket <span class="req">*</span></label>
+          <input id="paket" type="text" placeholder="Ketik nama paket sesuai kesepakatan (contoh: Meracik Cicalengka)" required />
+        </div>
+        <div class="form-group">
+          <label for="hijab">Penataan Hijab / Hairdo</label>
+          <select id="hijab">
+            <option value="Hijabdo">Hijabdo</option>
+            <option value="Hairdo">Hairdo</option>
+            <option value="Hijabdo & Hairdo">Hijabdo &amp; Hairdo</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="hp1">Nomor WhatsApp Aktif <span class="req">*</span></label>
+          <input id="hp1" type="tel" placeholder="Contoh: 089643574766" required autocomplete="tel" />
+        </div>
+        <div class="form-group">
+          <label for="hp2">Nomor HP Cadangan <span class="opt">(Opsional)</span></label>
+          <input id="hp2" type="tel" placeholder="Contoh: 083165107695" />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="ig">Akun Instagram <span class="opt">(Opsional)</span></label>
+        <input id="ig" type="text" placeholder="Contoh: @username" />
+      </div>
+    </div>
+
+    <!-- 3. Syarat & Ketentuan Singkat -->
+    <div class="terms-box">
+      <div class="terms-heading">Ketentuan Layanan Studio</div>
+      <ul class="terms-list">
+        <li>Reschedule berlaku selama jadwal masih tersedia</li>
+        <li>Pembatalan sepihak mengakibatkan DP hangus</li>
+        <li>Tidak pasang eyelash extension &amp; treatment H-7</li>
+        <li>Pelunasan maksimal H-7 (Wedding) / H-1 (Reguler)</li>
+      </ul>
+    </div>
+
+    <!-- Single Action Button: Simpan -->
+    <button type="submit" class="btn-save" id="saveBtn">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+        <polyline points="17 21 17 13 7 13 7 21"></polyline>
+        <polyline points="7 3 7 8 15 8"></polyline>
+      </svg>
+      <span id="saveBtnText">Simpan</span>
+    </button>
+  </form>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  const STORAGE_KEY_FORM = 'carisa_client_form_draft';
+  const STORAGE_KEY_BOOKINGS = 'carisa_bookings';
+  const LEGACY_STORAGE_KEY = 'carisa_mua_bookings_v1';
+  const STORAGE_KEY_PACKAGES = 'carisa_master_packages';
+
+  const DEFAULT_PACKAGES = [
+    { name: 'Paket 35jt (Wedding Complete Luxury All-In)', price: 35000000 },
+    { name: 'Paket Mahameru (Venue + Catering 200 Pax)', price: 28000000 },
+    { name: 'Paket La Maja Cicalengka (Venue + Catering 100 Pax)', price: 31500000 },
+    { name: 'Paket LPTQ (Venue + Catering 150 Pax)', price: 35000000 },
+    { name: 'Paket Selasih Cafe (Venue + Catering 250 Pax)', price: 36000000 },
+    { name: 'Paket Ganesha Cafe (Venue + Catering 250 Pax)', price: 36000000 },
+    { name: 'Paket Meracik Cicalengka (Venue + Catering 150 Pax)', price: 37000000 },
+    { name: 'Paket Kanaya Cafe (Venue + Catering 200 Pax)', price: 40000000 },
+    { name: 'Paket Ponyo Cinunuk Aula Atas (Venue + Catering 150 Pax)', price: 42000000 },
+    { name: 'Paket 20jt (Wedding Full Luxury)', price: 20000000 },
+    { name: 'Paket 15jt (Wedding Rose Gold)', price: 15000000 },
+    { name: 'Paket Lamaran / Engagement Sweet', price: 2500000 },
+    { name: 'Paket Wisuda / Graduation Glam', price: 750000 }
+  ];
+
+  let availablePackages = [...DEFAULT_PACKAGES];
+  const syncChannel = typeof BroadcastChannel !== 'undefined' ? new BroadcastChannel('carisa_booking_sync') : null;
+
+  const fieldIds = ['rek', 'cpw', 'cpp', 'tanggal', 'jam', 'alamat', 'paket', 'hijab', 'hp1', 'hp2', 'ig'];
+  const els = {};
+  fieldIds.forEach(id => els[id] = document.getElementById(id));
+
+  function showToast(message) {
+    const toast = document.getElementById('toast');
+    if (!toast) return;
+    toast.textContent = message;
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 3500);
+  }
+
+  function handleCategoryChange() {
+    const cat = document.querySelector('input[name="category"]:checked')?.value || 'wedding';
+    const cppGroup = document.getElementById('cppGroup');
+    const coupleRow = document.getElementById('coupleRow');
+    const cpwLabel = document.getElementById('cpwLabel');
+
+    if (cat === 'reguler') {
+      cppGroup.style.display = 'none';
+      coupleRow.style.gridTemplateColumns = '1fr';
+      cpwLabel.innerHTML = 'Nama Lengkap Klien <span class="req">*</span>';
+    } else {
+      cppGroup.style.display = 'block';
+      coupleRow.style.gridTemplateColumns = '';
+      cpwLabel.innerHTML = 'Nama Pengantin Wanita (CPW) <span class="req">*</span>';
+    }
+  }
+
+  function populatePackagesDatalist() {
+    try {
+      const stored = localStorage.getItem(STORAGE_KEY_PACKAGES);
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        if (Array.isArray(parsed) && parsed.length > 0) availablePackages = parsed;
+      }
+    } catch (e) {}
+
+    const datalist = document.getElementById('packageSuggestions');
+    if (!datalist) return;
+    datalist.innerHTML = '';
+    availablePackages.forEach(pkg => {
+      const opt = document.createElement('option');
+      opt.value = pkg.name;
+      datalist.appendChild(opt);
+    });
+  }
+
+  async function syncPackagesFromServer() {
+    try {
+      const res = await fetch('/api/packages');
+      if (res.ok) {
+        const data = await res.json();
+        if (Array.isArray(data.packages) && data.packages.length > 0) {
+          availablePackages = data.packages;
+          localStorage.setItem(STORAGE_KEY_PACKAGES, JSON.stringify(data.packages));
+          populatePackagesDatalist();
+        }
+      }
+    } catch (e) {}
+  }
+
+  function resolvePackagePrice(paketName, category) {
+    const clean = (paketName || '').toLowerCase().trim();
+    const matched = availablePackages.find(p => (p.name || '').toLowerCase() === clean || clean.includes((p.name || '').toLowerCase()));
+    if (matched && matched.price) return Number(matched.price);
+
+    const numMatch = clean.match(/(\d+(?:[.,]\d+)?)\s*(jt|juta|rb|ribu|k)?/);
+    if (numMatch) {
+      const val = parseFloat(numMatch[1].replace(',', '.'));
+      const unit = numMatch[2];
+      if (unit === 'jt' || unit === 'juta' || val < 100) return Math.round(val * 1000000);
+      if (unit === 'rb' || unit === 'ribu' || unit === 'k' || val < 1000) return Math.round(val * 1000);
+      return Math.round(val);
+    }
+    return category === 'reguler' ? 750000 : 20000000;
+  }
+
+  function saveDraft() {
+    const draft = {
+      category: document.querySelector('input[name="category"]:checked')?.value || 'wedding'
+    };
+    fieldIds.forEach(id => {
+      if (els[id]) draft[id] = els[id].value;
+    });
+    try {
+      localStorage.setItem(STORAGE_KEY_FORM, JSON.stringify(draft));
+    } catch (e) {}
+  }
+
+  function loadDraft() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY_FORM);
+      if (!raw) return;
+      const draft = JSON.parse(raw);
+      if (draft.category) {
+        const radio = document.querySelector(`input[name="category"][value="${draft.category}"]`);
+        if (radio) radio.checked = true;
+      }
+      fieldIds.forEach(id => {
+        if (draft[id] !== undefined && els[id]) {
+          els[id].value = draft[id];
+        }
+      });
+      handleCategoryChange();
+    } catch (e) {}
+  }
+
+  fieldIds.forEach(id => {
+    if (els[id]) {
+      els[id].addEventListener('input', saveDraft);
+      els[id].addEventListener('change', saveDraft);
+    }
+  });
+
+  async function handleFormSubmit(e) {
+    e.preventDefault();
+    const saveBtn = document.getElementById('saveBtn');
+    const saveBtnText = document.getElementById('saveBtnText');
+
+    const category = document.querySelector('input[name="category"]:checked')?.value || 'wedding';
+    const eventDate = els.tanggal.value || new Date().toISOString().split('T')[0];
+    const dateCode = eventDate.replace(/-/g, '');
+    const packageName = els.paket.value.trim() || (category === 'reguler' ? 'Paket Reguler' : 'Paket Wedding');
+    const totalPrice = resolvePackagePrice(packageName, category);
+    const defaultDp = category === 'reguler' ? Math.min(250000, totalPrice) : Math.min(5000000, totalPrice);
+
+    const hp1 = els.hp1.value.trim();
+    const hp2 = els.hp2.value.trim();
+    const combinedPhone = hp2 ? `${hp1} / ${hp2}` : hp1;
+
+    const newBooking = {
+      id: 'booking_' + Date.now(),
+      booking_code: `CMS-${dateCode}-${Math.floor(1000 + Math.random() * 9000)}`,
+      category: category,
+      account_name: els.rek.value.trim() || '-',
+      client_cpw: els.cpw.value.trim() || '-',
+      client_cpp: category === 'wedding' ? (els.cpp.value.trim() || '-') : '',
+      address: els.alamat.value.trim() || '-',
+      event_date: eventDate,
+      event_time: els.jam.value || '08:00',
+      package_name: packageName,
+      total_price: totalPrice,
+      dp_amount: defaultDp,
+      payment_status: 'dp',
+      hair_style: els.hijab.value || 'Hijabdo',
+      instagram: els.ig.value.trim().replace(/^@/, '') || '-',
+      phone: combinedPhone || '-',
+      phone2: hp2 || '',
+      source: 'client_form',
+      created_at: new Date().toISOString()
+    };
+
+    if (saveBtn) saveBtn.disabled = true;
+    if (saveBtnText) saveBtnText.textContent = 'Menyimpan...';
+
+    // 1. Save to LocalStorage for instant sharing with Admin Panel on same browser/device
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY_BOOKINGS) || localStorage.getItem(LEGACY_STORAGE_KEY) || '[]';
+      const list = JSON.parse(raw);
+      list.unshift(newBooking);
+      localStorage.setItem(STORAGE_KEY_BOOKINGS, JSON.stringify(list));
+      localStorage.setItem(LEGACY_STORAGE_KEY, JSON.stringify(list));
+      localStorage.setItem('bookings', JSON.stringify(list));
+      localStorage.setItem('carisa_last_client_submission', JSON.stringify({
+        booking: newBooking,
+        timestamp: Date.now()
+      }));
+    } catch (err) {}
+
+    // 2. Broadcast real-time event to any open Admin Panel tab
+    try {
+      if (syncChannel) {
+        syncChannel.postMessage({ type: 'NEW_CLIENT_BOOKING', booking: newBooking });
+      }
+    } catch (err) {}
+
+    // 3. Send to Backend API Server (/api/bookings) if running
+    try {
+      await fetch('/api/bookings', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newBooking)
+      });
+    } catch (err) {}
+
+    // 4. Clear form & show confirmation
+    try {
+      localStorage.removeItem(STORAGE_KEY_FORM);
+    } catch (err) {}
+
+    document.getElementById('bookingForm').reset();
+    els.jam.value = '08:00';
+    handleCategoryChange();
+
+    const banner = document.getElementById('successBanner');
+    const codeBadge = document.getElementById('successCodeBadge');
+    if (codeBadge) codeBadge.textContent = newBooking.booking_code;
+    if (banner) {
+      banner.classList.add('active');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    if (saveBtn) saveBtn.disabled = false;
+    if (saveBtnText) saveBtnText.textContent = 'Simpan';
+
+    showToast('Data booking berhasil disimpan dan dikirim ke Admin');
+  }
+
+  populatePackagesDatalist();
+  loadDraft();
+  syncPackagesFromServer();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,14 @@
+{
+  "name": "carisa-makeup-booking-api",
+  "version": "2.0.0",
+  "description": "Fullstack Booking, Calendar & Reminder System for Carisa Makeup Artistry",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.19.2"
+  }
+}

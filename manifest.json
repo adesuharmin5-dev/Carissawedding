@@ -1,0 +1,17 @@
+{
+  "name": "CARISSA PROFESIONAL MAKE UP ARTIST & WEDDING ORGANIZER",
+  "short_name": "Carissa MUA & WO",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#fff5f8",
+  "theme_color": "#f472b6",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "./logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
