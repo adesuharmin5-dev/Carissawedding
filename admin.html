@@ -119,25 +119,330 @@
       flex-shrink: 0;
     }
 
-    /* Anti-Slop Unified Button System */
+    /* ============================================================ */
+    /* ANTI-SLOP HARMONIOUS LUXURY BUTTON SYSTEM                     */
+    /* Palette designed to perfectly match Terracotta (#9A5B3E)     */
+    /* ============================================================ */
+
+    /* 1. Terracotta Brand (Primary creation & confirm) */
     .btn-primary {
       height: 38px;
       padding: 0 16px;
       border-radius: 10px;
       background-color: #9A5B3E;
       color: #FFFFFF;
-      border: 1px solid #9A5B3E;
+      border: 1px solid #884A2E;
       font-size: 12px;
       font-weight: 600;
       white-space: nowrap;
       gap: 6px;
-      transition: background-color 0.15s ease, border-color 0.15s ease;
+      box-shadow: 0 1.5px 3px rgba(154, 91, 62, 0.2);
+      transition: all 0.15s ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
     }
     .btn-primary:hover {
       background-color: #824A30;
-      border-color: #824A30;
+      border-color: #723E25;
+      transform: translateY(-0.5px);
+      box-shadow: 0 3px 8px rgba(154, 91, 62, 0.28);
+    }
+    .btn-primary:active {
+      transform: translateY(0);
     }
 
+    .btn-terracotta-soft {
+      height: 38px;
+      padding: 0 14px;
+      border-radius: 10px;
+      background-color: #FBF4F0;
+      color: #9A5B3E;
+      border: 1px solid #EADBCE;
+      font-size: 12px;
+      font-weight: 600;
+      white-space: nowrap;
+      gap: 6px;
+      transition: all 0.15s ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+    .btn-terracotta-soft:hover {
+      background-color: #F5EAE4;
+      border-color: #D8C2B3;
+      color: #824A30;
+      transform: translateY(-0.5px);
+    }
+
+    /* 2. Forest Emerald (Finance, WhatsApp, Transfer & Lunas) */
+    .btn-emerald {
+      height: 38px;
+      padding: 0 16px;
+      border-radius: 10px;
+      background-color: #15803D;
+      color: #FFFFFF;
+      border: 1px solid #166534;
+      font-size: 12px;
+      font-weight: 600;
+      white-space: nowrap;
+      gap: 6px;
+      box-shadow: 0 1.5px 3px rgba(21, 128, 61, 0.2);
+      transition: all 0.15s ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+    .btn-emerald:hover {
+      background-color: #166534;
+      border-color: #14532D;
+      transform: translateY(-0.5px);
+      box-shadow: 0 3px 8px rgba(21, 128, 61, 0.28);
+    }
+    .btn-emerald:active {
+      transform: translateY(0);
+    }
+
+    .btn-emerald-soft {
+      height: 38px;
+      padding: 0 14px;
+      border-radius: 10px;
+      background-color: #F0FDF4;
+      color: #15803D;
+      border: 1px solid #BBF7D0;
+      font-size: 12px;
+      font-weight: 600;
+      white-space: nowrap;
+      gap: 6px;
+      transition: all 0.15s ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+    .btn-emerald-soft:hover {
+      background-color: #DCFCE7;
+      border-color: #86EFAC;
+      color: #14532D;
+      transform: translateY(-0.5px);
+    }
+
+    /* 3. Honey Amber / Ochre Gold (Fitting Busana & Wardrobe) */
+    .btn-amber {
+      height: 38px;
+      padding: 0 16px;
+      border-radius: 10px;
+      background-color: #B45309;
+      color: #FFFFFF;
+      border: 1px solid #92400E;
+      font-size: 12px;
+      font-weight: 600;
+      white-space: nowrap;
+      gap: 6px;
+      box-shadow: 0 1.5px 3px rgba(180, 83, 9, 0.2);
+      transition: all 0.15s ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+    .btn-amber:hover {
+      background-color: #92400E;
+      border-color: #78350F;
+      transform: translateY(-0.5px);
+      box-shadow: 0 3px 8px rgba(180, 83, 9, 0.28);
+    }
+    .btn-amber:active {
+      transform: translateY(0);
+    }
+
+    .btn-amber-soft {
+      height: 38px;
+      padding: 0 14px;
+      border-radius: 10px;
+      background-color: #FFFBEB;
+      color: #92400E;
+      border: 1px solid #FDE68A;
+      font-size: 12px;
+      font-weight: 600;
+      white-space: nowrap;
+      gap: 6px;
+      transition: all 0.15s ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+    .btn-amber-soft:hover {
+      background-color: #FEF3C7;
+      border-color: #FCD34D;
+      color: #78350F;
+      transform: translateY(-0.5px);
+    }
+
+    /* 4. Midnight Indigo (Calendar, Agenda, Google Calendar v3) */
+    .btn-indigo {
+      height: 38px;
+      padding: 0 16px;
+      border-radius: 10px;
+      background-color: #1E3A8A;
+      color: #FFFFFF;
+      border: 1px solid #172554;
+      font-size: 12px;
+      font-weight: 600;
+      white-space: nowrap;
+      gap: 6px;
+      box-shadow: 0 1.5px 3px rgba(30, 58, 138, 0.2);
+      transition: all 0.15s ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+    .btn-indigo:hover {
+      background-color: #1E40AF;
+      border-color: #1E3A8A;
+      transform: translateY(-0.5px);
+      box-shadow: 0 3px 8px rgba(30, 58, 138, 0.28);
+    }
+    .btn-indigo:active {
+      transform: translateY(0);
+    }
+
+    .btn-indigo-soft {
+      height: 38px;
+      padding: 0 14px;
+      border-radius: 10px;
+      background-color: #EFF6FF;
+      color: #1E40AF;
+      border: 1px solid #BFDBFE;
+      font-size: 12px;
+      font-weight: 600;
+      white-space: nowrap;
+      gap: 6px;
+      transition: all 0.15s ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+    .btn-indigo-soft:hover {
+      background-color: #DBEAFE;
+      border-color: #93C5FD;
+      color: #172554;
+      transform: translateY(-0.5px);
+    }
+
+    /* 5. Deep Teal (Synchronization, Cloud Backup, WO Events) */
+    .btn-teal {
+      height: 38px;
+      padding: 0 16px;
+      border-radius: 10px;
+      background-color: #0F766E;
+      color: #FFFFFF;
+      border: 1px solid #115E59;
+      font-size: 12px;
+      font-weight: 600;
+      white-space: nowrap;
+      gap: 6px;
+      box-shadow: 0 1.5px 3px rgba(15, 118, 110, 0.2);
+      transition: all 0.15s ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+    .btn-teal:hover {
+      background-color: #115E59;
+      border-color: #134E4A;
+      transform: translateY(-0.5px);
+      box-shadow: 0 3px 8px rgba(15, 118, 110, 0.28);
+    }
+    .btn-teal:active {
+      transform: translateY(0);
+    }
+
+    .btn-teal-soft {
+      height: 38px;
+      padding: 0 14px;
+      border-radius: 10px;
+      background-color: #F0FDFA;
+      color: #0F766E;
+      border: 1px solid #99F6E4;
+      font-size: 12px;
+      font-weight: 600;
+      white-space: nowrap;
+      gap: 6px;
+      transition: all 0.15s ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+    .btn-teal-soft:hover {
+      background-color: #CCFBF1;
+      border-color: #5EEAD4;
+      color: #115E59;
+      transform: translateY(-0.5px);
+    }
+
+    /* 6. Rose Wine / Velvet Crimson (Logout, Delete, Reset, Danger) */
+    .btn-danger {
+      height: 38px;
+      padding: 0 16px;
+      border-radius: 10px;
+      background-color: #BE123C;
+      color: #FFFFFF;
+      border: 1px solid #9F1239;
+      font-size: 12px;
+      font-weight: 600;
+      white-space: nowrap;
+      gap: 6px;
+      box-shadow: 0 1.5px 3px rgba(190, 18, 60, 0.2);
+      transition: all 0.15s ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+    .btn-danger:hover {
+      background-color: #9F1239;
+      border-color: #881337;
+      transform: translateY(-0.5px);
+      box-shadow: 0 3px 8px rgba(190, 18, 60, 0.28);
+    }
+    .btn-danger:active {
+      transform: translateY(0);
+    }
+
+    .btn-danger-outline {
+      height: 38px;
+      padding: 0 14px;
+      border-radius: 10px;
+      background-color: #FFF1F2;
+      color: #BE123C;
+      border: 1px solid #FECDD3;
+      font-size: 12px;
+      font-weight: 600;
+      white-space: nowrap;
+      gap: 6px;
+      transition: all 0.15s ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+    .btn-danger-outline:hover {
+      background-color: #FFE4E6;
+      border-color: #FDA4AF;
+      color: #9F1239;
+      transform: translateY(-0.5px);
+    }
+
+    /* 7. Classic Neutral White */
     .btn-secondary {
       height: 38px;
       padding: 0 14px;
@@ -149,12 +454,18 @@
       font-weight: 600;
       white-space: nowrap;
       gap: 6px;
-      transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+      box-shadow: 0 1px 2px rgba(28, 25, 23, 0.03);
+      transition: all 0.15s ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
     }
     .btn-secondary:hover {
       background-color: #FAF8F5;
       border-color: #D6CFC5;
       color: #1C1917;
+      transform: translateY(-0.5px);
     }
 
     .btn-dark {
@@ -168,30 +479,17 @@
       font-weight: 600;
       white-space: nowrap;
       gap: 6px;
-      transition: background-color 0.15s ease, border-color 0.15s ease;
+      box-shadow: 0 1.5px 3px rgba(28, 25, 23, 0.2);
+      transition: all 0.15s ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
     }
     .btn-dark:hover {
       background-color: #292524;
       border-color: #292524;
-    }
-
-    .btn-danger-outline {
-      height: 38px;
-      padding: 0 14px;
-      border-radius: 10px;
-      background-color: #FFFFFF;
-      color: #E11D48;
-      border: 1px solid #E7E2DA;
-      font-size: 12px;
-      font-weight: 600;
-      white-space: nowrap;
-      gap: 6px;
-      transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
-    }
-    .btn-danger-outline:hover {
-      background-color: #FFF1F2;
-      border-color: #FECDD3;
-      color: #BE123C;
+      transform: translateY(-0.5px);
     }
 
     .btn-sm {
@@ -210,7 +508,11 @@
       background-color: #FFFFFF;
       color: #44403C;
       border: 1px solid #E7E2DA;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
       transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+      cursor: pointer;
     }
     .btn-icon:hover {
       background-color: #FAF8F5;
@@ -223,15 +525,19 @@
       height: 32px;
       padding: 0;
       border-radius: 8px;
-      background-color: #FFFFFF;
-      color: #E11D48;
-      border: 1px solid #E7E2DA;
+      background-color: #FFF1F2;
+      color: #BE123C;
+      border: 1px solid #FECDD3;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
       transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+      cursor: pointer;
     }
     .btn-icon-danger:hover {
-      background-color: #FFF1F2;
-      border-color: #FECDD3;
-      color: #BE123C;
+      background-color: #FFE4E6;
+      border-color: #FDA4AF;
+      color: #9F1239;
     }
 
     /* Proportional SVG icon sizing across all buttons */
@@ -243,8 +549,18 @@
     }
 
     .btn-primary svg,
+    .btn-emerald svg,
+    .btn-emerald-soft svg,
+    .btn-amber svg,
+    .btn-amber-soft svg,
+    .btn-indigo svg,
+    .btn-indigo-soft svg,
+    .btn-teal svg,
+    .btn-teal-soft svg,
+    .btn-terracotta-soft svg,
     .btn-secondary svg,
     .btn-dark svg,
+    .btn-danger svg,
     .btn-danger-outline svg {
       width: 15px !important;
       height: 15px !important;
@@ -524,8 +840,8 @@
             </select>
           </div>
 
-          <a href="./booking.html" target="_blank" title="Buka Form Klien" class="btn-secondary btn-sm">
-            <i data-lucide="external-link" class="text-terracotta-600"></i>
+          <a href="./booking.html" target="_blank" title="Buka Form Klien" class="btn-terracotta-soft btn-sm">
+            <i data-lucide="external-link"></i>
             <span class="hidden md:inline">Form Klien</span>
           </a>
 
@@ -571,21 +887,21 @@
             </p>
           </div>
 
-          <!-- Quick Action Buttons -->
+          <!-- Quick Action Buttons with Harmonious Luxury Palette -->
           <div class="flex flex-wrap items-center gap-2">
             <button type="button" onclick="openBookingModal()" class="btn-primary">
               <i data-lucide="plus-circle" class="w-4 h-4"></i>
               <span>+ Booking Baru</span>
             </button>
-            <button type="button" onclick="switchAdminTab('calendar')" class="btn-secondary">
+            <button type="button" onclick="switchAdminTab('calendar')" class="btn-indigo-soft">
               <i data-lucide="calendar" class="w-4 h-4"></i>
               <span>Jadwal Kalender</span>
             </button>
-            <button type="button" onclick="switchAdminTab('fitting')" class="btn-secondary">
+            <button type="button" onclick="switchAdminTab('fitting')" class="btn-amber-soft">
               <i data-lucide="scissors" class="w-4 h-4"></i>
               <span>Fitting Busana</span>
             </button>
-            <button type="button" onclick="syncWithBackendServer()" class="btn-secondary" title="Perbarui Data dari Server">
+            <button type="button" onclick="syncWithBackendServer()" class="btn-teal-soft" title="Perbarui Data dari Server">
               <i data-lucide="refresh-cw" class="w-4 h-4"></i>
               <span>Sinkron</span>
             </button>
@@ -776,49 +1092,49 @@
 
             <!-- 2 Clickable Shortcut Cards -->
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-              <!-- Shortcut 1: Fitting Busana -->
-              <div onclick="switchAdminTab('fitting')" class="p-3 rounded-xl border border-stone-200 hover:border-terracotta-600 hover:bg-[#FAF8F5] transition cursor-pointer group flex flex-col justify-between space-y-2">
+              <!-- Shortcut 1: Fitting Busana (Honey Amber Palette) -->
+              <div onclick="switchAdminTab('fitting')" class="p-3 rounded-xl border border-stone-200 hover:border-amber-500 hover:bg-[#FFFDF9] transition cursor-pointer group flex flex-col justify-between space-y-2">
                 <div class="flex items-start justify-between">
-                  <div class="w-7 h-7 rounded-lg bg-terracotta-50 text-terracotta-700 border border-terracotta-200 flex items-center justify-center flex-shrink-0 group-hover:bg-terracotta-600 group-hover:text-white transition">
+                  <div class="w-7 h-7 rounded-lg bg-amber-50 text-amber-700 border border-amber-200 flex items-center justify-center flex-shrink-0 group-hover:bg-amber-600 group-hover:text-white transition">
                     <i data-lucide="scissors" class="w-3.5 h-3.5"></i>
                   </div>
-                  <span class="text-[10px] font-medium text-stone-400 group-hover:text-terracotta-600 transition flex items-center gap-0.5">
+                  <span class="text-[10px] font-medium text-stone-400 group-hover:text-amber-700 transition flex items-center gap-0.5">
                     Buka <i data-lucide="arrow-right" class="w-3 h-3"></i>
                   </span>
                 </div>
                 <div>
-                  <h4 class="font-bold text-xs text-stone-900 group-hover:text-terracotta-800 transition">Fitting Busana</h4>
+                  <h4 class="font-bold text-xs text-stone-900 group-hover:text-amber-900 transition">Fitting Busana</h4>
                   <p class="text-[11px] text-stone-500 line-clamp-2 mt-0.5 leading-snug">
                     Jadwal &amp; ukuran gaun pengantin, orang tua &amp; rombongan.
                   </p>
                 </div>
                 <div class="pt-1.5 border-t border-stone-100 flex items-center justify-between text-[11px]">
                   <span class="text-stone-400 font-medium">Jadwal Busana</span>
-                  <button type="button" onclick="event.stopPropagation(); openFittingModal();" class="text-terracotta-700 font-bold hover:underline flex items-center gap-0.5">
+                  <button type="button" onclick="event.stopPropagation(); openFittingModal();" class="px-2 py-0.5 rounded-md bg-amber-50 text-amber-800 border border-amber-200 text-[11px] font-bold hover:bg-amber-100 transition flex items-center gap-0.5">
                     <i data-lucide="plus" class="w-3 h-3"></i> Input Baru
                   </button>
                 </div>
               </div>
 
-              <!-- Shortcut 2: Rekanan Vendor -->
-              <div onclick="switchAdminTab('vendor')" class="p-3 rounded-xl border border-stone-200 hover:border-terracotta-600 hover:bg-[#FAF8F5] transition cursor-pointer group flex flex-col justify-between space-y-2">
+              <!-- Shortcut 2: Rekanan Vendor (Forest Emerald Palette) -->
+              <div onclick="switchAdminTab('vendor')" class="p-3 rounded-xl border border-stone-200 hover:border-emerald-500 hover:bg-[#F9FCFA] transition cursor-pointer group flex flex-col justify-between space-y-2">
                 <div class="flex items-start justify-between">
-                  <div class="w-7 h-7 rounded-lg bg-stone-100 text-stone-700 border border-stone-200 flex items-center justify-center flex-shrink-0 group-hover:bg-stone-900 group-hover:text-white transition">
+                  <div class="w-7 h-7 rounded-lg bg-emerald-50 text-emerald-700 border border-emerald-200 flex items-center justify-center flex-shrink-0 group-hover:bg-emerald-600 group-hover:text-white transition">
                     <i data-lucide="landmark" class="w-3.5 h-3.5"></i>
                   </div>
-                  <span class="text-[10px] font-medium text-stone-400 group-hover:text-terracotta-600 transition flex items-center gap-0.5">
+                  <span class="text-[10px] font-medium text-stone-400 group-hover:text-emerald-700 transition flex items-center gap-0.5">
                     Buka <i data-lucide="arrow-right" class="w-3 h-3"></i>
                   </span>
                 </div>
                 <div>
-                  <h4 class="font-bold text-xs text-stone-900 group-hover:text-terracotta-800 transition">Rekanan Vendor</h4>
+                  <h4 class="font-bold text-xs text-stone-900 group-hover:text-emerald-900 transition">Rekanan Vendor</h4>
                   <p class="text-[11px] text-stone-500 line-clamp-2 mt-0.5 leading-snug">
                     Transfer dekorasi, foto/video, MC, tenda, sound &amp; WO.
                   </p>
                 </div>
                 <div class="pt-1.5 border-t border-stone-100 flex items-center justify-between text-[11px]">
                   <span class="text-stone-400 font-medium">Data Transfer</span>
-                  <button type="button" onclick="event.stopPropagation(); openVendorTransferModal();" class="text-terracotta-700 font-bold hover:underline flex items-center gap-0.5">
+                  <button type="button" onclick="event.stopPropagation(); openVendorTransferModal();" class="px-2 py-0.5 rounded-md bg-emerald-50 text-emerald-800 border border-emerald-200 text-[11px] font-bold hover:bg-emerald-100 transition flex items-center gap-0.5">
                     <i data-lucide="plus" class="w-3 h-3"></i> Input Transfer
                   </button>
                 </div>
@@ -827,12 +1143,12 @@
 
             <!-- Bottom Action Row -->
             <div class="pt-2 border-t border-stone-100 flex items-center gap-2 text-xs">
-              <button type="button" onclick="switchAdminTab('fitting')" class="btn-secondary btn-sm flex-1">
-                <i data-lucide="scissors" class="w-3.5 h-3.5 text-terracotta-600"></i>
+              <button type="button" onclick="switchAdminTab('fitting')" class="btn-amber-soft btn-sm flex-1">
+                <i data-lucide="scissors" class="w-3.5 h-3.5"></i>
                 <span>Menu Fitting</span>
               </button>
-              <button type="button" onclick="switchAdminTab('vendor')" class="btn-secondary btn-sm flex-1">
-                <i data-lucide="landmark" class="w-3.5 h-3.5 text-terracotta-600"></i>
+              <button type="button" onclick="switchAdminTab('vendor')" class="btn-emerald-soft btn-sm flex-1">
+                <i data-lucide="landmark" class="w-3.5 h-3.5"></i>
                 <span>Menu Vendor</span>
               </button>
             </div>
@@ -957,19 +1273,19 @@
             </p>
           </div>
           <div class="flex flex-wrap items-center gap-2">
-            <button type="button" onclick="syncAllToGoogleCalendarApiV3(true)" class="btn-primary btn-sm">
+            <button type="button" onclick="syncAllToGoogleCalendarApiV3(true)" class="btn-indigo btn-sm">
               <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
               <span>Sinkronkan API v3</span>
             </button>
-            <button type="button" onclick="openGcalApiModal('freebusy')" class="btn-secondary btn-sm">
-              <i data-lucide="clock" class="w-3.5 h-3.5 text-terracotta-600"></i>
+            <button type="button" onclick="openGcalApiModal('freebusy')" class="btn-indigo-soft btn-sm">
+              <i data-lucide="clock" class="w-3.5 h-3.5 text-blue-600"></i>
               <span>Cek FreeBusy</span>
             </button>
-            <button type="button" onclick="openGcalApiModal('acl')" class="btn-secondary btn-sm">
+            <button type="button" onclick="openGcalApiModal('acl')" class="btn-indigo-soft btn-sm">
               <i data-lucide="shield-check" class="w-3.5 h-3.5 text-blue-600"></i>
               <span>ACL Akses</span>
             </button>
-            <button type="button" onclick="openGcalApiModal('events')" class="btn-dark btn-sm">
+            <button type="button" onclick="openGcalApiModal('events')" class="btn-indigo btn-sm">
               <i data-lucide="layers" class="w-3.5 h-3.5"></i>
               <span>Explorer 8 Resource API v3</span>
             </button>
@@ -983,8 +1299,8 @@
               <i data-lucide="Zap" class="w-3.5 h-3.5 text-terracotta-600 absolute left-3 top-1/2 -translate-y-1/2"></i>
               <input type="text" id="gcal-quickadd-input" placeholder="Events.quickAdd — Ketik jadwal cepat (contoh: Fitting Kebaya Nopa 2026-12-20 10:00)..." class="w-full pl-8 pr-3 py-2 rounded-xl border border-stone-200 bg-[#FAF8F5] text-xs focus:outline-none focus:bg-white focus:border-terracotta-600" />
             </div>
-            <button type="submit" class="btn-secondary btn-sm whitespace-nowrap">
-              <i data-lucide="plus-circle" class="w-3.5 h-3.5 text-terracotta-600"></i>
+            <button type="submit" class="btn-indigo-soft btn-sm whitespace-nowrap">
+              <i data-lucide="plus-circle" class="w-3.5 h-3.5 text-blue-600"></i>
               <span>Quick Add (API v3)</span>
             </button>
           </form>
@@ -1019,7 +1335,7 @@
               <i data-lucide="calendar-plus"></i>
               <span>Tambah Jadwal</span>
             </button>
-            <button type="button" onclick="exportAllToGoogleCalendarICS()" class="btn-secondary btn-sm">
+            <button type="button" onclick="exportAllToGoogleCalendarICS()" class="btn-indigo-soft btn-sm">
               <i data-lucide="download"></i>
               <span>Export .ICS</span>
             </button>
@@ -1103,11 +1419,11 @@
             <h2 class="font-serif text-lg sm:text-xl font-bold text-stone-900">Data Fitting Busana</h2>
           </div>
           <div class="flex flex-wrap items-center gap-2">
-            <button onclick="exportEntourageToPDF()" class="btn-secondary">
-              <i data-lucide="file-check-2" class="text-terracotta-600"></i>
+            <button onclick="exportEntourageToPDF()" class="btn-amber-soft">
+              <i data-lucide="file-check-2"></i>
               <span>Download PDF Fitting</span>
             </button>
-            <button onclick="openFittingModal()" class="btn-primary">
+            <button onclick="openFittingModal()" class="btn-amber">
               <i data-lucide="shirt"></i>
               <span>Input Fitting Baru</span>
             </button>
@@ -1186,15 +1502,15 @@
             <p class="text-xs text-stone-500">Catat dan kelola data transfer pembayaran ke vendor berdasarkan kategori Data Bookingan atau Data WO.</p>
           </div>
           <div class="flex flex-wrap items-center gap-2">
-            <button onclick="openWoEventsModal()" class="btn-secondary">
-              <i data-lucide="folder-kanban" class="text-terracotta-600"></i>
+            <button onclick="openWoEventsModal()" class="btn-teal-soft">
+              <i data-lucide="folder-kanban"></i>
               <span>Daftar Data WO</span>
             </button>
-            <button onclick="exportVendorTransfersPDF()" class="btn-secondary">
-              <i data-lucide="file-check-2" class="text-terracotta-600"></i>
+            <button onclick="exportVendorTransfersPDF()" class="btn-emerald-soft">
+              <i data-lucide="file-check-2"></i>
               <span>Download PDF Vendor</span>
             </button>
-            <button onclick="openVendorTransferModal()" class="btn-primary">
+            <button onclick="openVendorTransferModal()" class="btn-emerald">
               <i data-lucide="wallet-cards"></i>
               <span>Input Data Transfer</span>
             </button>
@@ -1299,8 +1615,8 @@
             <h2 class="font-serif text-lg sm:text-xl font-bold text-stone-900">Katalog Price List &amp; Paket</h2>
           </div>
           <div class="flex flex-wrap items-center gap-2">
-            <button onclick="exportPricelistToPDF()" class="btn-secondary">
-              <i data-lucide="file-check-2" class="text-terracotta-600"></i>
+            <button onclick="exportPricelistToPDF()" class="btn-terracotta-soft">
+              <i data-lucide="file-check-2"></i>
               <span id="btn-download-pdf-pricelist-label">Download PDF Pricelist</span>
             </button>
             <button onclick="openAddPackageModal()" class="btn-primary">
@@ -1370,6 +1686,16 @@
             <h2 class="font-serif font-bold text-stone-900 text-lg">Status DP &amp; Rekapitulasi Pembayaran</h2>
             <p class="text-xs text-stone-500">Perbarui status pembayaran klien dan cetak kwitansi/invoice resmi.</p>
           </div>
+          <div class="flex items-center gap-2">
+            <button type="button" onclick="exportBookingsToCSV()" class="btn-emerald-soft btn-sm">
+              <i data-lucide="file-spreadsheet"></i>
+              <span>Ekspor CSV</span>
+            </button>
+            <button type="button" onclick="window.print()" class="btn-emerald btn-sm">
+              <i data-lucide="printer"></i>
+              <span>Cetak Rekap</span>
+            </button>
+          </div>
         </div>
 
         <div class="overflow-x-auto custom-scrollbar">
@@ -1405,7 +1731,7 @@
             <p class="text-xs text-stone-500 mt-0.5">Atur menu apa saja yang muncul di bilah navigasi untuk setiap Role pengguna.</p>
           </div>
           <div class="flex flex-wrap items-center gap-2">
-            <button onclick="resetRolesToDefault()" class="btn-secondary">
+            <button onclick="resetRolesToDefault()" class="btn-danger-outline">
               <i data-lucide="rotate-ccw"></i>
               <span>Reset Default</span>
             </button>
@@ -1593,12 +1919,12 @@
           <p class="text-xs text-stone-500">Unduh salinan seluruh data booking, fitting, pricelist, dan pengaturan role.</p>
         </div>
         <div class="flex flex-wrap gap-2.5">
-          <button onclick="backupDataJSON()" class="btn-dark">
+          <button onclick="backupDataJSON()" class="btn-teal">
             <i data-lucide="download"></i>
             <span>Download Backup JSON</span>
           </button>
-          <label class="btn-secondary cursor-pointer">
-            <i data-lucide="upload" class="text-terracotta-600"></i>
+          <label class="btn-teal-soft cursor-pointer">
+            <i data-lucide="upload"></i>
             <span>Restore dari File JSON</span>
             <input type="file" id="restore-file-input" accept=".json" onchange="restoreDataJSON(event)" class="hidden" />
           </label>
@@ -1650,7 +1976,7 @@
           Status: <strong class="text-emerald-700">Tersinkron Otomatis</strong> (Booking Hari-H, Reminder H-7 &amp; H-1 Wedding, Super Admin &amp; Fitting)
         </div>
         <div class="flex items-center gap-2">
-          <button type="button" onclick="syncAllToGoogleCalendarApiV3(true)" class="btn-primary btn-sm">
+          <button type="button" onclick="syncAllToGoogleCalendarApiV3(true)" class="btn-indigo btn-sm">
             <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
             <span>Sinkronkan Ulang Sekarang</span>
           </button>
@@ -1893,7 +2219,7 @@
                 <span class="px-2.5 py-0.5 rounded-md bg-amber-100 text-amber-900 border border-amber-200 font-bold text-[10px] uppercase tracking-wider">Versi 1 — Akad</span>
                 <label class="font-bold text-stone-800 uppercase tracking-wider text-[11px]">Daftar Item Busana Fitting (Akad)</label>
               </div>
-              <button type="button" onclick="addSimpleFittingRow({ session_type: 'Akad' }, 'Akad', true)" id="btn-add-fit-row" class="btn-dark btn-sm">
+              <button type="button" onclick="addSimpleFittingRow({ session_type: 'Akad' }, 'Akad', true)" id="btn-add-fit-row" class="btn-amber-soft btn-sm">
                 <i data-lucide="plus"></i>
                 <span>Tambah Baris Akad</span>
               </button>
@@ -1904,7 +2230,7 @@
             </div>
 
             <div id="wrap-bottom-add-akad" class="pt-1">
-              <button type="button" onclick="addSimpleFittingRow({ session_type: 'Akad' }, 'Akad', true)" class="w-full py-2.5 px-4 rounded-xl border border-dashed border-stone-300 hover:border-stone-800 bg-[#FAF8F5] hover:bg-stone-100 text-stone-800 font-semibold text-xs flex items-center justify-center gap-1.5 transition">
+              <button type="button" onclick="addSimpleFittingRow({ session_type: 'Akad' }, 'Akad', true)" class="w-full py-2.5 px-4 rounded-xl border border-dashed border-stone-300 hover:border-amber-600 bg-[#FAF8F5] hover:bg-amber-50/50 text-stone-800 font-semibold text-xs flex items-center justify-center gap-1.5 transition">
                 <i data-lucide="plus" class="w-4 h-4"></i>
                 <span>Tambah Baris Akad di Bawah</span>
               </button>
@@ -1918,7 +2244,7 @@
                 <span class="px-2.5 py-0.5 rounded-md bg-rose-100 text-rose-900 border border-rose-200 font-bold text-[10px] uppercase tracking-wider">Versi 2 — Resepsi</span>
                 <label class="font-bold text-stone-800 uppercase tracking-wider text-[11px]">Daftar Item Busana Fitting (Resepsi)</label>
               </div>
-              <button type="button" onclick="addSimpleFittingRow({ session_type: 'Resepsi' }, 'Resepsi', true)" id="btn-add-fit-row-resepsi" class="btn-primary btn-sm">
+              <button type="button" onclick="addSimpleFittingRow({ session_type: 'Resepsi' }, 'Resepsi', true)" id="btn-add-fit-row-resepsi" class="btn-amber-soft btn-sm">
                 <i data-lucide="plus"></i>
                 <span>Tambah Baris Resepsi</span>
               </button>
@@ -1929,7 +2255,7 @@
             </div>
 
             <div id="wrap-bottom-add-resepsi" class="pt-1">
-              <button type="button" onclick="addSimpleFittingRow({ session_type: 'Resepsi' }, 'Resepsi', true)" class="w-full py-2.5 px-4 rounded-xl border border-dashed border-terracotta-300 hover:border-terracotta-600 bg-terracotta-50/40 hover:bg-terracotta-50 text-terracotta-800 font-semibold text-xs flex items-center justify-center gap-1.5 transition">
+              <button type="button" onclick="addSimpleFittingRow({ session_type: 'Resepsi' }, 'Resepsi', true)" class="w-full py-2.5 px-4 rounded-xl border border-dashed border-amber-300 hover:border-amber-600 bg-amber-50/40 hover:bg-amber-50 text-amber-900 font-semibold text-xs flex items-center justify-center gap-1.5 transition">
                 <i data-lucide="plus" class="w-4 h-4"></i>
                 <span>Tambah Baris Resepsi di Bawah</span>
               </button>
@@ -1948,7 +2274,7 @@
 
         <div class="pt-4 border-t border-stone-200 flex items-center justify-end gap-2.5">
           <button type="button" onclick="closeFittingModal()" class="btn-secondary">Batal</button>
-          <button type="submit" class="btn-primary">Simpan Fitting</button>
+          <button type="submit" class="btn-amber">Simpan Fitting</button>
         </div>
       </form>
     </div>
@@ -1978,11 +2304,11 @@
 
       <div class="px-5 sm:px-6 py-3.5 bg-[#FAF8F5] border-t border-[#E7E2DA] flex flex-wrap items-center justify-between gap-2">
         <div class="flex items-center gap-2">
-          <button type="button" id="btn-detail-pdf" class="btn-secondary">
-            <i data-lucide="file-down" class="text-terracotta-600"></i>
+          <button type="button" id="btn-detail-pdf" class="btn-amber-soft">
+            <i data-lucide="file-down" class="text-amber-700"></i>
             <span>Download PDF</span>
           </button>
-          <button type="button" id="btn-detail-edit" class="btn-primary">
+          <button type="button" id="btn-detail-edit" class="btn-amber">
             <i data-lucide="edit-3"></i>
             <span>Edit Fitting</span>
           </button>
@@ -2202,7 +2528,7 @@
             <i data-lucide="copy"></i>
             <span>Salin Teks</span>
           </button>
-          <button onclick="launchWhatsAppDirect()" class="btn-primary !bg-emerald-700 hover:!bg-emerald-800">
+          <button onclick="launchWhatsAppDirect()" class="btn-emerald">
             <i data-lucide="send"></i>
             <span>Kirim via WhatsApp</span>
           </button>
@@ -2283,8 +2609,8 @@
               <i data-lucide="briefcase" class="w-3.5 h-3.5 text-blue-600"></i>
               <span>Pilih dari Data Acara WO (atau Input Baru di Bawah)</span>
             </label>
-            <button type="button" onclick="openWoEventsModal()" class="btn-secondary btn-sm">
-              <i data-lucide="list-plus" class="text-blue-600"></i>
+            <button type="button" onclick="openWoEventsModal()" class="btn-teal-soft btn-sm">
+              <i data-lucide="list-plus" class="text-teal-700"></i>
               <span>Kelola Daftar Data WO</span>
             </button>
           </div>
@@ -2344,7 +2670,7 @@
               <span class="font-bold text-stone-800 uppercase tracking-wider text-[11px]">3. Data Vendor, Bukti Transfer &amp; Keterangan</span>
               <span id="vtr-vendor-count-badge" class="px-2 py-0.5 rounded-full bg-terracotta-50 text-terracotta-700 border border-terracotta-200 font-bold text-[10px]">1 Vendor</span>
             </div>
-            <button type="button" id="btn-add-vtr-vendor-row" onclick="addVendorTransferEntryRow()" class="btn-primary btn-sm">
+            <button type="button" id="btn-add-vtr-vendor-row" onclick="addVendorTransferEntryRow()" class="btn-emerald btn-sm">
               <i data-lucide="plus"></i>
               <span>Tambah Vendor</span>
             </button>
@@ -2431,7 +2757,7 @@
 
         <div class="pt-3 border-t border-stone-200 flex items-center justify-end gap-2.5">
           <button type="button" onclick="closeVendorTransferModal()" class="btn-secondary">Batal</button>
-          <button type="submit" class="btn-primary">Simpan Data Transfer</button>
+          <button type="submit" class="btn-emerald">Simpan Data Transfer</button>
         </div>
       </form>
     </div>
@@ -2457,11 +2783,11 @@
 
       <div class="px-5 sm:px-6 py-3.5 bg-[#FAF8F5] border-t border-[#E7E2DA] flex flex-wrap items-center justify-between gap-2">
         <div class="flex items-center gap-2">
-          <button type="button" id="btn-vtr-detail-pdf" class="btn-secondary">
-            <i data-lucide="file-down" class="text-terracotta-600"></i>
+          <button type="button" id="btn-vtr-detail-pdf" class="btn-emerald-soft">
+            <i data-lucide="file-down" class="text-emerald-700"></i>
             <span>Download PDF Bukti</span>
           </button>
-          <button type="button" id="btn-vtr-detail-edit" class="btn-primary">
+          <button type="button" id="btn-vtr-detail-edit" class="btn-emerald">
             <i data-lucide="edit-3"></i>
             <span>Edit Transfer</span>
           </button>
@@ -2493,7 +2819,7 @@
           <input type="hidden" id="wo-form-id" value="" />
           <div class="flex items-center justify-between">
             <span id="wo-form-title" class="font-bold text-stone-800 uppercase tracking-wider text-[11px]">Tambah Data Acara / Job WO Baru</span>
-            <button type="button" onclick="resetWoEventForm()" class="btn-secondary btn-sm">Reset Form</button>
+            <button type="button" onclick="resetWoEventForm()" class="btn-teal-soft btn-sm">Reset Form</button>
           </div>
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
@@ -2518,7 +2844,7 @@
             </div>
           </div>
           <div class="flex justify-end pt-1">
-            <button type="submit" class="btn-dark">
+            <button type="submit" class="btn-teal">
               <i data-lucide="save"></i>
               <span>Simpan Data WO</span>
             </button>
@@ -2697,7 +3023,7 @@
             <button type="button" onclick="closeFittingReminderModal()" class="btn-secondary">
               <span>Batal</span>
             </button>
-            <button type="submit" class="btn-primary">
+            <button type="submit" class="btn-amber">
               <i data-lucide="check"></i>
               <span>Simpan Reminder Fitting</span>
             </button>
@@ -4547,8 +4873,8 @@
 
           <div class="flex items-center gap-2 self-start sm:self-center flex-shrink-0">
             ${cleanPhone ? `
-              <a href="${waLink}" target="_blank" class="btn-secondary btn-sm" title="Chat Klien via WhatsApp">
-                <i data-lucide="message-circle" class="w-3.5 h-3.5 text-emerald-600"></i>
+              <a href="${waLink}" target="_blank" class="btn-emerald-soft btn-sm" title="Chat Klien via WhatsApp">
+                <i data-lucide="message-circle" class="w-3.5 h-3.5"></i>
                 <span class="hidden sm:inline">WhatsApp</span>
               </a>
             ` : ''}
