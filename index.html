@@ -533,8 +533,98 @@
       transform: translateY(-1px);
     }
 
-    .btn-whatsapp-confirm:active {
-      transform: translateY(0);
+    /* Digital Signature Pad (Canvas) */
+    .signature-card {
+      margin-bottom: 20px;
+    }
+
+    .signature-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .btn-clear-sig {
+      background: #FFFFFF;
+      border: 1px solid var(--border-strong);
+      color: var(--text-secondary);
+      font-size: 0.76rem;
+      font-weight: 600;
+      padding: 5px 12px;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.15s ease;
+    }
+
+    .btn-clear-sig:hover {
+      background: #FEE2E2;
+      border-color: #FCA5A5;
+      color: #991B1B;
+    }
+
+    .signature-pad-wrapper {
+      position: relative;
+      width: 100%;
+      height: 165px;
+      background: #FFFFFF;
+      border: 1.5px dashed var(--border-strong);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      touch-action: none;
+      box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.03);
+      cursor: crosshair;
+    }
+
+    .signature-pad-wrapper:hover,
+    .signature-pad-wrapper:focus-within {
+      border-color: var(--accent);
+      border-style: solid;
+    }
+
+    #signaturePad {
+      width: 100%;
+      height: 100%;
+      display: block;
+      touch-action: none;
+    }
+
+    .sig-placeholder {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 0.84rem;
+      color: #A8A29E;
+      pointer-events: none;
+      user-select: none;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 5px;
+      text-align: center;
+      transition: opacity 0.2s ease;
+    }
+
+    .sig-guide-line {
+      position: absolute;
+      bottom: 32px;
+      left: 24px;
+      right: 24px;
+      border-bottom: 1px dashed #E7E2DA;
+      pointer-events: none;
+    }
+
+    .sig-badge-ok {
+      font-size: 0.74rem;
+      color: var(--success);
+      font-weight: 600;
+      display: none;
+      align-items: center;
+      gap: 4px;
     }
 
     /* Success Banner */
@@ -783,7 +873,49 @@
       </div>
     </div>
 
-    <!-- 4. Syarat & Ketentuan Singkat -->
+    <!-- 4. Tanda Tangan Digital Klien (Canvas) -->
+    <div class="card signature-card">
+      <div class="signature-header">
+        <div class="card-title" style="margin-bottom: 0;">Tanda Tangan Digital Klien <span class="opt">(Di Layar)</span></div>
+        <button type="button" id="btnClearSig" class="btn-clear-sig">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 6h18"></path>
+            <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path>
+            <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path>
+          </svg>
+          <span>Hapus / Ulangi</span>
+        </button>
+      </div>
+      <p style="font-size: 0.78rem; color: var(--text-muted); margin-bottom: 10px;">
+        Silakan bubuhkan tanda tangan langsung pada kotak di bawah ini menggunakan jari (di layar sentuh HP/Tablet) atau kursor:
+      </p>
+
+      <div class="signature-pad-wrapper" id="signaturePadWrapper">
+        <canvas id="signaturePad"></canvas>
+        <div class="sig-placeholder" id="sigPlaceholder">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="opacity: 0.5;">
+            <path d="M12 19l7-7 3 3-7 7-3-3z"></path>
+            <path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"></path>
+            <path d="M2 2l7.586 7.586"></path>
+            <circle cx="11" cy="11" r="2"></circle>
+          </svg>
+          <span>Goreskan tanda tangan Anda di sini</span>
+        </div>
+        <div class="sig-guide-line"></div>
+      </div>
+
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 6px;">
+        <span class="field-hint" style="margin-top: 0;">*Tanda tangan ini otomatis tercetak resmi pada PDF Invoice &amp; Bukti Reservasi.</span>
+        <span class="sig-badge-ok" id="sigBadgeOk">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12"></polyline>
+          </svg>
+          <span>Tanda Tangan Siap</span>
+        </span>
+      </div>
+    </div>
+
+    <!-- 5. Syarat & Ketentuan Singkat -->
     <div class="terms-box">
       <div class="terms-heading">Ketentuan Layanan Studio</div>
       <ul class="terms-list">
@@ -1046,6 +1178,124 @@
     });
   }
 
+  // ==========================================
+  // LOGIKA TANDA TANGAN DIGITAL (CANVAS)
+  // ==========================================
+  const sigCanvas = document.getElementById('signaturePad');
+  const sigPlaceholder = document.getElementById('sigPlaceholder');
+  const btnClearSig = document.getElementById('btnClearSig');
+  const sigBadgeOk = document.getElementById('sigBadgeOk');
+
+  let sigCtx = null;
+  let isDrawing = false;
+  let hasSignature = false;
+  let lastX = 0;
+  let lastY = 0;
+
+  function initSignaturePad() {
+    if (!sigCanvas) return;
+    sigCtx = sigCanvas.getContext('2d');
+    resizeSignaturePad();
+
+    window.addEventListener('resize', () => {
+      if (hasSignature) {
+        const temp = sigCanvas.toDataURL('image/png');
+        resizeSignaturePad();
+        const img = new Image();
+        img.onload = () => {
+          const rect = sigCanvas.getBoundingClientRect();
+          sigCtx.drawImage(img, 0, 0, rect.width, rect.height);
+        };
+        img.src = temp;
+      } else {
+        resizeSignaturePad();
+      }
+    });
+
+    sigCanvas.addEventListener('pointerdown', startDrawing);
+    sigCanvas.addEventListener('pointermove', drawStroke);
+    sigCanvas.addEventListener('pointerup', stopDrawing);
+    sigCanvas.addEventListener('pointercancel', stopDrawing);
+    sigCanvas.addEventListener('pointerleave', stopDrawing);
+
+    if (btnClearSig) {
+      btnClearSig.addEventListener('click', clearSignature);
+    }
+  }
+
+  function resizeSignaturePad() {
+    if (!sigCanvas) return;
+    const rect = sigCanvas.getBoundingClientRect();
+    const dpr = window.devicePixelRatio || 1;
+    sigCanvas.width = (rect.width || 400) * dpr;
+    sigCanvas.height = (rect.height || 165) * dpr;
+    sigCtx = sigCanvas.getContext('2d');
+    sigCtx.scale(dpr, dpr);
+    sigCtx.strokeStyle = '#0F172A';
+    sigCtx.lineWidth = 2.5;
+    sigCtx.lineCap = 'round';
+    sigCtx.lineJoin = 'round';
+  }
+
+  function getPointerPos(e) {
+    const rect = sigCanvas.getBoundingClientRect();
+    return {
+      x: e.clientX - rect.left,
+      y: e.clientY - rect.top
+    };
+  }
+
+  function startDrawing(e) {
+    if (e.button !== undefined && e.button !== 0) return;
+    e.preventDefault();
+    isDrawing = true;
+    try { sigCanvas.setPointerCapture(e.pointerId); } catch (_) {}
+    const pos = getPointerPos(e);
+    lastX = pos.x;
+    lastY = pos.y;
+    sigCtx.beginPath();
+    sigCtx.moveTo(lastX, lastY);
+  }
+
+  function drawStroke(e) {
+    if (!isDrawing) return;
+    e.preventDefault();
+    const pos = getPointerPos(e);
+    sigCtx.beginPath();
+    sigCtx.moveTo(lastX, lastY);
+    sigCtx.lineTo(pos.x, pos.y);
+    sigCtx.stroke();
+    lastX = pos.x;
+    lastY = pos.y;
+
+    if (!hasSignature) {
+      hasSignature = true;
+      if (sigPlaceholder) sigPlaceholder.style.opacity = '0';
+      if (sigBadgeOk) sigBadgeOk.style.display = 'inline-flex';
+    }
+  }
+
+  function stopDrawing(e) {
+    if (isDrawing) {
+      isDrawing = false;
+      try { sigCanvas.releasePointerCapture(e.pointerId); } catch (_) {}
+    }
+  }
+
+  function clearSignature() {
+    if (!sigCanvas || !sigCtx) return;
+    const rect = sigCanvas.getBoundingClientRect();
+    sigCtx.clearRect(0, 0, rect.width, rect.height);
+    hasSignature = false;
+    if (sigPlaceholder) sigPlaceholder.style.opacity = '1';
+    if (sigBadgeOk) sigBadgeOk.style.display = 'none';
+  }
+
+  function getClientSignatureDataURL() {
+    if (!hasSignature || !sigCanvas) return '';
+    return sigCanvas.toDataURL('image/png');
+  }
+
   async function handleFormSubmit(e) {
     e.preventDefault();
     const saveBtn = document.getElementById('saveBtn');
@@ -1069,6 +1319,8 @@
     const hp2 = els.hp2.value.trim();
     const combinedPhone = hp2 ? `${hp1} / ${hp2}` : hp1;
 
+    const signatureData = getClientSignatureDataURL();
+
     const newBooking = {
       id: 'booking_' + Date.now(),
       booking_code: `CMS-${dateCode}-${Math.floor(1000 + Math.random() * 9000)}`,
@@ -1087,6 +1339,8 @@
       instagram: els.ig.value.trim().replace(/^@/, '') || '-',
       phone: combinedPhone || '-',
       phone2: hp2 || '',
+      client_signature: signatureData,
+      signed_at: signatureData ? new Date().toISOString() : '',
       source: 'client_form',
       created_at: new Date().toISOString()
     };
@@ -1135,6 +1389,7 @@
     } catch (err) {}
 
     document.getElementById('bookingForm').reset();
+    clearSignature();
     els.jam.value = '08:00';
     handleCategoryChange();
     updatePaymentCalculation();
@@ -1148,10 +1403,12 @@
     if (codeBadge) codeBadge.textContent = newBooking.booking_code;
     if (summaryEl) {
       const sisa = Math.max(0, newBooking.total_price - newBooking.dp_amount);
-      summaryEl.innerHTML = `Total Paket: <b>Rp ${formatRupiahNumber(newBooking.total_price)}</b> &bull; DP: <b>Rp ${formatRupiahNumber(newBooking.dp_amount)}</b> &bull; Sisa: <b>Rp ${formatRupiahNumber(sisa)}</b> (${newBooking.payment_status.toUpperCase()})`;
+      const sigStatusText = newBooking.client_signature ? '<div style="margin-top: 5px; color: #15803D; font-size: 0.8rem; font-weight: 700;">&#10003; Tanda Tangan Digital Klien Resmi Telah Disertakan</div>' : '';
+      summaryEl.innerHTML = `Total Paket: <b>Rp ${formatRupiahNumber(newBooking.total_price)}</b> &bull; DP: <b>Rp ${formatRupiahNumber(newBooking.dp_amount)}</b> &bull; Sisa: <b>Rp ${formatRupiahNumber(sisa)}</b> (${newBooking.payment_status.toUpperCase()})${sigStatusText}`;
       summaryEl.style.display = 'block';
     }
     if (waWrap && waBtn) {
+      const sigWaInfo = newBooking.client_signature ? `• *Tanda Tangan Digital:* Sudah dibubuhkan langsung di layar formulir\n` : '';
       const waMsg = encodeURIComponent(
         `Halo Studio CARISSA Makeup & WO, saya telah mengirim formulir reservasi booking online:\n\n` +
         `• *Kode Booking:* ${newBooking.booking_code}\n` +
@@ -1160,7 +1417,8 @@
         `• *Tanggal Acara:* ${newBooking.event_date} (${newBooking.event_time} WIB)\n` +
         `• *Paket:* ${newBooking.package_name}\n` +
         `• *Total Harga:* Rp ${formatRupiahNumber(newBooking.total_price)}\n` +
-        `• *DP Ditransfer:* Rp ${formatRupiahNumber(newBooking.dp_amount)} (Rek: ${newBooking.account_name})\n\n` +
+        `• *DP Ditransfer:* Rp ${formatRupiahNumber(newBooking.dp_amount)} (Rek: ${newBooking.account_name})\n` +
+        sigWaInfo + `\n` +
         `Mohon konfirmasi ketersediaan jadwal studio. Terima kasih!`
       );
       waBtn.href = `https://wa.me/6281394218860?text=${waMsg}`;
@@ -1174,11 +1432,12 @@
     if (saveBtn) saveBtn.disabled = false;
     if (saveBtnText) saveBtnText.textContent = 'Simpan';
 
-    showToast('Data booking berhasil disimpan dan dikirim ke Admin');
+    showToast('Data booking & tanda tangan berhasil disimpan');
   }
 
   populatePackagesDatalist();
   loadDraft();
+  initSignaturePad();
   updatePaymentCalculation();
   syncPackagesFromServer();
 </script>

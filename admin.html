@@ -2146,11 +2146,76 @@
           </div>
         </div>
 
+        <!-- Tanda Tangan Digital Klien (Preview / Kelola) -->
+        <div class="p-3 bg-[#FAF8F5] rounded-xl border border-[#E7E2DA] space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="font-semibold text-stone-800 flex items-center gap-1.5">
+              <i data-lucide="pen-tool" class="w-4 h-4 text-terracotta-600"></i>
+              <span>Tanda Tangan Digital Klien</span>
+            </span>
+            <button type="button" onclick="openAdminSignaturePadFromBookingForm()" class="px-2.5 py-1 text-[11px] rounded-lg bg-white border border-stone-300 font-semibold text-stone-700 hover:bg-stone-50 flex items-center gap-1">
+              <i data-lucide="pen" class="w-3.5 h-3.5"></i>
+              <span id="btn-admin-sig-label">Bubuhkan TTD</span>
+            </button>
+          </div>
+          <div id="admin-booking-sig-preview-wrap" class="hidden">
+            <div class="h-16 bg-white rounded-lg border border-dashed border-stone-300 p-1 flex items-center justify-center">
+              <img id="admin-booking-sig-img" src="" alt="TTD Klien" class="max-h-full max-w-full object-contain" />
+            </div>
+            <div class="flex justify-between items-center text-[10px] text-stone-500 mt-1">
+              <span id="admin-booking-sig-date">Ditandatangani secara digital</span>
+              <button type="button" onclick="clearAdminBookingSignature()" class="text-rose-600 hover:underline font-semibold">Hapus TTD</button>
+            </div>
+          </div>
+          <div id="admin-booking-sig-empty-wrap" class="text-[11px] text-stone-400 italic">
+            Belum ada tanda tangan digital klien. Klien dapat menandatangani di layar form booking online atau langsung melalui perangkat ini.
+          </div>
+          <input type="hidden" id="form-client-signature" value="" />
+          <input type="hidden" id="form-client-signed-at" value="" />
+        </div>
+
         <div class="pt-3 border-t border-stone-200 flex items-center justify-end gap-2">
           <button type="button" onclick="closeBookingModal()" class="btn-secondary">Batal</button>
           <button type="button" id="btn-save-admin-booking" onclick="handleAdminSaveBooking(event)" class="btn-primary">Simpan Booking</button>
         </div>
       </form>
+    </div>
+  </div>
+
+  <!-- MODAL KHUSUS TANDA TANGAN DIGITAL KLIEN DI LAYAR (ADMIN) -->
+  <div id="admin-signature-modal" class="fixed inset-0 z-50 bg-stone-950/60 backdrop-blur-xs hidden flex items-center justify-center p-3 sm:p-4">
+    <div class="bg-white w-full max-w-lg rounded-2xl shadow-2xl border border-[#E7E2DA] overflow-hidden flex flex-col">
+      <div class="px-5 py-4 border-b border-[#E7E2DA] flex items-center justify-between">
+        <div>
+          <h3 class="font-serif font-bold text-stone-900 text-sm sm:text-base">Tanda Tangan Digital Klien</h3>
+          <p id="admin-sig-modal-client-info" class="text-[11px] text-stone-500">Silakan tanda tangan di layar menggunakan jari atau stylus</p>
+        </div>
+        <button onclick="closeAdminSignatureModal()" class="p-1.5 rounded-lg text-stone-400 hover:text-stone-700">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+      <div class="p-5 space-y-3">
+        <div class="flex justify-between items-center text-xs">
+          <span class="text-stone-500 font-medium">Area Tanda Tangan:</span>
+          <button type="button" onclick="clearAdminCanvasSignature()" class="px-2.5 py-1 text-[11px] rounded bg-stone-100 hover:bg-rose-50 text-stone-600 hover:text-rose-600 font-semibold border border-stone-200">
+            Hapus / Ulangi
+          </button>
+        </div>
+        <div class="relative w-full h-44 bg-white border-2 border-dashed border-stone-300 rounded-xl overflow-hidden touch-none" id="adminSigCanvasWrapper">
+          <canvas id="adminSigCanvas" class="w-full h-full block cursor-crosshair touch-none"></canvas>
+          <div id="adminSigCanvasPlaceholder" class="absolute inset-0 flex items-center justify-center pointer-events-none text-stone-400 text-xs">
+            Goreskan tanda tangan di sini...
+          </div>
+          <div class="absolute bottom-6 left-6 right-6 border-b border-dashed border-stone-200 pointer-events-none"></div>
+        </div>
+        <p class="text-[10px] text-stone-400 italic">
+          *Tanda tangan ini akan langsung tersimpan permanen dan dicantumkan pada Invoice &amp; Bukti Reservasi Resmi klien.
+        </p>
+      </div>
+      <div class="px-5 py-3.5 bg-stone-50 border-t border-[#E7E2DA] flex justify-end gap-2 text-xs">
+        <button type="button" onclick="closeAdminSignatureModal()" class="btn-secondary">Batal</button>
+        <button type="button" onclick="saveAdminCanvasSignature()" class="btn-primary">Gunakan Tanda Tangan</button>
+      </div>
     </div>
   </div>
 
@@ -5174,6 +5239,13 @@
               sub: 'Cetak bukti pembayaran resmi',
               onClick: `exportBookingInvoicePDF('${escId}')`
             },
+            {
+              icon: 'pen-tool',
+              badgeClass: 'bg-indigo-50 text-indigo-700 border border-indigo-200/70',
+              label: 'Tanda Tangan Digital Klien',
+              sub: 'TTD langsung di layar perangkat',
+              onClick: `openAdminSignatureModalForBooking('${escId}')`
+            },
             { divider: true },
             {
               icon: 'trash-2',
@@ -5351,6 +5423,13 @@
               label: 'Unduh Invoice PDF',
               sub: 'Cetak kwitansi & bukti bayar',
               onClick: `exportBookingInvoicePDF('${escId}')`
+            },
+            {
+              icon: 'pen-tool',
+              badgeClass: 'bg-indigo-50 text-indigo-700 border border-indigo-200/70',
+              label: 'Tanda Tangan Digital Klien',
+              sub: 'TTD langsung di layar perangkat',
+              onClick: `openAdminSignatureModalForBooking('${escId}')`
             },
             {
               icon: 'pen-line',
@@ -5737,6 +5816,19 @@
         document.getElementById('form-auto-open-gcal').checked = false;
       }
 
+      const sigInput = document.getElementById('form-client-signature');
+      const sigDateInput = document.getElementById('form-client-signed-at');
+      const sigPrevWrap = document.getElementById('admin-booking-sig-preview-wrap');
+      const sigEmptyWrap = document.getElementById('admin-booking-sig-empty-wrap');
+      const sigImg = document.getElementById('admin-booking-sig-img');
+      const sigBtnLabel = document.getElementById('btn-admin-sig-label');
+      if (sigInput) sigInput.value = '';
+      if (sigDateInput) sigDateInput.value = '';
+      if (sigImg) sigImg.src = '';
+      if (sigPrevWrap) sigPrevWrap.classList.add('hidden');
+      if (sigEmptyWrap) sigEmptyWrap.classList.remove('hidden');
+      if (sigBtnLabel) sigBtnLabel.textContent = 'Bubuhkan TTD';
+
       populateAdminPackageDatalist();
       handleAdminCategoryChange();
       updateBookingWeddingGcalPreview();
@@ -5819,6 +5911,8 @@
         const instagram = (document.getElementById('form-instagram')?.value || '').trim();
         const phone = (document.getElementById('form-phone')?.value || '').trim();
         const autoDownloadGcal = document.getElementById('form-auto-open-gcal')?.checked || false;
+        const clientSignature = (document.getElementById('form-client-signature')?.value || '').trim();
+        const clientSignedAt = (document.getElementById('form-client-signed-at')?.value || '').trim();
 
         // Validasi data penting
         if (!accountName) {
@@ -5868,7 +5962,9 @@
               payment_status: paymentStatus,
               hair_style: hairStyle,
               instagram,
-              phone
+              phone,
+              client_signature: clientSignature || bookings[idx].client_signature || '',
+              signed_at: clientSignature ? (clientSignedAt || new Date().toISOString()) : (bookings[idx].signed_at || '')
             };
           } else {
             const fallbackBooking = {
@@ -5888,6 +5984,8 @@
               hair_style: hairStyle,
               instagram,
               phone,
+              client_signature: clientSignature || '',
+              signed_at: clientSignature ? (clientSignedAt || new Date().toISOString()) : '',
               created_at: new Date().toISOString()
             };
             bookings.unshift(fallbackBooking);
@@ -5939,6 +6037,8 @@
             hair_style: hairStyle,
             instagram,
             phone,
+            client_signature: clientSignature || '',
+            signed_at: clientSignature ? (clientSignedAt || new Date().toISOString()) : '',
             created_at: new Date().toISOString()
           };
           savedBookingId = newBooking.id;
@@ -6012,6 +6112,30 @@
       document.getElementById('form-hair-style').value = b.hair_style || 'Hijabdo';
       document.getElementById('form-instagram').value = b.instagram || '';
       document.getElementById('form-phone').value = b.phone || '';
+
+      const sigInput = document.getElementById('form-client-signature');
+      const sigDateInput = document.getElementById('form-client-signed-at');
+      const sigPrevWrap = document.getElementById('admin-booking-sig-preview-wrap');
+      const sigEmptyWrap = document.getElementById('admin-booking-sig-empty-wrap');
+      const sigImg = document.getElementById('admin-booking-sig-img');
+      const sigDateEl = document.getElementById('admin-booking-sig-date');
+      const sigBtnLabel = document.getElementById('btn-admin-sig-label');
+
+      if (sigInput) sigInput.value = b.client_signature || '';
+      if (sigDateInput) sigDateInput.value = b.signed_at || '';
+      if (b.client_signature) {
+        if (sigImg) sigImg.src = b.client_signature;
+        if (sigPrevWrap) sigPrevWrap.classList.remove('hidden');
+        if (sigEmptyWrap) sigEmptyWrap.classList.add('hidden');
+        if (sigBtnLabel) sigBtnLabel.textContent = 'Ganti TTD';
+        if (sigDateEl) sigDateEl.textContent = b.signed_at ? `Ditandatangani secara digital (${formatDateIndo(b.signed_at.split('T')[0])})` : 'Ditandatangani secara digital';
+      } else {
+        if (sigImg) sigImg.src = '';
+        if (sigPrevWrap) sigPrevWrap.classList.add('hidden');
+        if (sigEmptyWrap) sigEmptyWrap.classList.remove('hidden');
+        if (sigBtnLabel) sigBtnLabel.textContent = 'Bubuhkan TTD';
+      }
+
       handleAdminCategoryChange();
       updateBookingWeddingGcalPreview();
       calculateAdminRemaining();
@@ -6025,6 +6149,243 @@
         refreshAllBookingViews();
         showToast('Data booking dihapus');
       }
+    }
+
+    // ==============================================================
+    // TANDA TANGAN DIGITAL KLIEN (ADMIN CANVAS PAD)
+    // ==============================================================
+    let adminSigTargetBookingId = null;
+    let adminSigCanvas = null;
+    let adminSigCtx = null;
+    let adminSigDrawing = false;
+    let adminSigHasStroke = false;
+    let adminSigLastX = 0;
+    let adminSigLastY = 0;
+
+    function initAdminSignatureCanvas() {
+      adminSigCanvas = document.getElementById('adminSigCanvas');
+      if (!adminSigCanvas) return;
+      adminSigCtx = adminSigCanvas.getContext('2d');
+      resizeAdminSignatureCanvas();
+
+      adminSigCanvas.onpointerdown = (e) => {
+        if (e.button !== undefined && e.button !== 0) return;
+        e.preventDefault();
+        adminSigDrawing = true;
+        try { adminSigCanvas.setPointerCapture(e.pointerId); } catch (_) {}
+        const pos = getAdminSigPointerPos(e);
+        adminSigLastX = pos.x;
+        adminSigLastY = pos.y;
+        adminSigCtx.beginPath();
+        adminSigCtx.moveTo(adminSigLastX, adminSigLastY);
+      };
+
+      adminSigCanvas.onpointermove = (e) => {
+        if (!adminSigDrawing) return;
+        e.preventDefault();
+        const pos = getAdminSigPointerPos(e);
+        adminSigCtx.beginPath();
+        adminSigCtx.moveTo(adminSigLastX, adminSigLastY);
+        adminSigCtx.lineTo(pos.x, pos.y);
+        adminSigCtx.stroke();
+        adminSigLastX = pos.x;
+        adminSigLastY = pos.y;
+
+        if (!adminSigHasStroke) {
+          adminSigHasStroke = true;
+          const ph = document.getElementById('adminSigCanvasPlaceholder');
+          if (ph) ph.style.opacity = '0';
+        }
+      };
+
+      const stop = (e) => {
+        if (adminSigDrawing) {
+          adminSigDrawing = false;
+          try { adminSigCanvas.releasePointerCapture(e.pointerId); } catch (_) {}
+        }
+      };
+      adminSigCanvas.onpointerup = stop;
+      adminSigCanvas.onpointercancel = stop;
+      adminSigCanvas.onpointerleave = stop;
+    }
+
+    function resizeAdminSignatureCanvas() {
+      if (!adminSigCanvas) return;
+      const rect = adminSigCanvas.getBoundingClientRect();
+      const dpr = window.devicePixelRatio || 1;
+      adminSigCanvas.width = (rect.width || 450) * dpr;
+      adminSigCanvas.height = (rect.height || 170) * dpr;
+      adminSigCtx = adminSigCanvas.getContext('2d');
+      adminSigCtx.scale(dpr, dpr);
+      adminSigCtx.strokeStyle = '#0F172A';
+      adminSigCtx.lineWidth = 2.5;
+      adminSigCtx.lineCap = 'round';
+      adminSigCtx.lineJoin = 'round';
+    }
+
+    function getAdminSigPointerPos(e) {
+      const rect = adminSigCanvas.getBoundingClientRect();
+      return {
+        x: e.clientX - rect.left,
+        y: e.clientY - rect.top
+      };
+    }
+
+    function clearAdminCanvasSignature() {
+      if (!adminSigCanvas || !adminSigCtx) return;
+      const rect = adminSigCanvas.getBoundingClientRect();
+      adminSigCtx.clearRect(0, 0, rect.width, rect.height);
+      adminSigHasStroke = false;
+      const ph = document.getElementById('adminSigCanvasPlaceholder');
+      if (ph) ph.style.opacity = '1';
+    }
+
+    function openAdminSignatureModalForBooking(id) {
+      adminSigTargetBookingId = id;
+      const b = bookings.find(x => x.id === id || String(x.id) === String(id) || (x.booking_code && x.booking_code === id));
+      if (!b) return;
+
+      const modal = document.getElementById('admin-signature-modal');
+      if (!modal) return;
+
+      const infoEl = document.getElementById('admin-sig-modal-client-info');
+      const clientName = b.client_cpw || 'Klien';
+      if (infoEl) infoEl.textContent = `Klien: ${clientName} (${b.booking_code || b.id}) - Silakan tanda tangan di layar`;
+
+      modal.classList.remove('hidden');
+      setTimeout(() => {
+        initAdminSignatureCanvas();
+        clearAdminCanvasSignature();
+        if (b.client_signature) {
+          const img = new Image();
+          img.onload = () => {
+            const rect = adminSigCanvas.getBoundingClientRect();
+            adminSigCtx.drawImage(img, 0, 0, rect.width, rect.height);
+            adminSigHasStroke = true;
+            const ph = document.getElementById('adminSigCanvasPlaceholder');
+            if (ph) ph.style.opacity = '0';
+          };
+          img.src = b.client_signature;
+        }
+        if (window.lucide) window.lucide.createIcons();
+      }, 50);
+    }
+
+    function closeAdminSignatureModal() {
+      const modal = document.getElementById('admin-signature-modal');
+      if (modal) modal.classList.add('hidden');
+      adminSigTargetBookingId = null;
+    }
+
+    function saveAdminCanvasSignature() {
+      if (!adminSigHasStroke || !adminSigCanvas) {
+        showToast('Silakan bubuhkan tanda tangan di layar terlebih dahulu', 'error');
+        return;
+      }
+
+      const dataUrl = adminSigCanvas.toDataURL('image/png');
+      const signedAt = new Date().toISOString();
+
+      if (adminSigTargetBookingId === '__FROM_FORM__') {
+        const sigInput = document.getElementById('form-client-signature');
+        const sigDateInput = document.getElementById('form-client-signed-at');
+        const sigPrevWrap = document.getElementById('admin-booking-sig-preview-wrap');
+        const sigEmptyWrap = document.getElementById('admin-booking-sig-empty-wrap');
+        const sigImg = document.getElementById('admin-booking-sig-img');
+        const sigDateEl = document.getElementById('admin-booking-sig-date');
+        const sigBtnLabel = document.getElementById('btn-admin-sig-label');
+
+        if (sigInput) sigInput.value = dataUrl;
+        if (sigDateInput) sigDateInput.value = signedAt;
+        if (sigImg) sigImg.src = dataUrl;
+        if (sigPrevWrap) sigPrevWrap.classList.remove('hidden');
+        if (sigEmptyWrap) sigEmptyWrap.classList.add('hidden');
+        if (sigBtnLabel) sigBtnLabel.textContent = 'Ganti TTD';
+        if (sigDateEl) sigDateEl.textContent = 'Ditandatangani secara digital (Baru saja)';
+
+        closeAdminSignatureModal();
+        showToast('Tanda tangan digital diterapkan pada formulir');
+        return;
+      }
+
+      const idx = bookings.findIndex(x => x.id === adminSigTargetBookingId || String(x.id) === String(adminSigTargetBookingId) || (x.booking_code && x.booking_code === adminSigTargetBookingId));
+      if (idx !== -1) {
+        bookings[idx].client_signature = dataUrl;
+        bookings[idx].signed_at = signedAt;
+        saveBookingsToStorage();
+        refreshAllBookingViews();
+
+        const target = bookings[idx];
+        fetch(`/api/bookings/${encodeURIComponent(target.id)}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(target)
+        }).then(res => {
+          if (!res.ok) {
+            return fetch('/api/sync-all', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ bookings })
+            });
+          }
+        }).catch(() => {
+          fetch('/api/sync-all', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ bookings })
+          }).catch(() => {});
+        });
+
+        closeAdminSignatureModal();
+        showToast('Tanda tangan digital klien berhasil disimpan');
+      }
+    }
+
+    function openAdminSignaturePadFromBookingForm() {
+      const cpw = (document.getElementById('form-cpw-name')?.value || '').trim() || 'Klien';
+      adminSigTargetBookingId = '__FROM_FORM__';
+
+      const modal = document.getElementById('admin-signature-modal');
+      if (!modal) return;
+
+      const infoEl = document.getElementById('admin-sig-modal-client-info');
+      if (infoEl) infoEl.textContent = `Klien: ${cpw} - Silakan tanda tangan di layar`;
+
+      modal.classList.remove('hidden');
+      setTimeout(() => {
+        initAdminSignatureCanvas();
+        clearAdminCanvasSignature();
+        const currentSig = document.getElementById('form-client-signature')?.value;
+        if (currentSig) {
+          const img = new Image();
+          img.onload = () => {
+            const rect = adminSigCanvas.getBoundingClientRect();
+            adminSigCtx.drawImage(img, 0, 0, rect.width, rect.height);
+            adminSigHasStroke = true;
+            const ph = document.getElementById('adminSigCanvasPlaceholder');
+            if (ph) ph.style.opacity = '0';
+          };
+          img.src = currentSig;
+        }
+        if (window.lucide) window.lucide.createIcons();
+      }, 50);
+    }
+
+    function clearAdminBookingSignature() {
+      const sigInput = document.getElementById('form-client-signature');
+      const sigDateInput = document.getElementById('form-client-signed-at');
+      const sigPrevWrap = document.getElementById('admin-booking-sig-preview-wrap');
+      const sigEmptyWrap = document.getElementById('admin-booking-sig-empty-wrap');
+      const sigImg = document.getElementById('admin-booking-sig-img');
+      const sigBtnLabel = document.getElementById('btn-admin-sig-label');
+
+      if (sigInput) sigInput.value = '';
+      if (sigDateInput) sigDateInput.value = '';
+      if (sigImg) sigImg.src = '';
+      if (sigPrevWrap) sigPrevWrap.classList.add('hidden');
+      if (sigEmptyWrap) sigEmptyWrap.classList.remove('hidden');
+      if (sigBtnLabel) sigBtnLabel.textContent = 'Bubuhkan TTD';
+      showToast('Tanda tangan dihapus dari formulir');
     }
 
     function saveBookingsToStorage() {
@@ -10321,12 +10682,19 @@
 
           <!-- Tanda Tangan Resmi -->
           <div style="display: flex; justify-content: space-between; font-size: 9.5px; color: #44403C; padding-top: 6px;">
-            <div style="text-align: center; width: 180px;">
+            <div style="text-align: center; width: 190px;">
               <div>Klien / Calon Pengantin,</div>
-              <div style="height: 48px;"></div>
+              ${b.client_signature ? `
+                <div style="height: 48px; display: flex; align-items: center; justify-content: center; margin: 2px 0;">
+                  <img src="${b.client_signature}" alt="Tanda Tangan Klien" style="max-height: 46px; max-width: 170px; object-fit: contain; display: block;" />
+                </div>
+              ` : `
+                <div style="height: 48px;"></div>
+              `}
               <div style="border-bottom: 1px solid #78716C; font-weight: 700; padding-bottom: 2px;">${clientName}</div>
+              ${b.signed_at ? `<div style="font-size: 8px; color: #78716C; margin-top: 2px;">Tanda Tangan Digital Resmi (${formatDateIndo((b.signed_at || '').split('T')[0])})</div>` : ''}
             </div>
-            <div style="text-align: center; width: 180px;">
+            <div style="text-align: center; width: 190px;">
               <div>Bandung, ${new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}</div>
               <div style="font-weight: 600; color: #78716C; font-size: 9px;">Manajemen Carissa WO,</div>
               <div style="height: 38px;"></div>
