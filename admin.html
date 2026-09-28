@@ -10317,12 +10317,61 @@
 
       setStorage(STORAGE_KEY_USERS, masterUsers);
       setStorage(LEGACY_USERS_KEY, masterUsers);
+
+      // 1. Update session jika user yang sedang login diubah
+      if (currentUserSession && currentUserSession.id === id) {
+        currentUserSession.name = name;
+        currentUserSession.email = email;
+        currentUserSession.role = role;
+        currentUserSession.phone = phone;
+        sessionStorage.setItem(STORAGE_KEY_SESSION, JSON.stringify(currentUserSession));
+        if (localStorage.getItem(STORAGE_KEY_SESSION)) {
+          localStorage.setItem(STORAGE_KEY_SESSION, JSON.stringify(currentUserSession));
+        }
+      }
+
+      // 2. Jika Super Admin diubah, perbarui active_sync_email di studioSettings
+      if (id === 'usr_1' || (role || '').toLowerCase() === 'super admin') {
+        if (!studioSettings) studioSettings = {};
+        studioSettings.active_sync_email = email;
+        setStorage(STORAGE_KEY_STUDIO, studioSettings);
+      }
+
+      // 3. Otomatis perbarui seluruh data penerima di jadwal pengingat (fittingReminders)
+      const recipients = getSuperAdminAndFittingRecipients();
+      if (Array.isArray(fittingReminders)) {
+        fittingReminders.forEach(r => {
+          r.superadmin_email = recipients.superAdmin.email;
+          r.superadmin_name = recipients.superAdmin.name;
+          r.fitting_user_email = recipients.fittingUser.email;
+          r.fitting_user_name = recipients.fittingUser.name;
+          r.fitting_user_phone = recipients.fittingUser.phone || '';
+          r.recipient_emails = recipients.emailsCsv;
+        });
+        setStorage(STORAGE_KEY_FITTING_REMINDERS, fittingReminders);
+      }
+
       closeMasterUserModal();
       renderMasterUsersTable();
       renderQuickLoginButtons();
+
+      // 4. Sinkronkan ulang pengingat event & Google Calendar API v3
+      if (typeof syncFittingRemindersFromEvents === 'function') syncFittingRemindersFromEvents(false);
       if (typeof renderFittingRemindersSection === 'function') renderFittingRemindersSection();
       if (typeof syncAllToGoogleCalendarApiV3 === 'function') syncAllToGoogleCalendarApiV3(false);
-      showToast('Akun user berhasil disimpan');
+
+      // 5. Dorong pembaruan komprehensif ke server cPanel
+      fetch('/api/sync-all', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          master_users: masterUsers,
+          fitting_reminders: fittingReminders,
+          studio_settings: studioSettings
+        })
+      }).catch(() => {});
+
+      showToast('Akun user dan seluruh jadwal pengingat kalender berhasil diperbarui');
     }
 
     function deleteMasterUser(id) {
@@ -10337,6 +10386,7 @@
         fetch('/api/users/' + encodeURIComponent(id), { method: 'DELETE' }).catch(() => {});
         renderMasterUsersTable();
         renderQuickLoginButtons();
+        if (typeof syncFittingRemindersFromEvents === 'function') syncFittingRemindersFromEvents(false);
         if (typeof renderFittingRemindersSection === 'function') renderFittingRemindersSection();
         if (typeof syncAllToGoogleCalendarApiV3 === 'function') syncAllToGoogleCalendarApiV3(false);
       }
