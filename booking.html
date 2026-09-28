@@ -279,6 +279,130 @@
       line-height: 1.45;
     }
 
+    /* Currency Input & Calculation Box */
+    .input-currency-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+      width: 100%;
+    }
+
+    .currency-prefix {
+      position: absolute;
+      left: 14px;
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: var(--accent);
+      pointer-events: none;
+      user-select: none;
+      z-index: 1;
+    }
+
+    .input-currency {
+      padding-left: 44px !important;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+    }
+
+    .field-hint {
+      display: block;
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      margin-top: 5px;
+      line-height: 1.35;
+    }
+
+    .payment-calc-box {
+      background: #FBF9F6;
+      border: 1px solid var(--border-strong);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      margin-top: 14px;
+    }
+
+    .calc-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.82rem;
+      margin-bottom: 8px;
+      color: var(--text-secondary);
+    }
+
+    .calc-val {
+      font-weight: 600;
+      color: var(--text-primary);
+      font-feature-settings: "tnum";
+      font-variant-numeric: tabular-nums;
+    }
+
+    .calc-val.calc-dp-text {
+      color: var(--success);
+      font-weight: 700;
+    }
+
+    .calc-divider {
+      height: 1px;
+      background: var(--border);
+      margin: 10px 0;
+    }
+
+    .calc-main-row {
+      font-size: 0.95rem;
+      margin-bottom: 12px;
+      color: var(--text-primary);
+    }
+
+    .calc-val.calc-sisa-text {
+      color: var(--accent);
+      font-size: 1.05rem;
+      font-weight: 700;
+    }
+
+    .calc-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding-top: 10px;
+      border-top: 1px dashed var(--border);
+    }
+
+    .calc-status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 999px;
+      letter-spacing: 0.04em;
+    }
+
+    .status-badge-pending {
+      background: #FEF3C7;
+      color: #92400E;
+      border: 1px solid #FCD34D;
+    }
+
+    .status-badge-dp {
+      background: #EFF6FF;
+      color: #1E40AF;
+      border: 1px solid #BFDBFE;
+    }
+
+    .status-badge-lunas {
+      background: var(--success-bg);
+      color: var(--success);
+      border: 1px solid var(--success-border);
+    }
+
+    .calc-status-desc {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+    }
+
     /* Terms Box */
     .terms-box {
       background: var(--surface-subtle);
@@ -474,7 +598,8 @@
   <div id="successBanner" class="success-banner" role="status" aria-live="polite">
     <span id="successCodeBadge" class="success-code">CMS-0000</span>
     <h2 class="success-title">Data Booking Berhasil Disimpan</h2>
-    <p class="success-desc">Reservasi Anda telah otomatis masuk ke sistem Panel Admin CARISSA Profesional Make Up Artist &amp; Wedding Organizer.</p>
+    <p class="success-desc">Reservasi Anda telah otomatis tersinkronkan ke sistem Panel Admin CARISSA Profesional Make Up Artist &amp; Wedding Organizer.</p>
+    <div id="successPaymentSummary" style="margin-top: 10px; font-size: 0.84rem; color: #166534; font-weight: 600; display: none;"></div>
   </div>
 
   <form id="bookingForm" onsubmit="handleFormSubmit(event)">
@@ -533,14 +658,15 @@
       </div>
     </div>
 
-    <!-- 2. Paket & Kontak -->
+    <!-- 2. Paket Layanan & Kontak -->
     <div class="card">
       <div class="card-title">Paket Layanan &amp; Kontak</div>
 
       <div class="form-row">
         <div class="form-group">
           <label for="paket">Pilihan Paket <span class="req">*</span></label>
-          <input id="paket" type="text" placeholder="Ketik nama paket sesuai kesepakatan (contoh: Meracik Cicalengka)" required />
+          <input id="paket" type="text" list="packageSuggestions" placeholder="Ketik atau pilih nama paket (contoh: Paket Mahameru)" required autocomplete="off" />
+          <datalist id="packageSuggestions"></datalist>
         </div>
         <div class="form-group">
           <label for="hijab">Penataan Hijab / Hairdo</label>
@@ -569,7 +695,52 @@
       </div>
     </div>
 
-    <!-- 3. Syarat & Ketentuan Singkat -->
+    <!-- 3. Rincian Biaya & Pembayaran DP -->
+    <div class="card">
+      <div class="card-title">Rincian Biaya Paket &amp; Pembayaran DP</div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="harga_paket">Nilai Harga Paket (Rp) <span class="req">*</span></label>
+          <div class="input-currency-wrapper">
+            <span class="currency-prefix">Rp</span>
+            <input id="harga_paket" class="input-currency" type="text" inputmode="numeric" placeholder="Contoh: 35.000.000" required autocomplete="off" />
+          </div>
+          <span class="field-hint">Total kesepakatan harga paket layanan studio</span>
+        </div>
+        <div class="form-group">
+          <label for="nominal_dp">Nominal DP Ditransfer (Rp) <span class="req">*</span></label>
+          <div class="input-currency-wrapper">
+            <span class="currency-prefix">Rp</span>
+            <input id="nominal_dp" class="input-currency" type="text" inputmode="numeric" placeholder="Contoh: 5.000.000" required autocomplete="off" />
+          </div>
+          <span class="field-hint">Jumlah uang muka / DP yang disetorkan</span>
+        </div>
+      </div>
+
+      <!-- Realtime Live Calculation Summary -->
+      <div class="payment-calc-box">
+        <div class="calc-row">
+          <span class="calc-label">Total Kesepakatan Paket:</span>
+          <span class="calc-val" id="calcHargaPreview">Rp 0</span>
+        </div>
+        <div class="calc-row">
+          <span class="calc-label">DP Masuk / Ditransfer:</span>
+          <span class="calc-val calc-dp-text" id="calcDpPreview">Rp 0</span>
+        </div>
+        <div class="calc-divider"></div>
+        <div class="calc-row calc-main-row">
+          <span class="calc-label font-bold">Sisa Tagihan Pelunasan:</span>
+          <span class="calc-val font-bold calc-sisa-text" id="calcSisaPreview">Rp 0</span>
+        </div>
+        <div class="calc-footer">
+          <span class="calc-status-badge status-badge-pending" id="calcStatusBadge">Belum Diisi</span>
+          <span class="calc-status-desc" id="calcStatusDesc">Masukkan nilai harga paket &amp; nominal transfer DP</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. Syarat & Ketentuan Singkat -->
     <div class="terms-box">
       <div class="terms-heading">Ketentuan Layanan Studio</div>
       <ul class="terms-list">
@@ -619,9 +790,86 @@
   let availablePackages = [...DEFAULT_PACKAGES];
   const syncChannel = typeof BroadcastChannel !== 'undefined' ? new BroadcastChannel('carisa_booking_sync') : null;
 
-  const fieldIds = ['rek', 'cpw', 'cpp', 'tanggal', 'jam', 'alamat', 'paket', 'hijab', 'hp1', 'hp2', 'ig'];
+  const fieldIds = ['rek', 'cpw', 'cpp', 'tanggal', 'jam', 'alamat', 'paket', 'hijab', 'hp1', 'hp2', 'ig', 'harga_paket', 'nominal_dp'];
   const els = {};
   fieldIds.forEach(id => els[id] = document.getElementById(id));
+
+  function formatRupiahNumber(val) {
+    if (val === null || val === undefined || isNaN(val)) return '0';
+    const num = Math.round(Number(val));
+    return num.toLocaleString('id-ID');
+  }
+
+  function parseRupiahNumber(str) {
+    if (!str) return 0;
+    const clean = String(str).replace(/[^\d]/g, '');
+    return clean ? parseInt(clean, 10) : 0;
+  }
+
+  function handleCurrencyInput(e) {
+    const input = e.target;
+    const num = parseRupiahNumber(input.value);
+    input.value = num > 0 ? formatRupiahNumber(num) : (input.value.trim() === '0' ? '0' : '');
+    updatePaymentCalculation();
+    saveDraft();
+  }
+
+  function updatePaymentCalculation() {
+    const harga = parseRupiahNumber(els.harga_paket ? els.harga_paket.value : 0);
+    const dp = parseRupiahNumber(els.nominal_dp ? els.nominal_dp.value : 0);
+    const sisa = Math.max(0, harga - dp);
+
+    const elHarga = document.getElementById('calcHargaPreview');
+    const elDp = document.getElementById('calcDpPreview');
+    const elSisa = document.getElementById('calcSisaPreview');
+    const elBadge = document.getElementById('calcStatusBadge');
+    const elDesc = document.getElementById('calcStatusDesc');
+
+    if (elHarga) elHarga.textContent = 'Rp ' + formatRupiahNumber(harga);
+    if (elDp) elDp.textContent = 'Rp ' + formatRupiahNumber(dp);
+    if (elSisa) {
+      elSisa.textContent = (sisa === 0 && harga > 0) ? 'Rp 0 (Lunas)' : 'Rp ' + formatRupiahNumber(sisa);
+    }
+
+    if (elBadge) {
+      elBadge.className = 'calc-status-badge';
+      if (harga === 0 && dp === 0) {
+        elBadge.classList.add('status-badge-pending');
+        elBadge.textContent = 'Belum Diisi';
+        if (elDesc) elDesc.textContent = 'Masukkan nilai harga paket & nominal transfer DP';
+      } else if (dp >= harga && harga > 0) {
+        elBadge.classList.add('status-badge-lunas');
+        elBadge.textContent = 'LUNAS';
+        if (elDesc) elDesc.textContent = 'Seluruh biaya paket telah terpenuhi penuh';
+      } else if (dp > 0) {
+        elBadge.classList.add('status-badge-dp');
+        elBadge.textContent = 'SUDAH DP';
+        if (elDesc) elDesc.textContent = `Sisa pelunasan Rp ${formatRupiahNumber(sisa)} maksimal H-7 (Wedding) / H-1 (Reguler)`;
+      } else {
+        elBadge.classList.add('status-badge-pending');
+        elBadge.textContent = 'MENUNGGU DP';
+        if (elDesc) elDesc.textContent = 'Nominal DP belum dimasukkan / belum ditransfer';
+      }
+    }
+  }
+
+  function handlePackageAutoSuggest() {
+    const packageName = els.paket ? els.paket.value.trim() : '';
+    if (!packageName) return;
+    const category = document.querySelector('input[name="category"]:checked')?.value || 'wedding';
+    const resolvedPrice = resolvePackagePrice(packageName, category);
+    if (resolvedPrice > 0) {
+      if (!els.harga_paket.value || parseRupiahNumber(els.harga_paket.value) === 0) {
+        els.harga_paket.value = formatRupiahNumber(resolvedPrice);
+      }
+      if (!els.nominal_dp.value || parseRupiahNumber(els.nominal_dp.value) === 0) {
+        const defDp = category === 'reguler' ? Math.min(250000, resolvedPrice) : Math.min(5000000, resolvedPrice);
+        els.nominal_dp.value = formatRupiahNumber(defDp);
+      }
+      updatePaymentCalculation();
+      saveDraft();
+    }
+  }
 
   function showToast(message) {
     const toast = document.getElementById('toast');
@@ -646,6 +894,7 @@
       coupleRow.style.gridTemplateColumns = '';
       cpwLabel.innerHTML = 'Nama Pengantin Wanita (CPW) <span class="req">*</span>';
     }
+    updatePaymentCalculation();
   }
 
   function populatePackagesDatalist() {
@@ -732,6 +981,7 @@
         }
       });
       handleCategoryChange();
+      updatePaymentCalculation();
     } catch (e) {}
   }
 
@@ -742,6 +992,17 @@
     }
   });
 
+  if (els.harga_paket) els.harga_paket.addEventListener('input', handleCurrencyInput);
+  if (els.nominal_dp) els.nominal_dp.addEventListener('input', handleCurrencyInput);
+  if (els.paket) {
+    els.paket.addEventListener('change', handlePackageAutoSuggest);
+    els.paket.addEventListener('input', () => {
+      const val = els.paket.value.trim().toLowerCase();
+      const matched = availablePackages.find(p => (p.name || '').toLowerCase() === val);
+      if (matched) handlePackageAutoSuggest();
+    });
+  }
+
   async function handleFormSubmit(e) {
     e.preventDefault();
     const saveBtn = document.getElementById('saveBtn');
@@ -751,8 +1012,15 @@
     const eventDate = els.tanggal.value || new Date().toISOString().split('T')[0];
     const dateCode = eventDate.replace(/-/g, '');
     const packageName = els.paket.value.trim() || (category === 'reguler' ? 'Paket Reguler' : 'Paket Wedding');
-    const totalPrice = resolvePackagePrice(packageName, category);
-    const defaultDp = category === 'reguler' ? Math.min(250000, totalPrice) : Math.min(5000000, totalPrice);
+    const totalPrice = parseRupiahNumber(els.harga_paket ? els.harga_paket.value : 0) || resolvePackagePrice(packageName, category);
+    const dpAmount = parseRupiahNumber(els.nominal_dp ? els.nominal_dp.value : 0);
+
+    let paymentStatus = 'pending';
+    if (totalPrice > 0 && dpAmount >= totalPrice) {
+      paymentStatus = 'lunas';
+    } else if (dpAmount > 0) {
+      paymentStatus = 'dp';
+    }
 
     const hp1 = els.hp1.value.trim();
     const hp2 = els.hp2.value.trim();
@@ -770,8 +1038,8 @@
       event_time: els.jam.value || '08:00',
       package_name: packageName,
       total_price: totalPrice,
-      dp_amount: defaultDp,
-      payment_status: 'dp',
+      dp_amount: dpAmount,
+      payment_status: paymentStatus,
       hair_style: els.hijab.value || 'Hijabdo',
       instagram: els.ig.value.trim().replace(/^@/, '') || '-',
       phone: combinedPhone || '-',
@@ -826,10 +1094,17 @@
     document.getElementById('bookingForm').reset();
     els.jam.value = '08:00';
     handleCategoryChange();
+    updatePaymentCalculation();
 
     const banner = document.getElementById('successBanner');
     const codeBadge = document.getElementById('successCodeBadge');
+    const summaryEl = document.getElementById('successPaymentSummary');
     if (codeBadge) codeBadge.textContent = newBooking.booking_code;
+    if (summaryEl) {
+      const sisa = Math.max(0, newBooking.total_price - newBooking.dp_amount);
+      summaryEl.innerHTML = `Total Paket: <b>Rp ${formatRupiahNumber(newBooking.total_price)}</b> &bull; DP: <b>Rp ${formatRupiahNumber(newBooking.dp_amount)}</b> &bull; Sisa: <b>Rp ${formatRupiahNumber(sisa)}</b> (${newBooking.payment_status.toUpperCase()})`;
+      summaryEl.style.display = 'block';
+    }
     if (banner) {
       banner.classList.add('active');
       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -843,6 +1118,7 @@
 
   populatePackagesDatalist();
   loadDraft();
+  updatePaymentCalculation();
   syncPackagesFromServer();
 </script>
 
