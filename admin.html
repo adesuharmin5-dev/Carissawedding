@@ -2459,7 +2459,7 @@
         </button>
       </div>
 
-      <form onsubmit="handleSaveMasterUser(event)" class="p-5 space-y-4 text-xs">
+      <form id="master-user-form" onsubmit="handleSaveMasterUser(event)" class="p-5 space-y-4 text-xs">
         <input type="hidden" id="master-user-id" value="" />
         <div>
           <label class="block font-semibold text-stone-700 mb-1">Nama Pengguna / Staf <span class="text-rose-600">*</span></label>
@@ -2478,7 +2478,7 @@
         <div>
           <label class="block font-semibold text-stone-700 mb-1">Kata Sandi / Password Login <span class="text-rose-600">*</span></label>
           <div class="relative">
-            <input type="password" id="master-user-password" required placeholder="Masukkan kata sandi akun" class="w-full pl-3.5 pr-10 py-2.5 rounded-xl border border-stone-300 font-mono text-xs focus:outline-none focus:border-terracotta-600" />
+            <input type="password" id="master-user-password" placeholder="Masukkan kata sandi akun" class="w-full pl-3.5 pr-10 py-2.5 rounded-xl border border-stone-300 font-mono text-xs focus:outline-none focus:border-terracotta-600" />
             <button type="button" onclick="toggleMasterUserPasswordVisibility()" title="Tampilkan/Sembunyikan Sandi" class="absolute inset-y-0 right-0 pr-3 flex items-center text-stone-400 hover:text-stone-600 cursor-pointer">
               <i id="master-user-pass-icon" data-lucide="eye" class="w-4 h-4"></i>
             </button>
@@ -2491,7 +2491,7 @@
         </div>
         <div class="pt-2 flex items-center justify-end gap-2">
           <button type="button" onclick="closeMasterUserModal()" class="btn-secondary">Batal</button>
-          <button type="submit" class="btn-primary">Simpan User</button>
+          <button type="submit" id="btn-save-master-user" class="btn-primary">Simpan User</button>
         </div>
       </form>
     </div>
@@ -3752,24 +3752,29 @@
         setStorage(STORAGE_KEY_PACKAGES, packages);
       }
       masterUsers = getStorage(STORAGE_KEY_USERS, getStorage(LEGACY_USERS_KEY, DEFAULT_MASTER_USERS));
-      // Enforce: Hanya akun Super Admin dan Fitting yang aktif di sistem
+      // Pastikan akun resmi default (Super Admin & User Fitting) selalu ada di sistem
       if (Array.isArray(masterUsers)) {
-        masterUsers = masterUsers.filter(u => {
-          const r = (u.role || '').toLowerCase();
-          return r === 'super admin' || r.includes('fitting') || u.id === 'usr_1' || u.id === 'usr_fitting';
-        });
-        const sa = masterUsers.find(u => (u.role || '').toLowerCase() === 'super admin' || u.id === 'usr_1');
-        if (sa) {
-          sa.name = 'Admin Carissa (Official)';
-          sa.email = 'rissa.april@gmail.com';
-          sa.phone = '081394218860';
-          if (!sa.password || sa.password === 'carissa123') sa.password = 'Risa1234';
+        let defaultSa = masterUsers.find(u => u.id === 'usr_1' || (u.email && u.email.toLowerCase() === 'rissa.april@gmail.com'));
+        if (!defaultSa) {
+          masterUsers.unshift({
+            id: 'usr_1',
+            name: 'Admin Carissa (Official)',
+            role: 'Super Admin',
+            email: 'rissa.april@gmail.com',
+            phone: '081394218860',
+            password: 'Risa1234'
+          });
         }
-        const fit = masterUsers.find(u => (u.role || '').toLowerCase().includes('fitting') || u.id === 'usr_fitting');
-        if (fit) {
-          fit.name = 'Staf Fitting Busana';
-          fit.email = 'fitting.carisa@gmail.com';
-          fit.phone = '083165107695';
+        let defaultFit = masterUsers.find(u => u.id === 'usr_fitting' || (u.email && u.email.toLowerCase() === 'fitting.carisa@gmail.com'));
+        if (!defaultFit) {
+          masterUsers.push({
+            id: 'usr_fitting',
+            name: 'Staf Fitting Busana',
+            role: 'Akses User (Khusus Fitting)',
+            email: 'fitting.carisa@gmail.com',
+            phone: '083165107695',
+            password: 'carissa123'
+          });
         }
         setStorage(STORAGE_KEY_USERS, masterUsers);
         setStorage(LEGACY_USERS_KEY, masterUsers);
@@ -3986,30 +3991,14 @@
           setStorage(LEGACY_PACKAGES_KEY, packages);
         }
         if (Array.isArray(db.master_users) && db.master_users.length > 0) {
-          // Hanya izinkan akun Super Admin dan Fitting di sistem
-          const filtered = db.master_users.filter(u => {
-            const r = (u.role || '').toLowerCase();
-            return r === 'super admin' || r.includes('fitting') || u.id === 'usr_1' || u.id === 'usr_fitting';
-          });
-          masterUsers = filtered.length ? filtered : JSON.parse(JSON.stringify(DEFAULT_MASTER_USERS));
-          let sa = masterUsers.find(u => (u.role || '').toLowerCase() === 'super admin' || u.id === 'usr_1');
+          masterUsers = db.master_users;
+          let sa = masterUsers.find(u => u.id === 'usr_1' || (u.email && u.email.toLowerCase() === 'rissa.april@gmail.com'));
           if (!sa) {
-            sa = JSON.parse(JSON.stringify(DEFAULT_MASTER_USERS[0]));
-            masterUsers.unshift(sa);
-          } else {
-            sa.name = 'Admin Carissa (Official)';
-            sa.email = 'rissa.april@gmail.com';
-            sa.phone = '081394218860';
-            if (!sa.password || sa.password === 'carissa123') sa.password = 'Risa1234';
+            masterUsers.unshift(JSON.parse(JSON.stringify(DEFAULT_MASTER_USERS[0])));
           }
-          let fit = masterUsers.find(u => (u.role || '').toLowerCase().includes('fitting') || u.id === 'usr_fitting');
+          let fit = masterUsers.find(u => u.id === 'usr_fitting' || (u.email && u.email.toLowerCase() === 'fitting.carisa@gmail.com'));
           if (!fit) {
-            fit = JSON.parse(JSON.stringify(DEFAULT_MASTER_USERS[1]));
-            masterUsers.push(fit);
-          } else {
-            fit.name = 'Staf Fitting Busana';
-            fit.email = 'fitting.carisa@gmail.com';
-            fit.phone = '083165107695';
+            masterUsers.push(JSON.parse(JSON.stringify(DEFAULT_MASTER_USERS[1])));
           }
           setStorage(STORAGE_KEY_USERS, masterUsers);
           setStorage(LEGACY_USERS_KEY, masterUsers);
@@ -4451,15 +4440,15 @@
           const pRole = (parsed.role || '').toLowerCase();
           let pEmail = (parsed.email || '').toLowerCase().trim();
 
-          // Auto-migrate standard role emails if needed
-          if (pRole === 'super admin' && (!pEmail || pEmail !== 'rissa.april@gmail.com')) {
-            parsed.email = 'rissa.april@gmail.com';
-            parsed.name = 'Admin Carissa (Official)';
-            pEmail = 'rissa.april@gmail.com';
-          } else if (pRole.includes('fitting') && (!pEmail || pEmail !== 'fitting.carisa@gmail.com')) {
-            parsed.email = 'fitting.carisa@gmail.com';
-            parsed.name = 'Staf Fitting Busana';
-            pEmail = 'fitting.carisa@gmail.com';
+          // Fallback email jika sesi lama belum memiliki email tersimpan
+          if (!pEmail) {
+            if (pRole === 'super admin') {
+              parsed.email = 'rissa.april@gmail.com';
+              pEmail = 'rissa.april@gmail.com';
+            } else if (pRole.includes('fitting')) {
+              parsed.email = 'fitting.carisa@gmail.com';
+              pEmail = 'fitting.carisa@gmail.com';
+            }
           }
 
           // Validasi apakah email masih terdaftar di masterUsers atau fallback akun resmi
@@ -10118,36 +10107,36 @@
       const clientName = b.category === 'wedding' && b.client_cpp && b.client_cpp !== '-' ? `${b.client_cpw} & ${b.client_cpp}` : b.client_cpw;
 
       const html = `
-        <div style="width: 100%; max-width: 760px; margin: 0 auto; padding: 18px 22px; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: #1C1917; background: #FFFFFF; box-sizing: border-box; page-break-inside: avoid;">
+        <div style="width: 100%; padding: 20px 24px; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: #1C1917; background: #FFFFFF; box-sizing: border-box;">
           <!-- Header Carissa Kompak & Resmi -->
-          <div style="text-align: center; margin-bottom: 12px;">
+          <div style="text-align: center; margin-bottom: 14px;">
             <div style="display: inline-block;">
-              <img src="${CARISSA_LOGO_DATA_URI}" alt="CARISSA" style="width: 130px; height: auto; display: block; margin: 0 auto;" />
+              <img src="${CARISSA_LOGO_DATA_URI}" alt="CARISSA" style="width: 135px; height: auto; display: block; margin: 0 auto;" />
             </div>
             <div style="font-family: 'Times New Roman', Times, serif; font-size: 11.5px; color: #292524; margin-top: 6px; line-height: 1.45;">
               <div>Jl. Cipasir Pancasila RT 03/09 Ds. Linggar Kec. Rancaekek Kab. Bandung</div>
               <div style="margin-top: 2px;">Contact Person: 081394218860 (WhatsApp) &bull; IG: @carissa.weddingorganizer</div>
             </div>
-            <div style="border-top: 1.5px solid #9A5B3E; margin-top: 10px; padding-top: 7px; display: flex; justify-content: space-between; align-items: center; font-size: 10px; color: #57534E;">
+            <div style="border-top: 1.5px solid #9A5B3E; margin-top: 10px; padding-top: 8px; display: flex; justify-content: space-between; align-items: center; font-size: 10.5px; color: #57534E;">
               <div>
                 <strong style="color: #1C1917; font-size: 11px; letter-spacing: 0.5px;">INVOICE &amp; BUKTI RESERVASI RESMI</strong>
               </div>
               <div>
-                No: <strong style="color: #9A5B3E; font-size: 11px;">${b.booking_code || b.id}</strong> &bull; Tgl Acara: <strong>${formatDateIndo(b.event_date)}</strong>
+                No: <strong style="color: #9A5B3E; font-size: 11.5px;">${b.booking_code || b.id}</strong> &bull; Tgl Acara: <strong>${formatDateIndo(b.event_date)}</strong>
               </div>
             </div>
           </div>
 
           <!-- Grid Data Klien & Jadwal -->
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; font-size: 10px; line-height: 1.5;">
-            <div style="padding: 9px 12px; background: #FAF8F5; border: 1px solid #E7E2DA; border-radius: 6px;">
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 14px; font-size: 10.5px; line-height: 1.55;">
+            <div style="padding: 10px 14px; background: #FAF8F5; border: 1px solid #E7E2DA; border-radius: 6px;">
               <div style="font-weight: 800; margin-bottom: 5px; color: #9A5B3E; text-transform: uppercase; font-size: 9.5px; letter-spacing: 0.3px;">Informasi Klien</div>
               <div><strong>Nama Klien:</strong> ${clientName}</div>
               <div><strong>No. WhatsApp:</strong> ${b.phone || '-'}</div>
               <div><strong>Instagram:</strong> @${(b.instagram || '-').replace(/^@/, '')}</div>
               <div><strong>Atas Nama Rekening DP:</strong> ${b.account_name || '-'}</div>
             </div>
-            <div style="padding: 9px 12px; background: #FAF8F5; border: 1px solid #E7E2DA; border-radius: 6px;">
+            <div style="padding: 10px 14px; background: #FAF8F5; border: 1px solid #E7E2DA; border-radius: 6px;">
               <div style="font-weight: 800; margin-bottom: 5px; color: #9A5B3E; text-transform: uppercase; font-size: 9.5px; letter-spacing: 0.3px;">Jadwal &amp; Lokasi Acara</div>
               <div><strong>Hari / Tanggal:</strong> ${formatDateIndo(b.event_date)} (${b.event_time || '08:00'} WIB)</div>
               <div><strong>Kategori:</strong> ${(b.category || 'wedding').toUpperCase()}</div>
@@ -10157,55 +10146,55 @@
           </div>
 
           <!-- Tabel Rincian Biaya -->
-          <table style="width: 100%; border-collapse: collapse; font-size: 10.5px; margin-bottom: 12px; border: 1px solid #E7E2DA; border-radius: 6px; overflow: hidden; page-break-inside: avoid;">
+          <table style="width: 100%; border-collapse: collapse; font-size: 11px; margin-bottom: 14px; border: 1px solid #E7E2DA; border-radius: 6px; overflow: hidden;">
             <thead>
               <tr style="background: #FAF8F5; border-bottom: 1.5px solid #D6CFC5; color: #44403C; font-size: 10px; text-transform: uppercase;">
-                <th style="padding: 7px 10px; text-align: left;">Deskripsi Layanan &amp; Paket</th>
-                <th style="padding: 7px 10px; text-align: right; width: 160px;">Nominal (Rp)</th>
+                <th style="padding: 8px 12px; text-align: left;">Deskripsi Layanan &amp; Paket</th>
+                <th style="padding: 8px 12px; text-align: right; width: 170px;">Nominal (Rp)</th>
               </tr>
             </thead>
             <tbody>
               <tr style="border-bottom: 1px solid #E7E2DA;">
-                <td style="padding: 7px 10px;"><strong>${b.package_name || 'Paket Layanan Wedding'}</strong></td>
-                <td style="padding: 7px 10px; text-align: right; font-weight: 700;">Rp ${formatNumberWithCommas(b.total_price)}</td>
+                <td style="padding: 8px 12px;"><strong>${b.package_name || 'Paket Layanan Wedding'}</strong></td>
+                <td style="padding: 8px 12px; text-align: right; font-weight: 700;">Rp ${formatNumberWithCommas(b.total_price)}</td>
               </tr>
               <tr style="border-bottom: 1.5px solid #D6CFC5; background: #F0FDF4;">
-                <td style="padding: 7px 10px; color: #15803D; font-weight: 600;">Uang Muka (DP) Diterima</td>
-                <td style="padding: 7px 10px; text-align: right; color: #15803D; font-weight: 700;">- Rp ${formatNumberWithCommas(b.dp_amount)}</td>
+                <td style="padding: 8px 12px; color: #15803D; font-weight: 600;">Uang Muka (DP) Diterima</td>
+                <td style="padding: 8px 12px; text-align: right; color: #15803D; font-weight: 700;">- Rp ${formatNumberWithCommas(b.dp_amount)}</td>
               </tr>
               <tr style="background: #FFFBEB; border-top: 1.5px solid #F59E0B;">
-                <td style="padding: 8px 10px; font-weight: 800; font-size: 11px; color: #1C1917;">SISA PELUNASAN</td>
-                <td style="padding: 8px 10px; text-align: right; font-weight: 800; font-size: 12px; color: #9A5B3E;">Rp ${formatNumberWithCommas(rem)}</td>
+                <td style="padding: 9px 12px; font-weight: 800; font-size: 11px; color: #1C1917;">SISA PELUNASAN</td>
+                <td style="padding: 9px 12px; text-align: right; font-weight: 800; font-size: 12.5px; color: #9A5B3E;">Rp ${formatNumberWithCommas(rem)}</td>
               </tr>
             </tbody>
           </table>
 
           <!-- Rekening Pembayaran & Status Badge -->
-          <div style="display: flex; gap: 10px; align-items: stretch; margin-bottom: 14px; page-break-inside: avoid;">
-            <div style="flex: 1; padding: 8px 12px; background: #FAF8F5; border: 1px solid #E7E2DA; border-radius: 6px; font-size: 9.5px; color: #57534E; line-height: 1.45;">
+          <div style="display: flex; gap: 12px; align-items: stretch; margin-bottom: 16px;">
+            <div style="flex: 1; padding: 10px 14px; background: #FAF8F5; border: 1px solid #E7E2DA; border-radius: 6px; font-size: 9.5px; color: #57534E; line-height: 1.45;">
               <div style="font-weight: 700; color: #1C1917; margin-bottom: 2px;">Rekening Pembayaran Resmi:</div>
-              <div style="font-weight: 800; color: #9A5B3E; font-size: 10px;">${studioSettings.bank || 'BCA 1234567890 a/n Carissa Wedding'}</div>
+              <div style="font-weight: 800; color: #9A5B3E; font-size: 10.5px;">${studioSettings.bank || 'BCA 1234567890 a/n Carissa Wedding'}</div>
               <div style="font-size: 8.5px; color: #78716C; margin-top: 3px;">*Pelunasan diselesaikan paling lambat H-3 sebelum tanggal pelaksanaan acara.</div>
             </div>
-            <div style="width: 170px; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 8px 10px; border-radius: 6px; border: 1px dashed ${rem === 0 ? '#10B981' : '#3B82F6'}; background: ${rem === 0 ? '#ECFDF5' : '#EFF6FF'}; text-align: center;">
+            <div style="width: 170px; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 10px 12px; border-radius: 6px; border: 1px dashed ${rem === 0 ? '#10B981' : '#3B82F6'}; background: ${rem === 0 ? '#ECFDF5' : '#EFF6FF'}; text-align: center;">
               <span style="font-size: 8.5px; text-transform: uppercase; font-weight: 700; color: ${rem === 0 ? '#047857' : '#1D4ED8'}; letter-spacing: 0.5px;">Status Pembayaran</span>
-              <span style="font-size: 12px; font-weight: 800; color: ${rem === 0 ? '#059669' : '#2563EB'}; margin-top: 2px;">
+              <span style="font-size: 12.5px; font-weight: 800; color: ${rem === 0 ? '#059669' : '#2563EB'}; margin-top: 2px;">
                 ${rem === 0 ? '&#10003; LUNAS' : (parseNumericValue(b.dp_amount) > 0 ? '&#9898; SUDAH DP' : '&#9888; BELUM DP')}
               </span>
             </div>
           </div>
 
           <!-- Tanda Tangan Resmi -->
-          <div style="display: flex; justify-content: space-between; font-size: 9.5px; color: #44403C; page-break-inside: avoid; padding-top: 4px;">
-            <div style="text-align: center; width: 170px;">
+          <div style="display: flex; justify-content: space-between; font-size: 9.5px; color: #44403C; padding-top: 6px;">
+            <div style="text-align: center; width: 180px;">
               <div>Klien / Calon Pengantin,</div>
-              <div style="height: 42px;"></div>
+              <div style="height: 48px;"></div>
               <div style="border-bottom: 1px solid #78716C; font-weight: 700; padding-bottom: 2px;">${clientName}</div>
             </div>
-            <div style="text-align: center; width: 170px;">
+            <div style="text-align: center; width: 180px;">
               <div>Bandung, ${new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}</div>
               <div style="font-weight: 600; color: #78716C; font-size: 9px;">Manajemen Carissa WO,</div>
-              <div style="height: 32px;"></div>
+              <div style="height: 38px;"></div>
               <div style="border-bottom: 1px solid #78716C; font-weight: 700; padding-bottom: 2px;">${studioSettings.name || 'Carissa Wedding Organizer'}</div>
             </div>
           </div>
@@ -10217,16 +10206,15 @@
       if (typeof html2pdf !== 'undefined') {
         showToast('Mengunduh PDF Invoice...');
         html2pdf().set({
-          margin: [6, 6, 6, 6],
+          margin: [8, 8, 8, 8],
           filename: `Invoice_${b.booking_code || b.id}.pdf`,
           image: { type: 'jpeg', quality: 0.98 },
-          html2canvas: { scale: 2, useCORS: true, logging: false, scrollX: 0, scrollY: 0, windowWidth: 780 },
-          jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
-          pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
+          html2canvas: { scale: 2, useCORS: true, logging: false },
+          jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
         }).from(container).save();
       } else {
         const printArea = document.getElementById('print-container');
-        printArea.innerHTML = html;
+        if (printArea) printArea.innerHTML = html;
         window.print();
       }
     }
@@ -10551,91 +10539,151 @@
     }
 
     function handleSaveMasterUser(e) {
-      e.preventDefault();
-      const id = document.getElementById('master-user-id').value;
-      const name = document.getElementById('master-user-name').value.trim();
-      const role = document.getElementById('master-user-role').value;
-      const email = document.getElementById('master-user-email').value.trim();
-      const password = document.getElementById('master-user-password').value.trim() || 'carissa123';
-      const phone = document.getElementById('master-user-phone').value.trim();
+      if (e) e.preventDefault();
+      try {
+        const idInput = document.getElementById('master-user-id');
+        const nameInput = document.getElementById('master-user-name');
+        const roleInput = document.getElementById('master-user-role');
+        const emailInput = document.getElementById('master-user-email');
+        const passInput = document.getElementById('master-user-password');
+        const phoneInput = document.getElementById('master-user-phone');
 
-      if (id) {
-        const idx = masterUsers.findIndex(x => x.id === id);
-        if (idx !== -1) {
-          masterUsers[idx] = { ...masterUsers[idx], name, role, email, password, phone };
-          fetch('/api/users/' + encodeURIComponent(id), {
-            method: 'PUT',
+        const id = idInput ? idInput.value : '';
+        const name = nameInput ? nameInput.value.trim() : '';
+        const role = roleInput ? roleInput.value : 'Super Admin';
+        const email = emailInput ? emailInput.value.trim().toLowerCase() : '';
+        const password = passInput ? passInput.value.trim() : '';
+        const phone = phoneInput ? phoneInput.value.trim() : '';
+
+        if (!name) {
+          showToast('Nama pengguna / staf wajib diisi', 'error');
+          if (nameInput) nameInput.focus();
+          return;
+        }
+        if (!email) {
+          showToast('Email login wajib diisi', 'error');
+          if (emailInput) emailInput.focus();
+          return;
+        }
+        if (!id && !password) {
+          showToast('Kata sandi login akun baru wajib diisi', 'error');
+          if (passInput) passInput.focus();
+          return;
+        }
+
+        if (!Array.isArray(masterUsers)) masterUsers = [];
+
+        // Pemeriksaan duplikasi email
+        const existingEmailUser = masterUsers.find(u => (u.email || '').toLowerCase().trim() === email && u.id !== id);
+        if (existingEmailUser) {
+          showToast(`Email ${email} sudah digunakan oleh "${existingEmailUser.name}". Gunakan email lain.`, 'error');
+          if (emailInput) emailInput.focus();
+          return;
+        }
+
+        if (id) {
+          const idx = masterUsers.findIndex(x => x.id === id);
+          if (idx !== -1) {
+            masterUsers[idx] = {
+              ...masterUsers[idx],
+              name,
+              role,
+              email,
+              password: password || masterUsers[idx].password || 'carissa123',
+              phone
+            };
+            fetch('/api/users/' + encodeURIComponent(id), {
+              method: 'PUT',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(masterUsers[idx])
+            }).catch(() => {});
+          }
+        } else {
+          const newUser = {
+            id: 'usr_' + Date.now(),
+            name,
+            role,
+            email,
+            password: password || 'carissa123',
+            phone
+          };
+          masterUsers.push(newUser);
+          fetch('/api/users', {
+            method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(masterUsers[idx])
+            body: JSON.stringify(newUser)
           }).catch(() => {});
         }
-      } else {
-        const newUser = { id: 'usr_' + Date.now(), name, role, email, password, phone };
-        masterUsers.push(newUser);
-        fetch('/api/users', {
+
+        setStorage(STORAGE_KEY_USERS, masterUsers);
+        setStorage(LEGACY_USERS_KEY, masterUsers);
+
+        // 1. Update session jika user yang sedang login diubah
+        if (currentUserSession && currentUserSession.id === id) {
+          currentUserSession.name = name;
+          currentUserSession.email = email;
+          currentUserSession.role = role;
+          currentUserSession.phone = phone;
+          sessionStorage.setItem(STORAGE_KEY_SESSION, JSON.stringify(currentUserSession));
+          if (localStorage.getItem(STORAGE_KEY_SESSION)) {
+            localStorage.setItem(STORAGE_KEY_SESSION, JSON.stringify(currentUserSession));
+          }
+        }
+
+        // 2. Jika Super Admin default (usr_1) diubah, perbarui active_sync_email di studioSettings
+        if (id === 'usr_1') {
+          if (!studioSettings) studioSettings = {};
+          studioSettings.active_sync_email = email;
+          setStorage(STORAGE_KEY_STUDIO, studioSettings);
+        }
+
+        // 3. Otomatis perbarui seluruh data penerima di jadwal pengingat (fittingReminders)
+        try {
+          const recipients = getSuperAdminAndFittingRecipients();
+          if (Array.isArray(fittingReminders)) {
+            fittingReminders.forEach(r => {
+              r.superadmin_email = recipients.superAdmin.email;
+              r.superadmin_name = recipients.superAdmin.name;
+              r.fitting_user_email = recipients.fittingUser.email;
+              r.fitting_user_name = recipients.fittingUser.name;
+              r.fitting_user_phone = recipients.fittingUser.phone || '';
+              r.recipient_emails = recipients.emailsCsv;
+            });
+            setStorage(STORAGE_KEY_FITTING_REMINDERS, fittingReminders);
+          }
+        } catch (recErr) {
+          console.warn('Recipients sync notice:', recErr);
+        }
+
+        closeMasterUserModal();
+        renderMasterUsersTable();
+        renderQuickLoginButtons();
+
+        // 4. Sinkronkan pengingat event & Google Calendar
+        try {
+          if (typeof syncFittingRemindersFromEvents === 'function') syncFittingRemindersFromEvents(false);
+          if (typeof renderFittingRemindersSection === 'function') renderFittingRemindersSection();
+          if (typeof syncAllToGoogleCalendarApiV3 === 'function') syncAllToGoogleCalendarApiV3(false);
+        } catch (syncErr) {
+          console.warn('Sync reminders notice:', syncErr);
+        }
+
+        // 5. Dorong pembaruan komprehensif ke server cPanel
+        fetch('/api/sync-all', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(newUser)
+          body: JSON.stringify({
+            master_users: masterUsers,
+            fitting_reminders: fittingReminders,
+            studio_settings: studioSettings
+          })
         }).catch(() => {});
+
+        showToast('Akun pengguna berhasil disimpan');
+      } catch (err) {
+        console.error('Error in handleSaveMasterUser:', err);
+        showToast('Gagal menyimpan user: ' + (err.message || 'Terjadi kesalahan sistem'), 'error');
       }
-
-      setStorage(STORAGE_KEY_USERS, masterUsers);
-      setStorage(LEGACY_USERS_KEY, masterUsers);
-
-      // 1. Update session jika user yang sedang login diubah
-      if (currentUserSession && currentUserSession.id === id) {
-        currentUserSession.name = name;
-        currentUserSession.email = email;
-        currentUserSession.role = role;
-        currentUserSession.phone = phone;
-        sessionStorage.setItem(STORAGE_KEY_SESSION, JSON.stringify(currentUserSession));
-        if (localStorage.getItem(STORAGE_KEY_SESSION)) {
-          localStorage.setItem(STORAGE_KEY_SESSION, JSON.stringify(currentUserSession));
-        }
-      }
-
-      // 2. Jika Super Admin diubah, perbarui active_sync_email di studioSettings
-      if (id === 'usr_1' || (role || '').toLowerCase() === 'super admin') {
-        if (!studioSettings) studioSettings = {};
-        studioSettings.active_sync_email = email;
-        setStorage(STORAGE_KEY_STUDIO, studioSettings);
-      }
-
-      // 3. Otomatis perbarui seluruh data penerima di jadwal pengingat (fittingReminders)
-      const recipients = getSuperAdminAndFittingRecipients();
-      if (Array.isArray(fittingReminders)) {
-        fittingReminders.forEach(r => {
-          r.superadmin_email = recipients.superAdmin.email;
-          r.superadmin_name = recipients.superAdmin.name;
-          r.fitting_user_email = recipients.fittingUser.email;
-          r.fitting_user_name = recipients.fittingUser.name;
-          r.fitting_user_phone = recipients.fittingUser.phone || '';
-          r.recipient_emails = recipients.emailsCsv;
-        });
-        setStorage(STORAGE_KEY_FITTING_REMINDERS, fittingReminders);
-      }
-
-      closeMasterUserModal();
-      renderMasterUsersTable();
-      renderQuickLoginButtons();
-
-      // 4. Sinkronkan ulang pengingat event & Google Calendar API v3
-      if (typeof syncFittingRemindersFromEvents === 'function') syncFittingRemindersFromEvents(false);
-      if (typeof renderFittingRemindersSection === 'function') renderFittingRemindersSection();
-      if (typeof syncAllToGoogleCalendarApiV3 === 'function') syncAllToGoogleCalendarApiV3(false);
-
-      // 5. Dorong pembaruan komprehensif ke server cPanel
-      fetch('/api/sync-all', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          master_users: masterUsers,
-          fitting_reminders: fittingReminders,
-          studio_settings: studioSettings
-        })
-      }).catch(() => {});
-
-      showToast('Akun user dan seluruh jadwal pengingat kalender berhasil diperbarui');
     }
 
     function deleteMasterUser(id) {
