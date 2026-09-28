@@ -2083,11 +2083,11 @@
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 p-3.5 rounded-xl bg-[#FAF8F5] border border-[#E7E2DA]">
           <div>
             <label class="block font-semibold text-stone-700 mb-1">Total Harga (Rp)</label>
-            <input type="text" id="form-total-price" oninput="formatMoneyInput(this); calculateAdminRemaining()" class="w-full px-3 py-2 rounded-lg border border-stone-300 bg-white font-bold" />
+            <input type="text" id="form-total-price" placeholder="0" oninput="formatMoneyInput(this); calculateAdminRemaining()" class="w-full px-3 py-2 rounded-lg border border-stone-300 bg-white font-bold" />
           </div>
           <div>
             <label class="block font-semibold text-stone-700 mb-1">DP Masuk (Rp)</label>
-            <input type="text" id="form-dp-amount" oninput="formatMoneyInput(this); calculateAdminRemaining()" class="w-full px-3 py-2 rounded-lg border border-stone-300 bg-white font-bold text-emerald-700" />
+            <input type="text" id="form-dp-amount" placeholder="0" oninput="formatMoneyInput(this); calculateAdminRemaining()" class="w-full px-3 py-2 rounded-lg border border-stone-300 bg-white font-bold text-emerald-700" />
           </div>
           <div>
             <label class="block font-semibold text-stone-700 mb-1">Status Pembayaran</label>
@@ -2157,7 +2157,7 @@
         <div class="rounded-xl border border-[#E7E2DA] bg-white overflow-hidden">
           <div class="px-4 py-3 bg-[#FAF8F5] border-b border-[#E7E2DA] flex flex-wrap items-center justify-between gap-2">
             <div class="flex items-center gap-2">
-              <input type="checkbox" id="fit-toggle-parents" checked onchange="toggleOptionalParentSection()" class="w-4 h-4 rounded text-terracotta-600 focus:ring-0 cursor-pointer" />
+              <input type="checkbox" id="fit-toggle-parents" onchange="toggleOptionalParentSection()" class="w-4 h-4 rounded text-terracotta-600 focus:ring-0 cursor-pointer" />
               <label for="fit-toggle-parents" class="font-bold text-stone-800 text-xs cursor-pointer select-none">
                 Data Nama Ayah &amp; Ibu CPW / CPP
               </label>
@@ -2171,7 +2171,7 @@
             </div>
           </div>
 
-          <div id="fit-optional-parents-body" class="p-4 grid grid-cols-1 md:grid-cols-2 gap-4 bg-white">
+          <div id="fit-optional-parents-body" class="hidden p-4 grid grid-cols-1 md:grid-cols-2 gap-4 bg-white">
             <!-- Orang Tua CPW (Wanita) -->
             <div class="p-3.5 rounded-xl bg-[#FAF8F5]/70 border border-stone-200/80 space-y-3">
               <div class="flex items-center justify-between">
@@ -5599,8 +5599,9 @@
       today.setDate(today.getDate() + 14);
       document.getElementById('form-event-date').value = today.toISOString().split('T')[0];
       document.getElementById('form-event-time').value = '08:00';
-      document.getElementById('form-total-price').value = '20,000,000';
-      document.getElementById('form-dp-amount').value = '5,000,000';
+      document.getElementById('form-total-price').value = '';
+      document.getElementById('form-dp-amount').value = '';
+      document.getElementById('form-payment-status').value = 'pending';
       if (document.getElementById('form-auto-open-gcal')) {
         document.getElementById('form-auto-open-gcal').checked = false;
       }
@@ -5608,6 +5609,7 @@
       populateAdminPackageDatalist();
       handleAdminCategoryChange();
       updateBookingWeddingGcalPreview();
+      calculateAdminRemaining();
       document.getElementById('booking-modal').classList.remove('hidden');
       if (window.lucide) window.lucide.createIcons();
     }
@@ -5639,7 +5641,19 @@
     }
 
     function calculateAdminRemaining() {
-      // Optional helper
+      const total = parseNumericValue(document.getElementById('form-total-price')?.value || 0);
+      const dp = parseNumericValue(document.getElementById('form-dp-amount')?.value || 0);
+      const statusEl = document.getElementById('form-payment-status');
+      const isNew = !document.getElementById('form-booking-id')?.value;
+      if (statusEl && isNew) {
+        if (total > 0 && dp >= total) {
+          statusEl.value = 'lunas';
+        } else if (dp > 0) {
+          statusEl.value = 'dp';
+        } else {
+          statusEl.value = 'pending';
+        }
+      }
     }
 
     async function handleAdminSaveBooking(e) {
@@ -6347,7 +6361,7 @@
       if (document.getElementById('fit-ibu-cpp')) document.getElementById('fit-ibu-cpp').value = '';
       if (document.getElementById('fit-general-notes')) document.getElementById('fit-general-notes').value = '';
       if (document.getElementById('fit-toggle-parents')) {
-        document.getElementById('fit-toggle-parents').checked = true;
+        document.getElementById('fit-toggle-parents').checked = false;
         toggleOptionalParentSection();
       }
 
@@ -6384,6 +6398,12 @@
         if (document.getElementById('fit-ayah-cpp')) document.getElementById('fit-ayah-cpp').value = f.ayah_cpp || sameEventRec.ayah_cpp || '';
         if (document.getElementById('fit-ibu-cpp')) document.getElementById('fit-ibu-cpp').value = f.ibu_cpp || sameEventRec.ibu_cpp || '';
         if (document.getElementById('fit-general-notes')) document.getElementById('fit-general-notes').value = f.general_notes || '';
+
+        const hasParentData = !!(f.ayah_cpw || f.ibu_cpw || f.ayah_cpp || f.ibu_cpp || sameEventRec.ayah_cpw || sameEventRec.ibu_cpw || sameEventRec.ayah_cpp || sameEventRec.ibu_cpp);
+        if (document.getElementById('fit-toggle-parents')) {
+          document.getElementById('fit-toggle-parents').checked = hasParentData;
+          toggleOptionalParentSection();
+        }
 
         if (addRowBtn) addRowBtn.classList.add('hidden');
         if (addRowResepsiBtn) addRowResepsiBtn.classList.add('hidden');
@@ -10110,8 +10130,24 @@
         const dp = parseNumericValue(b.dp_amount);
         const rem = Math.max(0, price - dp);
 
+        let statusClass = 'bg-stone-50 text-stone-700 border-stone-200';
+        let statusDot = 'bg-stone-400';
+        if (b.payment_status === 'lunas') {
+          statusClass = 'bg-emerald-50 text-emerald-800 border-emerald-300';
+          statusDot = 'bg-emerald-600';
+        } else if (b.payment_status === 'dp') {
+          statusClass = 'bg-blue-50 text-blue-800 border-blue-300';
+          statusDot = 'bg-blue-600';
+        } else if (b.payment_status === 'pending') {
+          statusClass = 'bg-amber-50 text-amber-900 border-amber-300';
+          statusDot = 'bg-amber-500';
+        } else if (b.payment_status === 'batal') {
+          statusClass = 'bg-rose-50 text-rose-800 border-rose-300';
+          statusDot = 'bg-rose-600';
+        }
+
         const tr = document.createElement('tr');
-        tr.className = 'hover:bg-[#FAF8F5] text-xs';
+        tr.className = 'hover:bg-[#FAF8F5] text-xs transition';
         tr.innerHTML = `
           <td class="py-3 px-4 font-bold text-stone-900">${b.client_cpw}</td>
           <td class="py-3 px-4 text-stone-600">${b.account_name || '-'}</td>
@@ -10120,12 +10156,15 @@
           <td class="py-3 px-4 font-semibold text-emerald-700">Rp ${formatNumberWithCommas(dp)}</td>
           <td class="py-3 px-4 font-semibold text-amber-700">Rp ${formatNumberWithCommas(rem)}</td>
           <td class="py-3 px-4">
-            <select onchange="updateBookingStatusDirect('${b.id}', this.value)" class="px-2.5 py-1 rounded-lg border border-stone-300 bg-white text-xs font-semibold">
-              <option value="pending" ${b.payment_status === 'pending' ? 'selected' : ''}>Belum DP</option>
-              <option value="dp" ${b.payment_status === 'dp' ? 'selected' : ''}>Sudah DP</option>
-              <option value="lunas" ${b.payment_status === 'lunas' ? 'selected' : ''}>Lunas</option>
-              <option value="batal" ${b.payment_status === 'batal' ? 'selected' : ''}>Batal</option>
-            </select>
+            <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg border ${statusClass} text-xs font-bold shadow-2xs">
+              <span class="w-2 h-2 rounded-full ${statusDot}"></span>
+              <select onchange="updateBookingStatusDirect('${b.id}', this.value)" class="bg-transparent border-0 font-bold text-xs focus:ring-0 cursor-pointer p-0 pr-1 text-inherit">
+                <option value="pending" class="bg-white text-stone-900" ${b.payment_status === 'pending' ? 'selected' : ''}>Belum DP</option>
+                <option value="dp" class="bg-white text-stone-900" ${b.payment_status === 'dp' ? 'selected' : ''}>Sudah DP</option>
+                <option value="lunas" class="bg-white text-stone-900" ${b.payment_status === 'lunas' ? 'selected' : ''}>Lunas</option>
+                <option value="batal" class="bg-white text-stone-900" ${b.payment_status === 'batal' ? 'selected' : ''}>Batal</option>
+              </select>
+            </div>
           </td>
           <td class="py-3 px-4 text-right whitespace-nowrap">
             <button type="button" onclick="toggleActionDropdown(event, 'finance', '${b.id}')" data-action-dropdown-trigger="finance:${b.id}" class="btn-action-trigger">
