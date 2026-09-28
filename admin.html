@@ -692,7 +692,42 @@
         margin: 0 !important;
       }
     }
+
+    /* Authentication state display control - eliminates flash of login screen on refresh */
+    html.is-authenticated #admin-login-screen {
+      display: none !important;
+    }
+    html.is-authenticated #admin-app-container {
+      display: flex !important;
+    }
+    html.is-unauthenticated #admin-login-screen {
+      display: flex !important;
+    }
+    html.is-unauthenticated #admin-app-container {
+      display: none !important;
+    }
   </style>
+  <script>
+    // Early session & active tab initialization to eliminate flash of login or wrong tab on refresh
+    (function() {
+      try {
+        var sess = sessionStorage.getItem('carisa_admin_session') || localStorage.getItem('carisa_admin_session');
+        if (sess) {
+          var p = JSON.parse(sess);
+          if (p && p.email && p.role) {
+            document.documentElement.classList.add('is-authenticated');
+            document.documentElement.classList.remove('is-unauthenticated');
+            return;
+          }
+        }
+        document.documentElement.classList.add('is-unauthenticated');
+        document.documentElement.classList.remove('is-authenticated');
+      } catch (e) {
+        document.documentElement.classList.add('is-unauthenticated');
+        document.documentElement.classList.remove('is-authenticated');
+      }
+    })();
+  </script>
 </head>
 <body class="min-h-screen flex flex-col bg-[#FAF8F5] text-stone-900 font-sans antialiased">
 
@@ -872,7 +907,7 @@
     <!-- ============================================================ -->
     <!-- TAB 1: DASHBOARD (MODERN ANTI-SLOP LUXURY EDITORIAL)         -->
     <!-- ============================================================ -->
-    <section id="admin-tab-dashboard" class="admin-tab-content space-y-6">
+    <section id="admin-tab-dashboard" class="admin-tab-content hidden space-y-6">
 
       <!-- 1. STUDIO GREETING & QUICK ACTION BAR -->
       <div class="bg-white rounded-2xl border border-[#E7E2DA] p-5 sm:p-6 shadow-sm">
@@ -3495,8 +3530,26 @@
     let fittingRowPhotosMap = {};
     let currentVendorProofPhoto = '';
     let currentVendorProofPhotoDataUrl = '';
+    const STORAGE_KEY_ACTIVE_TAB = 'carissa_admin_active_tab';
+
+    function getSavedActiveTab() {
+      if (window.location.hash) {
+        const h = window.location.hash.replace('#', '').trim().toLowerCase();
+        if (h && ALL_MENUS.some(m => m.id === h)) return h;
+      }
+      try {
+        const s = sessionStorage.getItem(STORAGE_KEY_ACTIVE_TAB);
+        if (s && ALL_MENUS.some(m => m.id === s)) return s;
+      } catch (e) {}
+      try {
+        const l = localStorage.getItem(STORAGE_KEY_ACTIVE_TAB);
+        if (l && ALL_MENUS.some(m => m.id === l)) return l;
+      } catch (e) {}
+      return 'dashboard';
+    }
+
     let currentUserSession = null;
-    let currentAdminTab = 'dashboard';
+    let currentAdminTab = getSavedActiveTab();
     let currentPricelistTypeFilter = 'all';
     let currentCalendarDate = new Date();
     let currentWaTargetBooking = null;
@@ -3742,6 +3795,9 @@
       // Automatically sync all Wedding events (Booking Wedding / Fitting / WO) into H-7 & H-1 reminders for Super Admin & Role Fitting
       syncFittingRemindersFromEvents(false);
 
+      // Verify active session immediately before rendering
+      checkAdminSession();
+
       renderQuickLoginButtons();
       populateRoleSwitcherDropdown();
       populateStudioSettingsForm();
@@ -3758,7 +3814,6 @@
       renderFinanceTable();
       calculateMonthlyKPI();
 
-      checkAdminSession();
       syncWithBackendServer();
       if (typeof initGcalApiV3Client === 'function') {
         initGcalApiV3Client();
@@ -4075,13 +4130,12 @@
       const allowed = getAllowedMenusForRole(user.role);
       renderNavigationByRole();
 
-      // If current tab is not allowed for this role, switch to the first allowed tab
-      if (!allowed.some(m => m.id === currentAdminTab)) {
-        const firstTab = allowed.length > 0 ? allowed[0].id : 'dashboard';
-        switchAdminTab(firstTab);
-      } else {
-        switchAdminTab(currentAdminTab);
+      // Prioritaskan tab yang sedang dibuka atau tersimpan
+      let targetTab = currentAdminTab || getSavedActiveTab();
+      if (!allowed.some(m => m.id === targetTab)) {
+        targetTab = allowed.length > 0 ? allowed[0].id : 'dashboard';
       }
+      switchAdminTab(targetTab);
     }
 
     function populateRoleSwitcherDropdown() {
@@ -4118,6 +4172,16 @@
       }
 
       currentAdminTab = tabName;
+      try {
+        sessionStorage.setItem(STORAGE_KEY_ACTIVE_TAB, tabName);
+        localStorage.setItem(STORAGE_KEY_ACTIVE_TAB, tabName);
+        if (window.history && window.history.replaceState) {
+          window.history.replaceState(null, '', '#' + tabName);
+        } else {
+          window.location.hash = '#' + tabName;
+        }
+      } catch (e) {}
+
       document.querySelectorAll('.admin-tab-content').forEach(el => el.classList.add('hidden'));
       const activeSection = document.getElementById(`admin-tab-${tabName}`);
       if (activeSection) activeSection.classList.remove('hidden');
@@ -4141,6 +4205,13 @@
       }
       if (window.lucide) window.lucide.createIcons();
     }
+
+    window.addEventListener('hashchange', () => {
+      const hashTab = window.location.hash.replace('#', '').trim().toLowerCase();
+      if (hashTab && hashTab !== currentAdminTab && ALL_MENUS.some(m => m.id === hashTab)) {
+        switchAdminTab(hashTab);
+      }
+    });
 
     // ==============================================================
     // PENGATURAN ROLE & MENU UI HANDLERS
@@ -4364,20 +4435,55 @@
 
       if (!sessionStr) {
         currentUserSession = null;
+        document.documentElement.classList.remove('is-authenticated');
+        document.documentElement.classList.add('is-unauthenticated');
         if (appContainer) appContainer.classList.add('hidden');
-        if (loginScreen) loginScreen.classList.remove('hidden');
+        if (loginScreen) {
+          loginScreen.classList.remove('hidden');
+          loginScreen.style.display = 'flex';
+        }
         return false;
       }
 
       try {
         const parsed = JSON.parse(sessionStr);
-        if (parsed && parsed.role && parsed.email) {
-          // Validasi apakah email masih terdaftar di masterUsers
-          const isStillValidUser = masterUsers.some(u => (u.email || '').toLowerCase() === (parsed.email || '').toLowerCase());
+        if (parsed && parsed.role) {
+          const pRole = (parsed.role || '').toLowerCase();
+          let pEmail = (parsed.email || '').toLowerCase().trim();
+
+          // Auto-migrate standard role emails if needed
+          if (pRole === 'super admin' && (!pEmail || pEmail !== 'rissa.april@gmail.com')) {
+            parsed.email = 'rissa.april@gmail.com';
+            parsed.name = 'Admin Carissa (Official)';
+            pEmail = 'rissa.april@gmail.com';
+          } else if (pRole.includes('fitting') && (!pEmail || pEmail !== 'fitting.carisa@gmail.com')) {
+            parsed.email = 'fitting.carisa@gmail.com';
+            parsed.name = 'Staf Fitting Busana';
+            pEmail = 'fitting.carisa@gmail.com';
+          }
+
+          // Validasi apakah email masih terdaftar di masterUsers atau fallback akun resmi
+          const isStillValidUser = (Array.isArray(masterUsers) && masterUsers.length > 0)
+            ? masterUsers.some(u => (u.email || '').toLowerCase().trim() === pEmail)
+            : (pEmail === 'rissa.april@gmail.com' || pEmail === 'fitting.carisa@gmail.com');
+
           if (isStillValidUser) {
             currentUserSession = parsed;
-            if (loginScreen) loginScreen.classList.add('hidden');
-            if (appContainer) appContainer.classList.remove('hidden');
+            sessionStorage.setItem(STORAGE_KEY_SESSION, JSON.stringify(currentUserSession));
+            if (localStorage.getItem(STORAGE_KEY_SESSION)) {
+              localStorage.setItem(STORAGE_KEY_SESSION, JSON.stringify(currentUserSession));
+            }
+
+            document.documentElement.classList.remove('is-unauthenticated');
+            document.documentElement.classList.add('is-authenticated');
+            if (loginScreen) {
+              loginScreen.classList.add('hidden');
+              loginScreen.style.display = 'none';
+            }
+            if (appContainer) {
+              appContainer.classList.remove('hidden');
+              appContainer.style.display = 'flex';
+            }
             applyUserRolePermissions(currentUserSession);
             return true;
           } else {
@@ -4390,8 +4496,13 @@
         currentUserSession = null;
         sessionStorage.removeItem(STORAGE_KEY_SESSION);
         localStorage.removeItem(STORAGE_KEY_SESSION);
+        document.documentElement.classList.remove('is-authenticated');
+        document.documentElement.classList.add('is-unauthenticated');
         if (appContainer) appContainer.classList.add('hidden');
-        if (loginScreen) loginScreen.classList.remove('hidden');
+        if (loginScreen) {
+          loginScreen.classList.remove('hidden');
+          loginScreen.style.display = 'flex';
+        }
         return false;
       }
     }
@@ -4454,11 +4565,20 @@
         localStorage.removeItem(STORAGE_KEY_SESSION);
       }
 
+      document.documentElement.classList.remove('is-unauthenticated');
+      document.documentElement.classList.add('is-authenticated');
+
       const loginScreen = document.getElementById('admin-login-screen');
-      if (loginScreen) loginScreen.classList.add('hidden');
+      if (loginScreen) {
+        loginScreen.classList.add('hidden');
+        loginScreen.style.display = 'none';
+      }
 
       const appContainer = document.getElementById('admin-app-container');
-      if (appContainer) appContainer.classList.remove('hidden');
+      if (appContainer) {
+        appContainer.classList.remove('hidden');
+        appContainer.style.display = 'flex';
+      }
 
       applyUserRolePermissions(currentUserSession);
       refreshAllBookingViews();
@@ -4474,14 +4594,28 @@
     function handleAdminLogout() {
       sessionStorage.removeItem(STORAGE_KEY_SESSION);
       localStorage.removeItem(STORAGE_KEY_SESSION);
+      sessionStorage.removeItem(STORAGE_KEY_ACTIVE_TAB);
+      localStorage.removeItem(STORAGE_KEY_ACTIVE_TAB);
       currentUserSession = null;
+      currentAdminTab = 'dashboard';
+
+      document.documentElement.classList.remove('is-authenticated');
+      document.documentElement.classList.add('is-unauthenticated');
+
+      if (window.history && window.history.replaceState) {
+        window.history.replaceState(null, '', window.location.pathname);
+      }
 
       const appContainer = document.getElementById('admin-app-container');
       const loginScreen = document.getElementById('admin-login-screen');
 
-      if (appContainer) appContainer.classList.add('hidden');
+      if (appContainer) {
+        appContainer.classList.add('hidden');
+        appContainer.style.display = 'none';
+      }
       if (loginScreen) {
         loginScreen.classList.remove('hidden');
+        loginScreen.style.display = 'flex';
         const emailInput = document.getElementById('login-email-input');
         if (emailInput) emailInput.value = '';
         const passInput = document.getElementById('login-password-input');
