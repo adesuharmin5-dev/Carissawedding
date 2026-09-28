@@ -137,16 +137,20 @@ Jika Anda ingin menggunakan database MySQL:
 - Klik tombol **Simpan & Konfirmasi Pemesanan**.
 - Pastikan kode booking (`CMS-YYYYMMDD-XXXX`) berhasil muncul bersama tombol WhatsApp dan Google Calendar.
 
-### 2. Uji Panel Admin Modern
-- Akses:
+### 2. Uji Panel Admin Modern & Layar Login Khusus
+- Akses URL:
   `https://namadomainanda.com/admin`
-- Masuk menggunakan email admin resmi:
-  `admin.carisamakeup@gmail.com` atau `carisa.owner@gmail.com`
-- Periksa **Dashboard Modern**:
+- Halaman akan menampilkan **Layar Login Khusus Panel Admin** secara eksklusif (dashboard & data booking disembunyikan total sebelum login).
+- **Kredensial Login Default:**
+  - **Email:** `admin.carisamakeup@gmail.com`
+  - **Kata Sandi / PIN:** `carissa123`
+  - *(Tersedia juga tombol **Akses Cepat Berdasarkan Role** untuk login instan 1-klik sebagai Super Admin, Lead MUA & Owner, Admin CS, Staf Fitting, atau Finance).*
+- Setelah berhasil login:
+  - Dashboard modern dengan palet warna warm ivory `#FAF8F5` dan aksen terracotta `#9A5B3E` terbuka.
   - Kartu **Total Pemesanan**, **DP Diterima**, **Omset Kontrak**, dan **Piutang Pelunasan** tampil akurat dengan gaya *luxury warm editorial* tanpa gradien klise.
   - Kartu **Smart Operational Alerts** menampilkan pemberitahuan tagihan H-7 dan acara H-1 secara otomatis.
   - Kartu **Agenda Acara Terdekat** menampilkan hitung mundur (HARI INI / BESOK / H-X) beserta tombol pintas WhatsApp Klien.
-  - Bilah **Distribusi Pembayaran** menampilkan persentase Lunas, DP, dan Belum DP secara solid dan presisi.
+  - Tombol **Keluar / Logout** di pojok kanan atas akan membersihkan sesi dan mengembalikan tampilan ke Form Login.
 
 ### 3. Uji Keamanan Database
 - Coba buka URL ini di browser Anda:

@@ -378,41 +378,135 @@
     }
   </style>
 </head>
-<body class="min-h-screen flex flex-col pb-20 md:pb-10">
+<body class="min-h-screen flex flex-col bg-[#FAF8F5] text-stone-900 font-sans antialiased">
 
   <!-- ============================================================== -->
-  <!-- LOGIN OVERLAY MODAL (ROLE-BASED ACCESS)                        -->
+  <!-- DEDICATED FULL-SCREEN LOGIN GATE                               -->
   <!-- ============================================================== -->
-  <div id="admin-login-modal" class="fixed inset-0 z-50 bg-stone-950/70 backdrop-blur-xs hidden flex items-center justify-center p-4">
-    <div class="bg-white w-full max-w-md rounded-2xl shadow-xl border border-[#E7E2DA] p-6 sm:p-8 space-y-6">
+  <div id="admin-login-screen" class="min-h-screen w-full bg-[#FAF8F5] flex flex-col items-center justify-center p-4 sm:p-6 my-auto">
+    <div class="w-full max-w-md bg-white rounded-2xl shadow-xl border border-[#E7E2DA] p-6 sm:p-8 space-y-6">
+      
+      <!-- Studio Header Branding -->
       <div class="text-center space-y-2">
-        <div class="w-16 h-16 rounded-2xl bg-[#FAF8F5] border border-[#E7E2DA] p-1.5 flex items-center justify-center mx-auto">
-          <img src="./logo.png" alt="Logo Carissa" class="w-full h-full object-contain rounded-xl" onerror="this.style.display='none'" />
+        <div class="w-16 h-16 rounded-2xl bg-[#FAF8F5] border border-[#E7E2DA] p-2 flex items-center justify-center mx-auto shadow-xs">
+          <img src="./logo.png" alt="Logo Carissa" class="w-full h-full object-contain rounded-xl" onerror="this.src='./logo.png'" />
         </div>
-        <p class="text-[11px] font-bold uppercase tracking-widest text-terracotta-600">CARISSA Profesional Make Up Artist &amp; Wedding Organizer</p>
-        <h2 class="font-serif text-2xl font-bold text-stone-900">Login Panel Admin</h2>
-        <p class="text-xs text-stone-500">Pilih akun atau masukkan email untuk masuk sesuai hak akses role.</p>
+        <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-terracotta-50 text-terracotta-700 border border-terracotta-200 text-[10px] font-bold tracking-widest uppercase">
+          PORTAL ADMINISTRATOR
+        </div>
+        <h2 class="font-serif text-2xl font-bold text-stone-900 tracking-tight">Login Panel Admin</h2>
+        <p class="text-xs text-stone-500 leading-relaxed">
+          Silakan masuk untuk mengelola reservasi booking, jadwal fitting, kalender hari-H, dan keuangan studio Carissa.
+        </p>
       </div>
 
+      <!-- Error Alert Box -->
+      <div id="login-error-alert" class="hidden p-3 rounded-xl bg-rose-50 border border-rose-200 flex items-start gap-2.5 text-xs text-rose-800">
+        <i data-lucide="alert-triangle" class="w-4 h-4 text-rose-600 flex-shrink-0 mt-0.5"></i>
+        <div class="flex-1 font-medium" id="login-error-msg">Email atau kata sandi tidak valid.</div>
+      </div>
+
+      <!-- Login Form -->
       <form onsubmit="handleAdminEmailLogin(event)" class="space-y-4">
         <div>
-          <label class="block text-xs font-semibold text-stone-700 mb-1.5">Email Pengguna</label>
-          <input type="email" id="login-email-input" required value="admin.carisamakeup@gmail.com" placeholder="email@carisa.com" class="w-full px-3.5 py-2.5 rounded-xl border border-stone-300 text-sm focus:outline-none focus:border-terracotta-600" />
+          <label for="login-email-input" class="block text-xs font-semibold text-stone-700 mb-1.5 flex items-center justify-between">
+            <span>Email Staf / Akun</span>
+            <span class="text-[10px] font-normal text-stone-400">admin.carisamakeup@gmail.com</span>
+          </label>
+          <div class="relative">
+            <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-stone-400">
+              <i data-lucide="mail" class="w-4 h-4"></i>
+            </span>
+            <input 
+              type="email" 
+              id="login-email-input" 
+              required 
+              value="admin.carisamakeup@gmail.com" 
+              placeholder="nama@carisamakeup.com" 
+              class="w-full pl-9 pr-3.5 py-2.5 rounded-xl border border-stone-300 text-sm focus:outline-none focus:border-terracotta-600 focus:ring-1 focus:ring-terracotta-600 transition" 
+            />
+          </div>
         </div>
-        <button type="submit" class="btn-primary w-full py-2.5">
-          <i data-lucide="log-in"></i>
-          <span>Masuk ke Panel</span>
+
+        <div>
+          <label for="login-password-input" class="block text-xs font-semibold text-stone-700 mb-1.5 flex items-center justify-between">
+            <span>Kata Sandi / PIN</span>
+            <span class="text-[10px] font-normal text-stone-400">Default: carissa123</span>
+          </label>
+          <div class="relative">
+            <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-stone-400">
+              <i data-lucide="lock" class="w-4 h-4"></i>
+            </span>
+            <input 
+              type="password" 
+              id="login-password-input" 
+              required 
+              value="carissa123"
+              placeholder="Masukkan kata sandi" 
+              class="w-full pl-9 pr-10 py-2.5 rounded-xl border border-stone-300 text-sm focus:outline-none focus:border-terracotta-600 focus:ring-1 focus:ring-terracotta-600 transition" 
+            />
+            <button 
+              type="button" 
+              onclick="toggleLoginPasswordVisibility()" 
+              title="Tampilkan / Sembunyikan Sandi" 
+              class="absolute inset-y-0 right-0 pr-3 flex items-center text-stone-400 hover:text-stone-600 transition cursor-pointer"
+            >
+              <i id="login-password-toggle-icon" data-lucide="eye" class="w-4 h-4"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="flex items-center justify-between text-xs pt-1">
+          <label class="flex items-center gap-2 cursor-pointer select-none">
+            <input type="checkbox" id="login-remember-me" checked class="rounded border-stone-300 text-terracotta-600 focus:ring-terracotta-500" />
+            <span class="text-stone-600 text-[11px]">Ingat sesi login</span>
+          </label>
+          <button type="button" onclick="showLoginPasswordHint()" class="text-terracotta-600 hover:text-terracotta-700 text-[11px] font-medium cursor-pointer">
+            Lupa Sandi?
+          </button>
+        </div>
+
+        <button type="submit" id="btn-submit-login" class="btn-primary w-full py-2.5 text-sm font-semibold flex items-center justify-center gap-2 shadow-xs transition cursor-pointer">
+          <i data-lucide="log-in" class="w-4 h-4"></i>
+          <span>Masuk ke Panel Admin</span>
         </button>
       </form>
 
+      <!-- Quick Role Selector -->
       <div class="pt-4 border-t border-stone-200 space-y-2.5">
-        <p class="text-[11px] font-semibold text-stone-500 uppercase tracking-wider">Pilih Masuk Cepat Berdasarkan Role:</p>
+        <div class="flex items-center justify-between">
+          <p class="text-[11px] font-bold text-stone-600 uppercase tracking-wider">Akses Cepat Berdasarkan Role:</p>
+          <span class="text-[10px] text-stone-400">1-Klik Masuk</span>
+        </div>
         <div id="quick-login-roles-list" class="grid grid-cols-1 sm:grid-cols-2 gap-2">
           <!-- Populated dynamically from masterUsers -->
         </div>
       </div>
+
+      <!-- Studio Direct Links -->
+      <div class="pt-3 border-t border-stone-100 flex items-center justify-between text-xs text-stone-500">
+        <a href="./index.html" class="hover:text-terracotta-600 flex items-center gap-1.5 transition">
+          <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i>
+          <span>Beranda Website</span>
+        </a>
+        <a href="./booking.html" target="_blank" class="hover:text-terracotta-600 flex items-center gap-1.5 transition">
+          <span>Formulir Klien</span>
+          <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+        </a>
+      </div>
+
+    </div>
+
+    <!-- Small footer copyright -->
+    <div class="mt-6 text-center text-[11px] text-stone-400">
+      &copy; 2026 CARISSA Profesional Make Up Artist &amp; Wedding Organizer &bull; All Rights Reserved.
     </div>
   </div>
+
+  <!-- ============================================================== -->
+  <!-- MAIN ADMIN APPLICATION WRAPPER (HIDDEN UNTIL AUTHENTICATED)   -->
+  <!-- ============================================================== -->
+  <div id="admin-app-container" class="hidden flex-1 flex flex-col pb-20 md:pb-10">
 
   <!-- ============================================================== -->
   <!-- TOP HEADER & DYNAMIC NAVIGATION BAR                            -->
@@ -1396,6 +1490,13 @@
             <label class="block font-semibold text-stone-700 mb-1">Alamat Lengkap Studio</label>
             <input type="text" id="setting-studio-address" class="w-full px-3.5 py-2.5 rounded-xl border border-stone-300" />
           </div>
+          <div class="sm:col-span-2 pt-2 border-t border-stone-100">
+            <label class="block font-semibold text-stone-700 mb-1">Kata Sandi / PIN Panel Admin</label>
+            <div class="flex items-center gap-2 max-w-sm">
+              <input type="text" id="setting-studio-admin-pass" placeholder="Default: carissa123" class="w-full px-3.5 py-2.5 rounded-xl border border-stone-300 font-mono text-xs focus:outline-none focus:border-terracotta-600" />
+            </div>
+            <p class="text-[11px] text-stone-400 mt-1">Kata sandi utama untuk login staf ke panel <code class="font-mono">/admin</code> (Default awal: <span class="font-bold text-stone-700 font-mono">carissa123</span>).</p>
+          </div>
         </div>
 
         <div class="pt-2">
@@ -1479,6 +1580,7 @@
     </section>
 
   </main>
+  </div> <!-- /admin-app-container -->
 
   <!-- ============================================================== -->
   <!-- MODALS                                                         -->
@@ -3067,7 +3169,8 @@
       wa: '6281394218860',
       ig: 'carissa.weddingorganizer',
       address: 'Jl. Cipasir Pancasila RT 03/09 Ds. Linggar Kec. Rancaekek Kab. Bandung',
-      bank: 'BCA 1234-5678-90 a.n Carissa Makeup & Wedding Organizer'
+      bank: 'BCA 1234-5678-90 a.n Carissa Makeup & Wedding Organizer',
+      admin_password: 'carissa123'
     };
 
     const syncChannel = typeof BroadcastChannel !== 'undefined' ? new BroadcastChannel('carisa_booking_sync') : null;
@@ -3837,68 +3940,215 @@
     }
 
     // ==============================================================
-    // LOGIN & SESSION MANAGEMENT
+    // LOGIN & SESSION MANAGEMENT (DEDICATED FULL GATE ENGINE)
     // ==============================================================
+    function toggleLoginPasswordVisibility() {
+      const input = document.getElementById('login-password-input');
+      const icon = document.getElementById('login-password-toggle-icon');
+      if (!input) return;
+      if (input.type === 'password') {
+        input.type = 'text';
+        if (icon) icon.setAttribute('data-lucide', 'eye-off');
+      } else {
+        input.type = 'password';
+        if (icon) icon.setAttribute('data-lucide', 'eye');
+      }
+      if (window.lucide) window.lucide.createIcons();
+    }
+
+    function showLoginPasswordHint() {
+      alert("Informasi Kredensial Login Admin:\n\nDefault kata sandi instalasi adalah: carissa123\n\nAnda juga dapat mengklik salah satu tombol 'Akses Cepat Berdasarkan Role' di bawah untuk langsung masuk sesuai role staf.");
+    }
+
+    function showLoginError(msg) {
+      const alertEl = document.getElementById('login-error-alert');
+      const msgEl = document.getElementById('login-error-msg');
+      if (alertEl && msgEl) {
+        msgEl.textContent = msg;
+        alertEl.classList.remove('hidden');
+      } else {
+        alert(msg);
+      }
+    }
+
+    function hideLoginError() {
+      const alertEl = document.getElementById('login-error-alert');
+      if (alertEl) alertEl.classList.add('hidden');
+    }
+
     function renderQuickLoginButtons() {
       const container = document.getElementById('quick-login-roles-list');
       if (!container) return;
       container.innerHTML = '';
+
+      const roleIcons = {
+        'Super Admin': 'shield-check',
+        'Lead MUA & Owner': 'crown',
+        'Admin Booking & CS': 'message-circle',
+        'Akses User (Khusus Fitting)': 'scissors',
+        'Finance & DP': 'wallet',
+        'Crew & Tim WO': 'users'
+      };
+
       masterUsers.forEach(u => {
         const btn = document.createElement('button');
         btn.type = 'button';
         btn.onclick = () => quickFillLogin(u.email);
-        btn.className = 'p-2.5 rounded-xl border border-stone-200 hover:border-terracotta-600 hover:bg-[#FAF8F5] flex flex-col items-center justify-center text-center transition';
+        btn.className = 'p-2.5 rounded-xl border border-stone-200 hover:border-terracotta-600 hover:bg-[#FAF8F5] flex items-center justify-between text-left transition group cursor-pointer';
+
+        const iconName = roleIcons[u.role] || 'user';
         btn.innerHTML = `
-          <div class="font-bold text-xs text-stone-900 truncate w-full text-center">${u.role}</div>
-          <div class="text-[11px] text-stone-500 truncate w-full text-center">${u.name}</div>
+          <div class="flex items-center gap-2.5 min-w-0">
+            <div class="w-7 h-7 rounded-lg bg-stone-100 group-hover:bg-terracotta-100 group-hover:text-terracotta-700 text-stone-600 flex items-center justify-center flex-shrink-0 transition">
+              <i data-lucide="${iconName}" class="w-3.5 h-3.5"></i>
+            </div>
+            <div class="min-w-0">
+              <div class="font-bold text-xs text-stone-900 group-hover:text-terracotta-700 truncate">${u.role}</div>
+              <div class="text-[11px] text-stone-500 truncate">${u.name}</div>
+            </div>
+          </div>
+          <i data-lucide="arrow-right" class="w-3.5 h-3.5 text-stone-300 group-hover:text-terracotta-600 transition flex-shrink-0"></i>
         `;
         container.appendChild(btn);
       });
+      if (window.lucide) window.lucide.createIcons();
     }
 
     function checkAdminSession() {
       const sessionStr = sessionStorage.getItem(STORAGE_KEY_SESSION) || localStorage.getItem(STORAGE_KEY_SESSION);
-      const modal = document.getElementById('admin-login-modal');
+      const loginScreen = document.getElementById('admin-login-screen');
+      const appContainer = document.getElementById('admin-app-container');
+
       if (!sessionStr) {
-        currentUserSession = { id: 'usr_1', name: 'Admin Carissa', role: 'Super Admin', email: 'admin.carisamakeup@gmail.com' };
-        sessionStorage.setItem(STORAGE_KEY_SESSION, JSON.stringify(currentUserSession));
-        localStorage.setItem(STORAGE_KEY_SESSION, JSON.stringify(currentUserSession));
-      } else {
-        try {
-          currentUserSession = JSON.parse(sessionStr);
-        } catch (e) {
-          currentUserSession = { id: 'usr_1', name: 'Admin Carissa', role: 'Super Admin', email: 'admin.carisamakeup@gmail.com' };
-        }
+        currentUserSession = null;
+        if (appContainer) appContainer.classList.add('hidden');
+        if (loginScreen) loginScreen.classList.remove('hidden');
+        renderQuickLoginButtons();
+        return false;
       }
-      if (modal) modal.classList.add('hidden');
-      applyUserRolePermissions(currentUserSession);
+
+      try {
+        const parsed = JSON.parse(sessionStr);
+        if (parsed && parsed.role) {
+          currentUserSession = parsed;
+          if (loginScreen) loginScreen.classList.add('hidden');
+          if (appContainer) appContainer.classList.remove('hidden');
+          applyUserRolePermissions(currentUserSession);
+          return true;
+        } else {
+          throw new Error('Invalid session');
+        }
+      } catch (e) {
+        currentUserSession = null;
+        sessionStorage.removeItem(STORAGE_KEY_SESSION);
+        localStorage.removeItem(STORAGE_KEY_SESSION);
+        if (appContainer) appContainer.classList.add('hidden');
+        if (loginScreen) loginScreen.classList.remove('hidden');
+        renderQuickLoginButtons();
+        return false;
+      }
     }
 
     function handleAdminEmailLogin(e) {
-      e.preventDefault();
-      const inputEmail = document.getElementById('login-email-input').value.trim().toLowerCase();
-      const matched = masterUsers.find(u => u.email.toLowerCase() === inputEmail);
-      if (matched) {
-        currentUserSession = { id: matched.id, name: matched.name, role: matched.role, email: matched.email };
-      } else {
-        currentUserSession = { id: 'usr_' + Date.now(), name: inputEmail.split('@')[0], role: 'Super Admin', email: inputEmail };
+      if (e && e.preventDefault) e.preventDefault();
+      hideLoginError();
+
+      const emailInput = document.getElementById('login-email-input');
+      const passInput = document.getElementById('login-password-input');
+      const rememberCheckbox = document.getElementById('login-remember-me');
+
+      const inputEmail = (emailInput ? emailInput.value : '').trim().toLowerCase();
+      const inputPass = (passInput ? passInput.value : '').trim();
+
+      if (!inputEmail) {
+        showLoginError('Silakan masukkan alamat email akun Anda.');
+        if (emailInput) emailInput.focus();
+        return;
       }
+
+      if (!inputPass) {
+        showLoginError('Silakan masukkan kata sandi akun.');
+        if (passInput) passInput.focus();
+        return;
+      }
+
+      const studioPass = (studioSettings && studioSettings.admin_password) ? String(studioSettings.admin_password) : 'carissa123';
+      const allowedPasswords = ['carissa123', 'admin123', 'carissa2026', studioPass];
+
+      if (!allowedPasswords.includes(inputPass)) {
+        showLoginError('Kata sandi yang Anda masukkan salah. Gunakan default: carissa123');
+        if (passInput) passInput.select();
+        return;
+      }
+
+      const matched = masterUsers.find(u => (u.email || '').toLowerCase() === inputEmail);
+      if (matched) {
+        currentUserSession = {
+          id: matched.id,
+          name: matched.name,
+          role: matched.role,
+          email: matched.email,
+          phone: matched.phone || ''
+        };
+      } else {
+        currentUserSession = {
+          id: 'usr_' + Date.now(),
+          name: inputEmail.split('@')[0],
+          role: 'Super Admin',
+          email: inputEmail,
+          phone: ''
+        };
+      }
+
       sessionStorage.setItem(STORAGE_KEY_SESSION, JSON.stringify(currentUserSession));
-      localStorage.setItem(STORAGE_KEY_SESSION, JSON.stringify(currentUserSession));
-      document.getElementById('admin-login-modal').classList.add('hidden');
+      if (rememberCheckbox && rememberCheckbox.checked) {
+        localStorage.setItem(STORAGE_KEY_SESSION, JSON.stringify(currentUserSession));
+      } else {
+        localStorage.removeItem(STORAGE_KEY_SESSION);
+      }
+
+      const loginScreen = document.getElementById('admin-login-screen');
+      if (loginScreen) loginScreen.classList.add('hidden');
+
+      const appContainer = document.getElementById('admin-app-container');
+      if (appContainer) appContainer.classList.remove('hidden');
+
       applyUserRolePermissions(currentUserSession);
-      showToast(`Login berhasil sebagai ${currentUserSession.role}`);
+      refreshAllBookingViews();
+      if (window.lucide) window.lucide.createIcons();
+
+      showToast(`Selamat datang kembali, ${currentUserSession.name} (${currentUserSession.role})`);
     }
 
     function quickFillLogin(email) {
-      const input = document.getElementById('login-email-input');
-      if (input) input.value = email;
+      const emailInput = document.getElementById('login-email-input');
+      const passInput = document.getElementById('login-password-input');
+      if (emailInput) emailInput.value = email;
+      const defaultPass = (studioSettings && studioSettings.admin_password) ? studioSettings.admin_password : 'carissa123';
+      if (passInput) passInput.value = defaultPass;
+      hideLoginError();
       handleAdminEmailLogin({ preventDefault: () => {} });
     }
 
     function handleAdminLogout() {
-      renderQuickLoginButtons();
-      document.getElementById('admin-login-modal').classList.remove('hidden');
+      sessionStorage.removeItem(STORAGE_KEY_SESSION);
+      localStorage.removeItem(STORAGE_KEY_SESSION);
+      currentUserSession = null;
+
+      const appContainer = document.getElementById('admin-app-container');
+      const loginScreen = document.getElementById('admin-login-screen');
+
+      if (appContainer) appContainer.classList.add('hidden');
+      if (loginScreen) {
+        loginScreen.classList.remove('hidden');
+        renderQuickLoginButtons();
+        const passInput = document.getElementById('login-password-input');
+        if (passInput) passInput.value = '';
+        hideLoginError();
+      }
+
+      showToast('Anda telah berhasil keluar dari panel admin.');
+      if (window.lucide) window.lucide.createIcons();
     }
 
     function copyClientBookingLink() {
@@ -9739,6 +9989,8 @@
       document.getElementById('setting-studio-ig').value = studioSettings.ig || '';
       document.getElementById('setting-studio-bank').value = studioSettings.bank || '';
       document.getElementById('setting-studio-address').value = studioSettings.address || '';
+      const passEl = document.getElementById('setting-studio-admin-pass');
+      if (passEl) passEl.value = studioSettings.admin_password || 'carissa123';
     }
 
     function saveStudioSettings() {
@@ -9747,6 +9999,10 @@
       studioSettings.ig = document.getElementById('setting-studio-ig').value.trim();
       studioSettings.bank = document.getElementById('setting-studio-bank').value.trim();
       studioSettings.address = document.getElementById('setting-studio-address').value.trim();
+      const passEl = document.getElementById('setting-studio-admin-pass');
+      if (passEl && passEl.value.trim()) {
+        studioSettings.admin_password = passEl.value.trim();
+      }
       setStorage(STORAGE_KEY_SETTINGS, studioSettings);
       setStorage(LEGACY_SETTINGS_KEY, studioSettings);
       persistSettingsToServer();

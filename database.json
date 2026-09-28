@@ -12,6 +12,7 @@
     "studio_bank": "BCA 2820321777 a.n Carissa Wedding / Mandiri 1300099887766",
     "bank": "BCA 2820321777 a.n Carissa Wedding / Mandiri 1300099887766",
     "active_sync_email": "admin.carisamakeup@gmail.com",
+    "admin_password": "carissa123",
     "gcal_api_config": {
       "calendar_id": "primary",
       "secondary_calendar_id": "fitting.carisa@gmail.com",

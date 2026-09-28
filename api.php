@@ -38,6 +38,7 @@ function getInitialDbStructure() {
             'ig' => defined('STUDIO_IG') ? STUDIO_IG : '@carissa.weddingorganizer',
             'bank' => defined('STUDIO_BANK') ? STUDIO_BANK : 'BCA 2820321777 a.n Carissa Wedding / Mandiri 1300099887766',
             'address' => defined('STUDIO_ADDRESS') ? STUDIO_ADDRESS : 'Jl. Cipasir Pancasila RT 03/09 Ds. Linggar Kec. Rancaekek Kab. Bandung',
+            'admin_password' => 'carissa123',
             'gcal_api_config' => [
                 'calendar_id' => 'primary',
                 'fitting_calendar_id' => 'fitting_calendar',
