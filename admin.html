@@ -562,15 +562,6 @@
       <div class="bg-white rounded-2xl border border-[#E7E2DA] p-5 sm:p-6 shadow-sm">
         <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-5 border-b border-stone-100">
           <div class="space-y-1">
-            <div class="flex flex-wrap items-center gap-2">
-              <span class="px-2.5 py-0.5 rounded-full text-[11px] font-semibold tracking-wide bg-stone-100 text-stone-700 uppercase">
-                Studio Manajemen
-              </span>
-              <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-emerald-50 text-emerald-800 border border-emerald-200">
-                <span class="w-1.5 h-1.5 rounded-full bg-emerald-600 animate-pulse"></span>
-                <span>cPanel Online Ready</span>
-              </span>
-            </div>
             <h1 class="font-serif text-2xl sm:text-3xl font-bold text-stone-900 tracking-tight">
               Selamat Datang di Carissa Wedding &amp; MUA
             </h1>
@@ -766,33 +757,83 @@
             </div>
           </div>
 
-          <!-- Card B: Integrasi & Pusat Kontrol cPanel -->
-          <div class="bg-[#FAF8F5] rounded-2xl border border-[#E7E2DA] p-5 shadow-sm space-y-3">
-            <h3 class="font-serif font-bold text-sm text-stone-900 flex items-center gap-2">
-              <i data-lucide="shield-check" class="w-4 h-4 text-emerald-700"></i>
-              <span>Pusat Sistem &amp; cPanel Hosting</span>
-            </h3>
-            <p class="text-xs text-stone-600 leading-relaxed">
-              Panel admin Carissa siap dijalankan di cPanel Apache/LiteSpeed menggunakan PHP API Engine dan penyimpanan terproteksi.
-            </p>
-            <div class="space-y-2 pt-1 text-xs">
-              <div class="flex items-center justify-between py-1 border-b border-stone-200/60">
-                <span class="text-stone-500">Engine API Backend</span>
-                <span class="font-semibold text-stone-800">PHP 8+ / JSON / MySQL</span>
+          <!-- Card B: Akses Pintas Fitting & Vendor -->
+          <div class="bg-white rounded-2xl border border-[#E7E2DA] p-5 shadow-sm space-y-3.5 flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between gap-2 mb-1">
+                <h3 class="font-serif font-bold text-sm text-stone-900 flex items-center gap-2">
+                  <i data-lucide="sparkles" class="w-4 h-4 text-terracotta-600"></i>
+                  <span>Akses Pintas Fitting &amp; Vendor</span>
+                </h3>
+                <span class="text-[10px] font-semibold text-terracotta-700 bg-terracotta-50 px-2 py-0.5 rounded-full border border-terracotta-200">
+                  Operasional Studio
+                </span>
               </div>
-              <div class="flex items-center justify-between py-1 border-b border-stone-200/60">
-                <span class="text-stone-500">Google Calendar API v3</span>
-                <span class="font-semibold text-emerald-700">Aktif &amp; Terhubung</span>
+              <p class="text-xs text-stone-500">
+                Pintasan navigasi cepat ke jadwal fitting busana pengantin dan rekapitulasi pembayaran vendor rekanan.
+              </p>
+            </div>
+
+            <!-- 2 Clickable Shortcut Cards -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+              <!-- Shortcut 1: Fitting Busana -->
+              <div onclick="switchAdminTab('fitting')" class="p-3 rounded-xl border border-stone-200 hover:border-terracotta-600 hover:bg-[#FAF8F5] transition cursor-pointer group flex flex-col justify-between space-y-2">
+                <div class="flex items-start justify-between">
+                  <div class="w-7 h-7 rounded-lg bg-terracotta-50 text-terracotta-700 border border-terracotta-200 flex items-center justify-center flex-shrink-0 group-hover:bg-terracotta-600 group-hover:text-white transition">
+                    <i data-lucide="scissors" class="w-3.5 h-3.5"></i>
+                  </div>
+                  <span class="text-[10px] font-medium text-stone-400 group-hover:text-terracotta-600 transition flex items-center gap-0.5">
+                    Buka <i data-lucide="arrow-right" class="w-3 h-3"></i>
+                  </span>
+                </div>
+                <div>
+                  <h4 class="font-bold text-xs text-stone-900 group-hover:text-terracotta-800 transition">Fitting Busana</h4>
+                  <p class="text-[11px] text-stone-500 line-clamp-2 mt-0.5 leading-snug">
+                    Jadwal &amp; ukuran gaun pengantin, orang tua &amp; rombongan.
+                  </p>
+                </div>
+                <div class="pt-1.5 border-t border-stone-100 flex items-center justify-between text-[11px]">
+                  <span class="text-stone-400 font-medium">Jadwal Busana</span>
+                  <button type="button" onclick="event.stopPropagation(); openFittingModal();" class="text-terracotta-700 font-bold hover:underline flex items-center gap-0.5">
+                    <i data-lucide="plus" class="w-3 h-3"></i> Input Baru
+                  </button>
+                </div>
               </div>
-              <div class="flex items-center justify-between py-1">
-                <span class="text-stone-500">Proteksi Data Klien</span>
-                <span class="font-semibold text-stone-800">.htaccess Shielded</span>
+
+              <!-- Shortcut 2: Rekanan Vendor -->
+              <div onclick="switchAdminTab('vendor')" class="p-3 rounded-xl border border-stone-200 hover:border-terracotta-600 hover:bg-[#FAF8F5] transition cursor-pointer group flex flex-col justify-between space-y-2">
+                <div class="flex items-start justify-between">
+                  <div class="w-7 h-7 rounded-lg bg-stone-100 text-stone-700 border border-stone-200 flex items-center justify-center flex-shrink-0 group-hover:bg-stone-900 group-hover:text-white transition">
+                    <i data-lucide="landmark" class="w-3.5 h-3.5"></i>
+                  </div>
+                  <span class="text-[10px] font-medium text-stone-400 group-hover:text-terracotta-600 transition flex items-center gap-0.5">
+                    Buka <i data-lucide="arrow-right" class="w-3 h-3"></i>
+                  </span>
+                </div>
+                <div>
+                  <h4 class="font-bold text-xs text-stone-900 group-hover:text-terracotta-800 transition">Rekanan Vendor</h4>
+                  <p class="text-[11px] text-stone-500 line-clamp-2 mt-0.5 leading-snug">
+                    Transfer dekorasi, foto/video, MC, tenda, sound &amp; WO.
+                  </p>
+                </div>
+                <div class="pt-1.5 border-t border-stone-100 flex items-center justify-between text-[11px]">
+                  <span class="text-stone-400 font-medium">Data Transfer</span>
+                  <button type="button" onclick="event.stopPropagation(); openVendorTransferModal();" class="text-terracotta-700 font-bold hover:underline flex items-center gap-0.5">
+                    <i data-lucide="plus" class="w-3 h-3"></i> Input Transfer
+                  </button>
+                </div>
               </div>
             </div>
-            <div class="pt-2">
-              <button type="button" onclick="downloadDatabaseBackup()" class="btn-secondary w-full text-xs">
-                <i data-lucide="download" class="w-3.5 h-3.5"></i>
-                <span>Unduh Cadangan Database (.json)</span>
+
+            <!-- Bottom Action Row -->
+            <div class="pt-2 border-t border-stone-100 flex items-center gap-2 text-xs">
+              <button type="button" onclick="switchAdminTab('fitting')" class="btn-secondary btn-sm flex-1">
+                <i data-lucide="scissors" class="w-3.5 h-3.5 text-terracotta-600"></i>
+                <span>Menu Fitting</span>
+              </button>
+              <button type="button" onclick="switchAdminTab('vendor')" class="btn-secondary btn-sm flex-1">
+                <i data-lucide="landmark" class="w-3.5 h-3.5 text-terracotta-600"></i>
+                <span>Menu Vendor</span>
               </button>
             </div>
           </div>
