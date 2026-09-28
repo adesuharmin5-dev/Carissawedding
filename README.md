@@ -31,7 +31,7 @@ Aplikasi pemesanan mandiri untuk klien (*self-booking*) dan panel manajemen stud
 
 ### 2. 🛡️ [Panel Khusus Admin (`admin.html`)](file:///g:/My%20Drive/Aplikasi/carisa-makeup-booking/admin.html)
 - **Diproteksi Login Email**:
-  - Hanya dapat diakses oleh email yang terdaftar di **Master User** (seperti `admin.carisamakeup@gmail.com`, `carisa.owner@gmail.com`, `keuangan.carisa@gmail.com`).
+  - Hanya dapat diakses oleh email yang terdaftar di **Master User**: Super Admin (`rissa.april@gmail.com`) dan Role Fitting (`fitting.carisa@gmail.com`).
 - **Fitur Lengkap Panel Admin**:
   1. 🔍 **Filter & Rekap Periode Bulanan**: Pencarian instan untuk menghitung **Total Booking**, **Total DP Masuk**, **Total Omset**, dan **Sisa Pelunasan** untuk bulan dan tahun yang dipilih.
   2. 📋 **Daftar Booking & Status DP**: Tabel lengkap data pemesanan, pencarian klien/lokasi, ubah status DP (Belum DP, Sudah DP, Lunas, Batal), auto-parse chat WhatsApp, dan cetak invoice resmi.

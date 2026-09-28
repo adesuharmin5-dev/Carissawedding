@@ -1883,7 +1883,7 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
           <div>
             <label class="block font-semibold text-stone-700 mb-1">Calendar ID Utama (<span class="font-mono">calendarId</span>)</label>
-            <input type="text" id="gcal-setting-calendar-id" placeholder="primary atau admin.carisamakeup@gmail.com" class="w-full px-3.5 py-2.5 rounded-xl border border-stone-300 font-mono" value="primary" />
+            <input type="text" id="gcal-setting-calendar-id" placeholder="primary atau rissa.april@gmail.com" class="w-full px-3.5 py-2.5 rounded-xl border border-stone-300 font-mono" value="primary" />
           </div>
           <div>
             <label class="block font-semibold text-stone-700 mb-1">Google Cloud OAuth 2.0 Client ID (Opsional)</label>
@@ -3161,25 +3161,9 @@
         id: 'usr_1',
         name: 'Admin Carissa (Official)',
         role: 'Super Admin',
-        email: 'admin.carisamakeup@gmail.com',
-        phone: '089643574766',
-        password: 'carissa123'
-      },
-      {
-        id: 'usr_2',
-        name: 'Carissa (Lead MUA & Owner)',
-        role: 'Lead MUA & Owner',
-        email: 'carisa.owner@gmail.com',
-        phone: '083165107695',
-        password: 'carissa123'
-      },
-      {
-        id: 'usr_cs',
-        name: 'Admin CS & Booking',
-        role: 'Admin Booking & CS',
-        email: 'cs.carisa@gmail.com',
+        email: 'rissa.april@gmail.com',
         phone: '081394218860',
-        password: 'carissa123'
+        password: 'Risa1234'
       },
       {
         id: 'usr_fitting',
@@ -3187,22 +3171,6 @@
         role: 'Akses User (Khusus Fitting)',
         email: 'fitting.carisa@gmail.com',
         phone: '083165107695',
-        password: 'carissa123'
-      },
-      {
-        id: 'usr_3',
-        name: 'Finance & Kasir DP',
-        role: 'Finance & DP',
-        email: 'keuangan.carisa@gmail.com',
-        phone: '081234567890',
-        password: 'carissa123'
-      },
-      {
-        id: 'usr_crew',
-        name: 'Tim WO & Crew Lapangan',
-        role: 'Crew & Tim WO',
-        email: 'wo.carisa@gmail.com',
-        phone: '085712345678',
         password: 'carissa123'
       }
     ];
@@ -3731,6 +3699,28 @@
         setStorage(STORAGE_KEY_PACKAGES, packages);
       }
       masterUsers = getStorage(STORAGE_KEY_USERS, getStorage(LEGACY_USERS_KEY, DEFAULT_MASTER_USERS));
+      // Enforce: Hanya akun Super Admin dan Fitting yang aktif di sistem
+      if (Array.isArray(masterUsers)) {
+        masterUsers = masterUsers.filter(u => {
+          const r = (u.role || '').toLowerCase();
+          return r === 'super admin' || r.includes('fitting') || u.id === 'usr_1' || u.id === 'usr_fitting';
+        });
+        const sa = masterUsers.find(u => (u.role || '').toLowerCase() === 'super admin' || u.id === 'usr_1');
+        if (sa) {
+          sa.name = 'Admin Carissa (Official)';
+          sa.email = 'rissa.april@gmail.com';
+          sa.phone = '081394218860';
+          if (!sa.password || sa.password === 'carissa123') sa.password = 'Risa1234';
+        }
+        const fit = masterUsers.find(u => (u.role || '').toLowerCase().includes('fitting') || u.id === 'usr_fitting');
+        if (fit) {
+          fit.name = 'Staf Fitting Busana';
+          fit.email = 'fitting.carisa@gmail.com';
+          fit.phone = '083165107695';
+        }
+        setStorage(STORAGE_KEY_USERS, masterUsers);
+        setStorage(LEGACY_USERS_KEY, masterUsers);
+      }
       rolesConfig = getStorage(STORAGE_KEY_ROLES, DEFAULT_ROLES_CONFIG);
       globalMenus = getStorage(STORAGE_KEY_GLOBAL_MENUS, DEFAULT_GLOBAL_MENUS);
       fittingCustomColumns = getStorage(STORAGE_KEY_FIT_COLS, []);
@@ -3941,12 +3931,31 @@
           setStorage(LEGACY_PACKAGES_KEY, packages);
         }
         if (Array.isArray(db.master_users) && db.master_users.length > 0) {
-          const usrMap = new Map();
-          masterUsers.forEach(u => usrMap.set(u.id, u));
-          db.master_users.forEach(u => {
-            if (!usrMap.has(u.id)) usrMap.set(u.id, u);
+          // Hanya izinkan akun Super Admin dan Fitting di sistem
+          const filtered = db.master_users.filter(u => {
+            const r = (u.role || '').toLowerCase();
+            return r === 'super admin' || r.includes('fitting') || u.id === 'usr_1' || u.id === 'usr_fitting';
           });
-          masterUsers = Array.from(usrMap.values());
+          masterUsers = filtered.length ? filtered : JSON.parse(JSON.stringify(DEFAULT_MASTER_USERS));
+          let sa = masterUsers.find(u => (u.role || '').toLowerCase() === 'super admin' || u.id === 'usr_1');
+          if (!sa) {
+            sa = JSON.parse(JSON.stringify(DEFAULT_MASTER_USERS[0]));
+            masterUsers.unshift(sa);
+          } else {
+            sa.name = 'Admin Carissa (Official)';
+            sa.email = 'rissa.april@gmail.com';
+            sa.phone = '081394218860';
+            if (!sa.password || sa.password === 'carissa123') sa.password = 'Risa1234';
+          }
+          let fit = masterUsers.find(u => (u.role || '').toLowerCase().includes('fitting') || u.id === 'usr_fitting');
+          if (!fit) {
+            fit = JSON.parse(JSON.stringify(DEFAULT_MASTER_USERS[1]));
+            masterUsers.push(fit);
+          } else {
+            fit.name = 'Staf Fitting Busana';
+            fit.email = 'fitting.carisa@gmail.com';
+            fit.phone = '083165107695';
+          }
           setStorage(STORAGE_KEY_USERS, masterUsers);
           setStorage(LEGACY_USERS_KEY, masterUsers);
         }
@@ -6822,8 +6831,8 @@
         id: 'usr_1',
         name: 'Admin Carissa (Official)',
         role: 'Super Admin',
-        email: 'admin.carisamakeup@gmail.com',
-        phone: '089643574766'
+        email: 'rissa.april@gmail.com',
+        phone: '081394218860'
       };
       const defaultFittingUser = fittingRoleUsers[0] || {
         id: 'usr_fitting',
@@ -6995,7 +7004,7 @@
           ? `<span class="px-2 py-0.5 rounded bg-stone-900 text-white font-bold text-[10px]">H-${daysToEvent}</span>`
           : `<span class="px-2 py-0.5 rounded bg-stone-200 text-stone-600 font-semibold text-[10px]">Selesai</span>`;
 
-        const saEmail = item.superadmin_email || superAdmin.email || 'admin.carisamakeup@gmail.com';
+        const saEmail = item.superadmin_email || superAdmin.email || 'rissa.april@gmail.com';
         const fitEmail = item.fitting_user_email || fittingUser.email || 'fitting.carisa@gmail.com';
 
         tr.innerHTML = `
@@ -7393,13 +7402,18 @@
       const { superAdmin, fittingUser, emailsCsv } = getSuperAdminAndFittingRecipients();
       const groupedEvents = new Map();
 
-      // 1. Collect from Wedding Bookings (category === 'wedding')
+      // 1. Collect from Bookings (Wedding, Engagement, dan Acara Terjadwal)
       bookings.forEach(b => {
         if (b.payment_status === 'batal') return;
-        if ((b.category || '').toLowerCase() !== 'wedding') return;
-        const title = b.client_cpp && b.client_cpp !== '-'
-          ? `The Wedding of ${b.client_cpp} & ${b.client_cpw}`
-          : `The Wedding of ${b.client_cpw}`;
+        if (!b.event_date) return;
+        let title = '';
+        if (b.client_cpp && b.client_cpp !== '-') {
+          title = `The Wedding of ${b.client_cpp} & ${b.client_cpw}`;
+        } else if ((b.client_cpw || '').includes('&')) {
+          title = `The Wedding of ${b.client_cpw}`;
+        } else {
+          title = `${b.package_name || 'Acara'} - ${b.client_cpw || b.account_name || 'Klien'}`;
+        }
         const key = title.toLowerCase().trim();
         if (!groupedEvents.has(key)) {
           groupedEvents.set(key, {

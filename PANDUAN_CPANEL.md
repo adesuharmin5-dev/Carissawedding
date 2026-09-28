@@ -141,10 +141,9 @@ Jika Anda ingin menggunakan database MySQL:
 - Akses URL:
   `https://namadomainanda.com/admin`
 - Halaman akan menampilkan **Layar Login Khusus Panel Admin** secara eksklusif (dashboard & data booking disembunyikan total sebelum login).
-- **Kredensial Login Default:**
-  - **Email:** `admin.carisamakeup@gmail.com`
-  - **Kata Sandi / PIN:** `carissa123`
-  - *(Tersedia juga tombol **Akses Cepat Berdasarkan Role** untuk login instan 1-klik sebagai Super Admin, Lead MUA & Owner, Admin CS, Staf Fitting, atau Finance).*
+- **Kredensial Login Resmi:**
+  - **Super Admin:** Email: `rissa.april@gmail.com` | Sandi: `Risa1234` | WA: `081394218860`
+  - **Role Fitting:** Email: `fitting.carisa@gmail.com` | Sandi: `carissa123` | WA: `083165107695`
 - Setelah berhasil login:
   - Dashboard modern dengan palet warna warm ivory `#FAF8F5` dan aksen terracotta `#9A5B3E` terbuka.
   - Kartu **Total Pemesanan**, **DP Diterima**, **Omset Kontrak**, dan **Piutang Pelunasan** tampil akurat dengan gaya *luxury warm editorial* tanpa gradien klise.

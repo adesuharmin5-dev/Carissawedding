@@ -102,10 +102,10 @@ function getRecipientsPhp(&$db) {
         }
     }
     if (!$superAdmin) {
-        $superAdmin = ['id' => 'usr_1', 'name' => 'Carissa Owner', 'role' => 'Super Admin', 'email' => 'owner@carissawedding.com', 'phone' => '081394218860'];
+        $superAdmin = ['id' => 'usr_1', 'name' => 'Admin Carissa (Official)', 'role' => 'Super Admin', 'email' => 'rissa.april@gmail.com', 'phone' => '081394218860', 'password' => 'Risa1234'];
     }
     if (!$fittingUser) {
-        $fittingUser = ['id' => 'usr_3', 'name' => 'Siti Aminah (Tim Fitting)', 'role' => 'Admin Fitting & Busana', 'email' => 'fitting.carisa@gmail.com', 'phone' => '081394218862'];
+        $fittingUser = ['id' => 'usr_fitting', 'name' => 'Staf Fitting Busana', 'role' => 'Akses User (Khusus Fitting)', 'email' => 'fitting.carisa@gmail.com', 'phone' => '083165107695', 'password' => 'carissa123'];
     }
     return ['superAdmin' => $superAdmin, 'fittingUser' => $fittingUser];
 }
@@ -131,16 +131,22 @@ function syncRemindersAndGcalPhp(&$db) {
     $bookings = isset($db['bookings']) && is_array($db['bookings']) ? $db['bookings'] : [];
     foreach ($bookings as $b) {
         if (empty($b['event_date']) || (isset($b['payment_status']) && $b['payment_status'] === 'batal')) continue;
-        $cat = strtolower(isset($b['category']) ? $b['category'] : '');
-        $pkg = strtolower(isset($b['package_name']) ? $b['package_name'] : '');
-        $hasCpp = !empty($b['client_cpp']) && trim($b['client_cpp']) !== '-';
-        if ($cat !== 'wedding' && strpos($pkg, 'wedding') === false && !$hasCpp) continue;
+        $cpw = isset($b['client_cpw']) ? trim($b['client_cpw']) : '';
+        $cpp = isset($b['client_cpp']) ? trim($b['client_cpp']) : '';
+        $hasCpp = !empty($cpp) && $cpp !== '-';
 
         $hubId = !empty($b['booking_code']) ? $b['booking_code'] : $b['id'];
         if (isset($seenHubs[$hubId])) continue;
         $seenHubs[$hubId] = true;
 
-        $title = $hasCpp ? ('The Wedding of ' . trim($b['client_cpp']) . ' & ' . trim($b['client_cpw'])) : ('The Wedding of ' . trim($b['client_cpw']));
+        $title = '';
+        if ($hasCpp) {
+            $title = 'The Wedding of ' . $cpp . ' & ' . $cpw;
+        } else if (strpos($cpw, '&') !== false) {
+            $title = 'The Wedding of ' . $cpw;
+        } else {
+            $title = (!empty($b['package_name']) ? $b['package_name'] : 'Acara') . ' - ' . (!empty($cpw) ? $cpw : (isset($b['account_name']) ? $b['account_name'] : 'Klien'));
+        }
         $prev = isset($existingByHub[$hubId]) ? $existingByHub[$hubId] : [];
 
         $nextReminders[] = [
@@ -148,7 +154,7 @@ function syncRemindersAndGcalPhp(&$db) {
             'fitting_user_id' => $fittingUser['id'],
             'fitting_user_name' => $fittingUser['name'],
             'fitting_user_email' => $fittingUser['email'],
-            'fitting_user_phone' => isset($fittingUser['phone']) ? $fittingUser['phone'] : '081394218862',
+            'fitting_user_phone' => isset($fittingUser['phone']) ? $fittingUser['phone'] : '083165107695',
             'superadmin_user_id' => $superAdmin['id'],
             'superadmin_name' => $superAdmin['name'],
             'superadmin_email' => $superAdmin['email'],
@@ -179,7 +185,7 @@ function syncRemindersAndGcalPhp(&$db) {
             'fitting_user_id' => $fittingUser['id'],
             'fitting_user_name' => $fittingUser['name'],
             'fitting_user_email' => $fittingUser['email'],
-            'fitting_user_phone' => isset($fittingUser['phone']) ? $fittingUser['phone'] : '081394218862',
+            'fitting_user_phone' => isset($fittingUser['phone']) ? $fittingUser['phone'] : '083165107695',
             'superadmin_user_id' => $superAdmin['id'],
             'superadmin_name' => $superAdmin['name'],
             'superadmin_email' => $superAdmin['email'],

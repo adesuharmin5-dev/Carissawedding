@@ -11,8 +11,8 @@
     "address": "Jl. Cipasir Pancasila RT 03/09 Ds. Linggar Kec. Rancaekek Kab. Bandung",
     "studio_bank": "BCA 2820321777 a.n Carissa Wedding / Mandiri 1300099887766",
     "bank": "BCA 2820321777 a.n Carissa Wedding / Mandiri 1300099887766",
-    "active_sync_email": "admin.carisamakeup@gmail.com",
-    "admin_password": "carissa123",
+    "active_sync_email": "rissa.april@gmail.com",
+    "admin_password": "Risa1234",
     "gcal_api_config": {
       "calendar_id": "primary",
       "secondary_calendar_id": "fitting.carisa@gmail.com",
@@ -30,9 +30,9 @@
       "id": "usr_1",
       "name": "Admin Carissa (Official)",
       "role": "Super Admin",
-      "email": "admin.carisamakeup@gmail.com",
-      "phone": "089643574766",
-      "password": "carissa123",
+      "email": "rissa.april@gmail.com",
+      "phone": "081394218860",
+      "password": "Risa1234",
       "isSyncActive": true
     },
     {
@@ -41,24 +41,6 @@
       "role": "Akses User (Khusus Fitting)",
       "email": "fitting.carisa@gmail.com",
       "phone": "083165107695",
-      "password": "carissa123",
-      "isSyncActive": false
-    },
-    {
-      "id": "usr_2",
-      "name": "Carissa (Lead MUA & Owner)",
-      "role": "Lead MUA & Owner",
-      "email": "carisa.owner@gmail.com",
-      "phone": "083165107695",
-      "password": "carissa123",
-      "isSyncActive": false
-    },
-    {
-      "id": "usr_3",
-      "name": "Finance & Pembayaran DP",
-      "role": "Finance & DP",
-      "email": "keuangan.carisa@gmail.com",
-      "phone": "081234567890",
       "password": "carissa123",
       "isSyncActive": false
     }
@@ -195,9 +177,55 @@
       "desc": "Makeup Lamaran Flawless HD, Hairdo/Hijabdo, Softlens & Fresh Flowers."
     }
   ],
-  "bookings": [],
+  "bookings": [
+    {
+      "id": "booking_1790569723702",
+      "booking_code": "CMS-20261128-4069",
+      "category": "wedding",
+      "account_name": "Adli Azharuddin BCA-2950962740",
+      "client_cpw": "Anistya Ayu Lustrianingrum",
+      "client_cpp": "Adli Azharuddin",
+      "address": "Perum Griya Utama Rancaekek. Jl. Borneo II No.40 RT.05 RW.19",
+      "event_date": "2026-11-28",
+      "event_time": "05:00",
+      "package_name": "All in engagement (Wedding & Engagement)",
+      "total_price": 4250000,
+      "dp_amount": 1000000,
+      "payment_status": "dp",
+      "hair_style": "Hijabdo",
+      "instagram": "anistyaayu26 adli.azharuddin",
+      "phone": "081224884095",
+      "phone2": "",
+      "source": "client_form",
+      "created_at": "2026-09-28T04:28:43.703Z"
+    }
+  ],
   "fittings": [],
-  "fitting_reminders": [],
+  "fitting_reminders": [
+    {
+      "id": "frem_auto_booking_1790569723702",
+      "reminder_code": "REM-WED-20261128-101",
+      "event_hub_id": "CMS-20261128-4069",
+      "event_title": "The Wedding of Adli Azharuddin & Anistya Ayu Lustrianingrum",
+      "event_date": "2026-11-28",
+      "h7_date": "2026-11-21",
+      "h1_date": "2026-11-27",
+      "reminder_time": "05:00",
+      "event_location": "Perum Griya Utama Rancaekek. Jl. Borneo II No.40 RT.05 RW.19",
+      "superadmin_email": "rissa.april@gmail.com",
+      "recipient_emails": "rissa.april@gmail.com,fitting.carisa@gmail.com",
+      "fitting_user_id": "usr_fitting",
+      "fitting_user_name": "Staf Fitting Busana",
+      "fitting_user_email": "fitting.carisa@gmail.com",
+      "fitting_user_phone": "083165107695",
+      "items_summary": "Paket: All in engagement (Wedding & Engagement) — Persiapan Wedding & Fitting Busana",
+      "notes_h7": "H-7 Event: Super Admin cek pelunasan & konfirmasi klien; Role Fitting cek kelengkapan kebaya, busana orang tua & ukuran akhir.",
+      "notes_h1": "H-1 Event: Super Admin konfirmasi kesiapan tim rias; Role Fitting final steam busana, packing garmen & loading serah terima busana.",
+      "h7_gcal_status": "terjadwal",
+      "h1_gcal_status": "terjadwal",
+      "created_at": "2026-09-28T04:28:43.703Z"
+    }
+  ],
   "wo_events": [],
   "vendor_transfers": [],
   "google_calendar_v3": {
