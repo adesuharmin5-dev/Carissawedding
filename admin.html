@@ -2148,7 +2148,7 @@
 
         <div class="pt-3 border-t border-stone-200 flex items-center justify-end gap-2">
           <button type="button" onclick="closeBookingModal()" class="btn-secondary">Batal</button>
-          <button type="submit" class="btn-primary">Simpan Booking</button>
+          <button type="button" id="btn-save-admin-booking" onclick="handleAdminSaveBooking(event)" class="btn-primary">Simpan Booking</button>
         </div>
       </form>
     </div>
@@ -5788,84 +5788,210 @@
     }
 
     async function handleAdminSaveBooking(e) {
-      e.preventDefault();
-      const id = document.getElementById('form-booking-id').value;
-      const category = document.querySelector('input[name="admin_service_category"]:checked').value;
-      const accountName = document.getElementById('form-account-name').value.trim();
-      const cpp = document.getElementById('form-cpp-name').value.trim();
-      const cpw = document.getElementById('form-cpw-name').value.trim();
-      const address = document.getElementById('form-address').value.trim();
-      const eventDate = document.getElementById('form-event-date').value;
-      const eventTime = document.getElementById('form-event-time').value;
-      const packageName = document.getElementById('form-package-name').value.trim() || 'Paket Wedding';
-      const totalPrice = parseNumericValue(document.getElementById('form-total-price').value);
-      const dpAmount = parseNumericValue(document.getElementById('form-dp-amount').value);
-      const paymentStatus = document.getElementById('form-payment-status').value;
-      const hairStyle = document.getElementById('form-hair-style').value.trim() || 'Hijabdo';
-      const instagram = document.getElementById('form-instagram').value.trim();
-      const phone = document.getElementById('form-phone').value.trim();
-      const autoDownloadGcal = document.getElementById('form-auto-open-gcal')?.checked;
+      if (e && e.preventDefault) e.preventDefault();
+      try {
+        const id = (document.getElementById('form-booking-id')?.value || '').trim();
+        const catEl = document.querySelector('input[name="admin_service_category"]:checked');
+        const category = catEl ? catEl.value : (document.getElementById('admin-cat-reguler')?.checked ? 'reguler' : 'wedding');
 
-      let savedBookingId = id;
-      if (id) {
-        const idx = bookings.findIndex(x => x.id === id);
-        if (idx !== -1) {
-          bookings[idx] = {
-            ...bookings[idx],
-            category, account_name: accountName, client_cpp: cpp, client_cpw: cpw,
-            address, event_date: eventDate, event_time: eventTime,
-            package_name: packageName, total_price: totalPrice, dp_amount: dpAmount,
-            payment_status: paymentStatus, hair_style: hairStyle, instagram, phone
-          };
-          try {
-            await fetch(`/api/bookings/${id}`, {
-              method: 'PUT',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify(bookings[idx])
-            });
-          } catch (err) {}
+        const accountName = (document.getElementById('form-account-name')?.value || '').trim();
+        const cpp = (document.getElementById('form-cpp-name')?.value || '').trim();
+        const cpw = (document.getElementById('form-cpw-name')?.value || '').trim();
+        const address = (document.getElementById('form-address')?.value || '').trim();
+        const rawDate = (document.getElementById('form-event-date')?.value || '').trim();
+
+        // Normalisasi format tanggal dd/mm/yyyy atau yyyy-mm-dd menjadi ISO yyyy-mm-dd
+        let eventDate = rawDate;
+        if (/^\d{2}\/\d{2}\/\d{4}$/.test(rawDate)) {
+          const [d, m, y] = rawDate.split('/');
+          eventDate = `${y}-${m.padStart(2, '0')}-${d.padStart(2, '0')}`;
+        } else if (/^\d{2}-\d{2}-\d{4}$/.test(rawDate)) {
+          const [d, m, y] = rawDate.split('-');
+          eventDate = `${y}-${m.padStart(2, '0')}-${d.padStart(2, '0')}`;
         }
-      } else {
-        const newBooking = {
-          id: 'booking_' + Date.now(),
-          booking_code: `CMS-${eventDate.replace(/-/g, '')}-${Math.floor(1000 + Math.random() * 9000)}`,
-          category, account_name: accountName, client_cpp: cpp, client_cpw: cpw,
-          address, event_date: eventDate, event_time: eventTime,
-          package_name: packageName, total_price: totalPrice, dp_amount: dpAmount,
-          payment_status: paymentStatus, hair_style: hairStyle, instagram, phone,
-          created_at: new Date().toISOString()
-        };
-        savedBookingId = newBooking.id;
-        bookings.unshift(newBooking);
-        try {
-          await fetch('/api/bookings', {
+
+        const eventTime = (document.getElementById('form-event-time')?.value || '').trim() || '08:00';
+        const packageName = (document.getElementById('form-package-name')?.value || '').trim() || (category === 'wedding' ? 'Paket Wedding' : 'Layanan Makeup');
+        const totalPrice = parseNumericValue(document.getElementById('form-total-price')?.value);
+        const dpAmount = parseNumericValue(document.getElementById('form-dp-amount')?.value);
+        const paymentStatus = document.getElementById('form-payment-status')?.value || 'dp';
+        const hairStyle = (document.getElementById('form-hair-style')?.value || '').trim() || 'Hijabdo';
+        const instagram = (document.getElementById('form-instagram')?.value || '').trim();
+        const phone = (document.getElementById('form-phone')?.value || '').trim();
+        const autoDownloadGcal = document.getElementById('form-auto-open-gcal')?.checked || false;
+
+        // Validasi data penting
+        if (!accountName) {
+          showToast('Nama Pemilik Rekening DP wajib diisi', 'error');
+          document.getElementById('form-account-name')?.focus();
+          return;
+        }
+        if (!cpw) {
+          showToast(category === 'wedding' ? 'Nama CPW (Wanita) wajib diisi' : 'Nama Klien wajib diisi', 'error');
+          document.getElementById('form-cpw-name')?.focus();
+          return;
+        }
+        if (!eventDate) {
+          showToast('Tanggal Acara wajib diisi', 'error');
+          document.getElementById('form-event-date')?.focus();
+          return;
+        }
+        if (!address) {
+          showToast('Alamat / Lokasi Acara wajib diisi', 'error');
+          document.getElementById('form-address')?.focus();
+          return;
+        }
+        if (!phone) {
+          showToast('Nomor WhatsApp wajib diisi', 'error');
+          document.getElementById('form-phone')?.focus();
+          return;
+        }
+
+        if (!Array.isArray(bookings)) bookings = [];
+
+        let savedBookingId = id;
+        if (id) {
+          let idx = bookings.findIndex(x => x.id === id || String(x.id) === String(id) || (x.booking_code && x.booking_code === id));
+          if (idx !== -1) {
+            bookings[idx] = {
+              ...bookings[idx],
+              category,
+              account_name: accountName,
+              client_cpp: category === 'wedding' ? cpp : (cpp || '-'),
+              client_cpw: cpw,
+              address,
+              event_date: eventDate,
+              event_time: eventTime,
+              package_name: packageName,
+              total_price: totalPrice,
+              dp_amount: dpAmount,
+              payment_status: paymentStatus,
+              hair_style: hairStyle,
+              instagram,
+              phone
+            };
+          } else {
+            const fallbackBooking = {
+              id,
+              booking_code: `CMS-${eventDate.replace(/-/g, '')}-${Math.floor(1000 + Math.random() * 9000)}`,
+              category,
+              account_name: accountName,
+              client_cpp: category === 'wedding' ? cpp : (cpp || '-'),
+              client_cpw: cpw,
+              address,
+              event_date: eventDate,
+              event_time: eventTime,
+              package_name: packageName,
+              total_price: totalPrice,
+              dp_amount: dpAmount,
+              payment_status: paymentStatus,
+              hair_style: hairStyle,
+              instagram,
+              phone,
+              created_at: new Date().toISOString()
+            };
+            bookings.unshift(fallbackBooking);
+            idx = 0;
+          }
+
+          // Segera simpan dan perbarui tampilan (non-blocking)
+          saveBookingsToStorage();
+          closeBookingModal();
+          try { refreshAllBookingViews(); } catch (rfErr) { console.warn('Refresh views notice:', rfErr); }
+
+          // Sinkronisasi server di latar belakang
+          const updatedTarget = bookings[idx];
+          fetch(`/api/bookings/${encodeURIComponent(id)}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(updatedTarget)
+          }).then(res => {
+            if (!res.ok) {
+              return fetch('/api/sync-all', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ bookings })
+              });
+            }
+          }).catch(() => {
+            fetch('/api/sync-all', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ bookings })
+            }).catch(() => {});
+          });
+        } else {
+          // Tambah data booking baru
+          const newBooking = {
+            id: 'booking_' + Date.now(),
+            booking_code: `CMS-${eventDate.replace(/-/g, '')}-${Math.floor(1000 + Math.random() * 9000)}`,
+            category,
+            account_name: accountName,
+            client_cpp: category === 'wedding' ? cpp : (cpp || '-'),
+            client_cpw: cpw,
+            address,
+            event_date: eventDate,
+            event_time: eventTime,
+            package_name: packageName,
+            total_price: totalPrice,
+            dp_amount: dpAmount,
+            payment_status: paymentStatus,
+            hair_style: hairStyle,
+            instagram,
+            phone,
+            created_at: new Date().toISOString()
+          };
+          savedBookingId = newBooking.id;
+          bookings.unshift(newBooking);
+
+          // Segera simpan dan perbarui tampilan
+          saveBookingsToStorage();
+          closeBookingModal();
+          try { refreshAllBookingViews(); } catch (rfErr) { console.warn('Refresh views notice:', rfErr); }
+
+          // Kirim ke server
+          fetch('/api/bookings', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(newBooking)
+          }).then(res => {
+            if (!res.ok) {
+              return fetch('/api/sync-all', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ bookings })
+              });
+            }
+          }).catch(() => {
+            fetch('/api/sync-all', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ bookings })
+            }).catch(() => {});
           });
-        } catch (err) {}
-      }
+        }
 
-      saveBookingsToStorage();
-      closeBookingModal();
-      refreshAllBookingViews();
-      if (category === 'wedding' && paymentStatus !== 'batal') {
-        const wTitle = cpp ? `The Wedding of ${cpp} & ${cpw}` : `The Wedding of ${cpw}`;
-        showToast('Booking Wedding disimpan & Pengingat Google Kalender (H-7 & H-1) otomatis ditambahkan untuk Super Admin & Role Fitting!');
-        const rem = findOrCreateReminderForBooking(savedBookingId);
-        if (rem && autoDownloadGcal) {
-          exportSingleFittingReminderICS(rem.id);
+        if (category === 'wedding' && paymentStatus !== 'batal') {
+          const wTitle = cpp && cpp !== '-' ? `The Wedding of ${cpp} & ${cpw}` : `The Wedding of ${cpw}`;
+          showToast('Data booking wedding berhasil disimpan & Kalender diperbarui');
+          try {
+            const rem = findOrCreateReminderForBooking(savedBookingId);
+            if (rem && autoDownloadGcal) exportSingleFittingReminderICS(rem.id);
+            if (typeof showAutoWeddingCalendarToast === 'function') showAutoWeddingCalendarToast(wTitle);
+          } catch (remErr) {
+            console.warn('Reminder notice:', remErr);
+          }
+        } else {
+          showToast('Data booking berhasil disimpan');
         }
-        if (typeof showAutoWeddingCalendarToast === 'function') {
-          showAutoWeddingCalendarToast(wTitle);
-        }
-      } else {
-        showToast('Data booking berhasil disimpan');
+      } catch (err) {
+        console.error('Error saving booking:', err);
+        showToast('Gagal menyimpan booking: ' + (err.message || 'Terjadi kesalahan sistem'), 'error');
       }
     }
 
     function editBooking(id) {
-      const b = bookings.find(x => x.id === id);
+      const b = bookings.find(x => x.id === id || String(x.id) === String(id) || (x.booking_code && x.booking_code === id));
       if (!b) return;
       openBookingModal();
       document.getElementById('form-booking-id').value = b.id;
@@ -5888,6 +6014,7 @@
       document.getElementById('form-phone').value = b.phone || '';
       handleAdminCategoryChange();
       updateBookingWeddingGcalPreview();
+      calculateAdminRemaining();
     }
 
     async function deleteBooking(id) {
