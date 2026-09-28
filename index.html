@@ -667,14 +667,22 @@
     });
   }
 
+  function getApiUrl(path) {
+    const clean = path.replace(/^\//, '');
+    const pathname = window.location.pathname;
+    const dir = pathname.substring(0, pathname.lastIndexOf('/') + 1);
+    return dir + clean;
+  }
+
   async function syncPackagesFromServer() {
     try {
-      const res = await fetch('/api/packages');
+      const res = await fetch(getApiUrl('api/packages'));
       if (res.ok) {
         const data = await res.json();
-        if (Array.isArray(data.packages) && data.packages.length > 0) {
-          availablePackages = data.packages;
-          localStorage.setItem(STORAGE_KEY_PACKAGES, JSON.stringify(data.packages));
+        const pkgs = data.packages || data.data;
+        if (Array.isArray(pkgs) && pkgs.length > 0) {
+          availablePackages = pkgs;
+          localStorage.setItem(STORAGE_KEY_PACKAGES, JSON.stringify(pkgs));
           populatePackagesDatalist();
         }
       }
@@ -796,13 +804,18 @@
       }
     } catch (err) {}
 
-    // 3. Send to Backend API Server (/api/bookings) if running
+    // 3. Send to Backend API Server (/api/bookings) & auto-sync Google Calendar API v3 if running
     try {
-      await fetch('/api/bookings', {
+      await fetch(getApiUrl('api/bookings'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(newBooking)
       });
+      fetch(getApiUrl('api/gcal/v3/sync'), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({})
+      }).catch(() => {});
     } catch (err) {}
 
     // 4. Clear form & show confirmation

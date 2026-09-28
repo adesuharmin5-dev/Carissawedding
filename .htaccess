@@ -1,0 +1,57 @@
+# ============================================================================
+# CARISSA PROFESIONAL MAKE UP ARTIST & WEDDING ORGANIZER
+# Konfigurasi cPanel Apache / LiteSpeed (.htaccess)
+# ============================================================================
+
+# Cegah direktori browsing
+Options -Indexes
+DirectoryIndex index.html booking.html
+
+# ----------------------------------------------------------------------------
+# 1. PROTEKSI FILE SENSITIF & DATABASE DARI AKSES PUBLIK
+# ----------------------------------------------------------------------------
+<FilesMatch "^(database\.json|server\.js|package.*\.json|start-app\.bat|\.env.*|schema\.sql|\.git.*)$">
+  <IfModule mod_authz_core.c>
+    Require all denied
+  </IfModule>
+  <IfModule !mod_authz_core.c>
+    Order allow,deny
+    Deny from all
+  </IfModule>
+</FilesMatch>
+
+# ----------------------------------------------------------------------------
+# 2. ROUTING URL BERSIH & REST API ENGINE
+# ----------------------------------------------------------------------------
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  # Blokir akses langsung ke file sensitif via Rewrite
+  RewriteRule ^(database\.json|server\.js|package.*\.json|start-app\.bat|\.env|schema\.sql)$ - [F,L]
+
+  # Routing Halaman Bersih (/admin -> admin.html, /booking -> booking.html)
+  RewriteRule ^admin/?$ admin.html [L]
+  RewriteRule ^booking/?$ booking.html [L]
+
+  # Routing REST API (/api/* -> api.php untuk Shared Hosting Apache/LiteSpeed PHP)
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteRule ^api/(.*)$ api.php [QSA,L]
+  RewriteRule ^api$ api.php [QSA,L]
+</IfModule>
+
+# ----------------------------------------------------------------------------
+# 3. HEADER KEAMANAN & CACHE CONTROL
+# ----------------------------------------------------------------------------
+<IfModule mod_headers.c>
+  Header set X-Content-Type-Options "nosniff"
+  Header set X-Frame-Options "SAMEORIGIN"
+  Header set X-XSS-Protection "1; mode=block"
+
+  # Pastikan file statis dinamis tidak dicache berlebihan
+  <FilesMatch "\.(html|php)$">
+    Header set Cache-Control "no-cache, no-store, must-revalidate"
+    Header set Pragma "no-cache"
+    Header set Expires "0"
+  </FilesMatch>
+</IfModule>

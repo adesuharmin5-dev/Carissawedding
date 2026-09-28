@@ -399,8 +399,9 @@
           <label class="block text-xs font-semibold text-stone-700 mb-1.5">Email Pengguna</label>
           <input type="email" id="login-email-input" required value="admin.carisamakeup@gmail.com" placeholder="email@carisa.com" class="w-full px-3.5 py-2.5 rounded-xl border border-stone-300 text-sm focus:outline-none focus:border-terracotta-600" />
         </div>
-        <button type="submit" class="w-full py-3 rounded-xl bg-terracotta-600 hover:bg-terracotta-700 text-white font-semibold text-sm text-center transition">
-          Masuk ke Panel
+        <button type="submit" class="btn-primary w-full py-2.5">
+          <i data-lucide="log-in"></i>
+          <span>Masuk ke Panel</span>
         </button>
       </form>
 
@@ -439,23 +440,23 @@
         <div class="flex items-center gap-1.5 sm:gap-2 flex-shrink-0">
           <!-- Quick Role Switcher (For testing / switching roles) -->
           <div class="relative">
-            <select id="header-role-switcher" onchange="handleQuickRoleSwitch(this.value)" title="Ubah / Uji Role Akses" class="px-2.5 py-1.5 rounded-lg border border-stone-200 bg-[#FAF8F5] text-xs font-semibold text-stone-700 focus:outline-none focus:border-terracotta-600 max-w-[135px] sm:max-w-none">
+            <select id="header-role-switcher" onchange="handleQuickRoleSwitch(this.value)" title="Ubah / Uji Role Akses" class="h-[34px] px-2.5 py-1 rounded-xl border border-stone-200 bg-[#FAF8F5] text-xs font-semibold text-stone-700 focus:outline-none focus:border-terracotta-600 max-w-[135px] sm:max-w-none">
               <!-- Populated dynamically -->
             </select>
           </div>
 
-          <a href="./booking.html" target="_blank" title="Buka Form Klien" class="px-2.5 py-1.5 rounded-lg border border-stone-200 hover:bg-stone-50 text-stone-700 text-xs font-medium flex items-center justify-center text-center gap-1.5 transition">
-            <i data-lucide="external-link" class="w-3.5 h-3.5 text-terracotta-600"></i>
+          <a href="./booking.html" target="_blank" title="Buka Form Klien" class="btn-secondary btn-sm">
+            <i data-lucide="external-link" class="text-terracotta-600"></i>
             <span class="hidden md:inline">Form Klien</span>
           </a>
 
-          <button onclick="copyClientBookingLink()" title="Salin Link Form Klien" class="px-2.5 py-1.5 rounded-lg border border-stone-200 hover:bg-stone-50 text-stone-700 text-xs font-medium flex items-center justify-center text-center gap-1.5 transition">
-            <i data-lucide="link" class="w-3.5 h-3.5"></i>
+          <button type="button" onclick="copyClientBookingLink()" title="Salin Link Form Klien" class="btn-secondary btn-sm">
+            <i data-lucide="link"></i>
             <span class="hidden lg:inline">Salin Link</span>
           </button>
 
-          <button onclick="handleAdminLogout()" title="Ganti Akun / Keluar" class="p-1.5 sm:px-2.5 sm:py-1.5 rounded-lg border border-stone-200 hover:bg-rose-50 hover:text-rose-700 hover:border-rose-200 text-stone-600 text-xs font-medium flex items-center justify-center text-center gap-1 transition">
-            <i data-lucide="log-out" class="w-3.5 h-3.5"></i>
+          <button type="button" onclick="handleAdminLogout()" title="Ganti Akun / Keluar" class="btn-danger-outline btn-sm">
+            <i data-lucide="log-out"></i>
             <span class="hidden xl:inline">Keluar</span>
           </button>
         </div>
@@ -474,14 +475,65 @@
   <main class="max-w-7xl w-full mx-auto px-3 sm:px-6 py-5 sm:py-6 space-y-6 flex-1">
 
     <!-- ============================================================ -->
-    <!-- TAB 1: DASHBOARD                                             -->
+    <!-- TAB 1: DASHBOARD (MODERN ANTI-SLOP LUXURY EDITORIAL)         -->
     <!-- ============================================================ -->
-    <section id="admin-tab-dashboard" class="admin-tab-content space-y-5">
-      <div class="bg-white rounded-2xl border border-[#E7E2DA] p-4 sm:p-6 space-y-5">
+    <section id="admin-tab-dashboard" class="admin-tab-content space-y-6">
+
+      <!-- 1. STUDIO GREETING & QUICK ACTION BAR -->
+      <div class="bg-white rounded-2xl border border-[#E7E2DA] p-5 sm:p-6 shadow-sm">
+        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-5 border-b border-stone-100">
+          <div class="space-y-1">
+            <div class="flex flex-wrap items-center gap-2">
+              <span class="px-2.5 py-0.5 rounded-full text-[11px] font-semibold tracking-wide bg-stone-100 text-stone-700 uppercase">
+                Studio Manajemen
+              </span>
+              <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-emerald-50 text-emerald-800 border border-emerald-200">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-600 animate-pulse"></span>
+                <span>cPanel Online Ready</span>
+              </span>
+            </div>
+            <h1 class="font-serif text-2xl sm:text-3xl font-bold text-stone-900 tracking-tight">
+              Selamat Datang di Carissa Wedding &amp; MUA
+            </h1>
+            <p id="dashboard-live-date" class="text-xs text-stone-500 flex items-center gap-1.5">
+              <i data-lucide="calendar" class="w-3.5 h-3.5 text-stone-400"></i>
+              <span>Memuat kalender operasional...</span>
+            </p>
+          </div>
+
+          <!-- Quick Action Buttons -->
+          <div class="flex flex-wrap items-center gap-2">
+            <button type="button" onclick="openBookingModal()" class="btn-primary">
+              <i data-lucide="plus-circle" class="w-4 h-4"></i>
+              <span>+ Booking Baru</span>
+            </button>
+            <button type="button" onclick="switchAdminTab('calendar')" class="btn-secondary">
+              <i data-lucide="calendar" class="w-4 h-4"></i>
+              <span>Jadwal Kalender</span>
+            </button>
+            <button type="button" onclick="switchAdminTab('fitting')" class="btn-secondary">
+              <i data-lucide="scissors" class="w-4 h-4"></i>
+              <span>Fitting Busana</span>
+            </button>
+            <button type="button" onclick="syncWithBackendServer()" class="btn-secondary" title="Perbarui Data dari Server">
+              <i data-lucide="refresh-cw" class="w-4 h-4"></i>
+              <span>Sinkron</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- 2. SMART OPERATIONAL ACTION ALERTS -->
+        <div id="dashboard-smart-alerts" class="pt-4">
+          <!-- Populated by renderSmartAlerts() -->
+        </div>
+      </div>
+
+      <!-- 3. FINANCIAL & OPERATIONAL METRIC CARDS -->
+      <div class="bg-white rounded-2xl border border-[#E7E2DA] p-5 sm:p-6 shadow-sm space-y-5">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-stone-100">
           <div>
-            <h2 class="font-serif text-lg sm:text-xl font-bold text-stone-900">Ringkasan Operasional &amp; Keuangan</h2>
-            <p class="text-xs text-stone-500 mt-0.5">Data pemesanan dari form klien otomatis tersinkronisasi ke halaman ini.</p>
+            <h2 class="font-serif text-lg font-bold text-stone-900">Performa Keuangan &amp; Operasional</h2>
+            <p class="text-xs text-stone-500 mt-0.5">Ringkasan transaksi dan status pemesanan terverifikasi</p>
           </div>
           <div class="flex flex-wrap items-center gap-2">
             <select id="kpi-month-select" onchange="calculateMonthlyKPI()" class="px-3 py-2 rounded-lg border border-stone-200 text-xs font-semibold text-stone-700 bg-[#FAF8F5]">
@@ -506,52 +558,201 @@
               <option value="2027">2027</option>
               <option value="2028">2028</option>
             </select>
-            <button onclick="setKpiQuickFilter('all')" class="btn-secondary btn-sm">
-              <span>Semua Data</span>
+            <button type="button" onclick="setKpiQuickFilter('current')" class="btn-secondary btn-sm">
+              <span>Bulan Berjalan</span>
+            </button>
+            <button type="button" onclick="setKpiQuickFilter('all')" class="btn-secondary btn-sm">
+              <span>Semua Periode</span>
             </button>
           </div>
         </div>
 
-        <!-- 4 KPI Cards -->
-        <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-          <div class="p-4 rounded-xl bg-[#FAF8F5] border border-[#E7E2DA]">
-            <span class="text-[11px] font-semibold text-stone-500 uppercase tracking-wider">Total Booking</span>
-            <div id="kpi-filtered-bookings" class="text-xl sm:text-2xl font-bold text-stone-900 mt-1">0</div>
-            <p id="kpi-filtered-booking-sub" class="text-[11px] text-stone-500 mt-0.5">0 Wedding &bull; 0 Reguler</p>
+        <!-- 4 Metric Cards (Clean Warm Surfaces, No AI Mesh Gradients) -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <!-- Card 1: Total Bookings -->
+          <div class="p-4 sm:p-5 rounded-xl bg-[#FAF8F5] border border-[#E7E2DA] flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between">
+                <span class="text-[11px] font-semibold text-stone-500 uppercase tracking-wider">Total Pemesanan</span>
+                <span class="w-8 h-8 rounded-lg bg-stone-200/60 text-stone-700 flex items-center justify-center">
+                  <i data-lucide="calendar-check-2" class="w-4 h-4"></i>
+                </span>
+              </div>
+              <div id="kpi-filtered-bookings" class="text-2xl sm:text-3xl font-bold text-stone-900 mt-2">0</div>
+            </div>
+            <div class="mt-3 pt-3 border-t border-stone-200/60">
+              <div id="kpi-filtered-booking-sub" class="text-xs font-medium text-stone-600 flex items-center gap-1.5 flex-wrap">
+                <span class="px-2 py-0.5 rounded bg-white border border-stone-200 text-stone-700 font-semibold text-[11px]">0 Wedding</span>
+                <span class="px-2 py-0.5 rounded bg-white border border-stone-200 text-stone-600 text-[11px]">0 Reguler</span>
+              </div>
+            </div>
           </div>
-          <div class="p-4 rounded-xl bg-[#FAF8F5] border border-[#E7E2DA]">
-            <span class="text-[11px] font-semibold text-stone-500 uppercase tracking-wider">Total DP Masuk</span>
-            <div id="kpi-filtered-dp" class="text-xl sm:text-2xl font-bold text-emerald-700 mt-1">Rp 0</div>
-            <p class="text-[11px] text-stone-500 mt-0.5">Uang muka diterima</p>
+
+          <!-- Card 2: Total DP -->
+          <div class="p-4 sm:p-5 rounded-xl bg-[#FAF8F5] border border-[#E7E2DA] flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between">
+                <span class="text-[11px] font-semibold text-emerald-800 uppercase tracking-wider">Total DP Diterima</span>
+                <span class="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-800 flex items-center justify-center">
+                  <i data-lucide="wallet-cards" class="w-4 h-4"></i>
+                </span>
+              </div>
+              <div id="kpi-filtered-dp" class="text-2xl sm:text-3xl font-bold text-emerald-800 mt-2">Rp 0</div>
+            </div>
+            <div class="mt-3 pt-3 border-t border-stone-200/60">
+              <p id="kpi-filtered-dp-percent" class="text-xs text-emerald-700 font-medium">Uang muka terverifikasi</p>
+            </div>
           </div>
-          <div class="p-4 rounded-xl bg-[#FAF8F5] border border-[#E7E2DA]">
-            <span class="text-[11px] font-semibold text-stone-500 uppercase tracking-wider">Total Nilai Paket</span>
-            <div id="kpi-filtered-omset" class="text-xl sm:text-2xl font-bold text-stone-900 mt-1">Rp 0</div>
-            <p class="text-[11px] text-stone-500 mt-0.5">Estimasi omset kotor</p>
+
+          <!-- Card 3: Total Omset -->
+          <div class="p-4 sm:p-5 rounded-xl bg-[#FAF8F5] border border-[#E7E2DA] flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between">
+                <span class="text-[11px] font-semibold text-stone-500 uppercase tracking-wider">Nilai Kontrak Paket</span>
+                <span class="w-8 h-8 rounded-lg bg-stone-200/60 text-stone-700 flex items-center justify-center">
+                  <i data-lucide="gem" class="w-4 h-4"></i>
+                </span>
+              </div>
+              <div id="kpi-filtered-omset" class="text-2xl sm:text-3xl font-bold text-stone-900 mt-2">Rp 0</div>
+            </div>
+            <div class="mt-3 pt-3 border-t border-stone-200/60">
+              <p class="text-xs text-stone-500">Estimasi omset kotor paket terpilih</p>
+            </div>
           </div>
-          <div class="p-4 rounded-xl bg-[#FAF8F5] border border-[#E7E2DA]">
-            <span class="text-[11px] font-semibold text-stone-500 uppercase tracking-wider">Sisa Pelunasan</span>
-            <div id="kpi-filtered-remaining" class="text-xl sm:text-2xl font-bold text-amber-700 mt-1">Rp 0</div>
-            <p class="text-[11px] text-stone-500 mt-0.5">Menunggu pelunasan</p>
+
+          <!-- Card 4: Sisa Pelunasan -->
+          <div class="p-4 sm:p-5 rounded-xl bg-[#FAF8F5] border border-[#E7E2DA] flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between">
+                <span class="text-[11px] font-semibold text-amber-900 uppercase tracking-wider">Piutang Pelunasan</span>
+                <span class="w-8 h-8 rounded-lg bg-amber-100 text-amber-800 flex items-center justify-center">
+                  <i data-lucide="clock" class="w-4 h-4"></i>
+                </span>
+              </div>
+              <div id="kpi-filtered-remaining" class="text-2xl sm:text-3xl font-bold text-amber-800 mt-2">Rp 0</div>
+            </div>
+            <div class="mt-3 pt-3 border-t border-stone-200/60">
+              <p class="text-xs text-amber-700 font-medium">Wajib lunas H-7 Wedding / H-1 Reguler</p>
+            </div>
           </div>
         </div>
       </div>
 
-      <!-- Recent Client Bookings Preview -->
-      <div class="bg-white rounded-2xl border border-[#E7E2DA] overflow-hidden">
-        <div class="p-4 sm:px-6 border-b border-stone-100 flex items-center justify-between">
-          <div>
-            <h3 class="font-serif font-bold text-base text-stone-900">Booking Terbaru Masuk</h3>
-            <p class="text-xs text-stone-500">Kiriman formulir klien terbaru yang masuk ke sistem</p>
+      <!-- 4. SPLIT TWO-COLUMN SECTION: AGENDA TERDEKAT + RINGKASAN PEMBAYARAN -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 sm:gap-6">
+
+        <!-- LEFT COLUMN (7 COLS): UPCOMING SCHEDULE & COUNTDOWN AGENDA -->
+        <div class="lg:col-span-7 bg-white rounded-2xl border border-[#E7E2DA] overflow-hidden shadow-sm flex flex-col">
+          <div class="p-4 sm:px-6 border-b border-stone-100 flex items-center justify-between">
+            <div>
+              <div class="flex items-center gap-2">
+                <span class="w-2.5 h-2.5 rounded-full bg-terracotta-600"></span>
+                <h3 class="font-serif font-bold text-base text-stone-900">Agenda Acara Terdekat</h3>
+              </div>
+              <p class="text-xs text-stone-500 mt-0.5">Jadwal rias &amp; wedding terdekat dengan hitung mundur hari</p>
+            </div>
+            <button type="button" onclick="switchAdminTab('calendar')" class="btn-secondary btn-sm">
+              <span>Buka Kalender &rarr;</span>
+            </button>
           </div>
-          <button onclick="switchAdminTab('bookings')" class="btn-secondary btn-sm">
-            <span>Lihat Semua &rarr;</span>
-          </button>
+
+          <div id="dashboard-upcoming-agenda" class="divide-y divide-stone-100 p-2 sm:p-4 flex-1">
+            <!-- Populated dynamically by renderUpcomingScheduleAgenda() -->
+          </div>
         </div>
-        <div id="dashboard-recent-bookings" class="divide-y divide-stone-100">
-          <!-- Populated dynamically -->
+
+        <!-- RIGHT COLUMN (5 COLS): FINANCIAL PROGRESS & SYSTEM SUMMARY -->
+        <div class="lg:col-span-5 space-y-5">
+
+          <!-- Card A: Distribusi Pembayaran -->
+          <div class="bg-white rounded-2xl border border-[#E7E2DA] p-5 shadow-sm space-y-4">
+            <div class="flex items-center justify-between border-b border-stone-100 pb-3">
+              <h3 class="font-serif font-bold text-sm text-stone-900">Distribusi Status Pembayaran</h3>
+              <span id="dashboard-ratio-summary" class="text-[11px] font-semibold text-stone-500">0 Acara</span>
+            </div>
+
+            <!-- Segmented Progress Bar (Solid Colors, No AI Mesh) -->
+            <div class="space-y-2">
+              <div id="dashboard-payment-bar" class="w-full h-3.5 bg-stone-100 rounded-full overflow-hidden flex">
+                <div id="bar-lunas" style="width: 0%" class="bg-emerald-700 h-full transition-all duration-300" title="Lunas"></div>
+                <div id="bar-dp" style="width: 0%" class="bg-amber-600 h-full transition-all duration-300" title="Sudah DP"></div>
+                <div id="bar-pending" style="width: 0%" class="bg-stone-400 h-full transition-all duration-300" title="Belum DP"></div>
+                <div id="bar-batal" style="width: 0%" class="bg-rose-600 h-full transition-all duration-300" title="Batal"></div>
+              </div>
+
+              <!-- Legends -->
+              <div id="dashboard-payment-legend" class="grid grid-cols-2 gap-2 pt-2 text-xs">
+                <!-- Populated dynamically -->
+              </div>
+            </div>
+          </div>
+
+          <!-- Card B: Integrasi & Pusat Kontrol cPanel -->
+          <div class="bg-[#FAF8F5] rounded-2xl border border-[#E7E2DA] p-5 shadow-sm space-y-3">
+            <h3 class="font-serif font-bold text-sm text-stone-900 flex items-center gap-2">
+              <i data-lucide="shield-check" class="w-4 h-4 text-emerald-700"></i>
+              <span>Pusat Sistem &amp; cPanel Hosting</span>
+            </h3>
+            <p class="text-xs text-stone-600 leading-relaxed">
+              Panel admin Carissa siap dijalankan di cPanel Apache/LiteSpeed menggunakan PHP API Engine dan penyimpanan terproteksi.
+            </p>
+            <div class="space-y-2 pt-1 text-xs">
+              <div class="flex items-center justify-between py-1 border-b border-stone-200/60">
+                <span class="text-stone-500">Engine API Backend</span>
+                <span class="font-semibold text-stone-800">PHP 8+ / JSON / MySQL</span>
+              </div>
+              <div class="flex items-center justify-between py-1 border-b border-stone-200/60">
+                <span class="text-stone-500">Google Calendar API v3</span>
+                <span class="font-semibold text-emerald-700">Aktif &amp; Terhubung</span>
+              </div>
+              <div class="flex items-center justify-between py-1">
+                <span class="text-stone-500">Proteksi Data Klien</span>
+                <span class="font-semibold text-stone-800">.htaccess Shielded</span>
+              </div>
+            </div>
+            <div class="pt-2">
+              <button type="button" onclick="downloadDatabaseBackup()" class="btn-secondary w-full text-xs">
+                <i data-lucide="download" class="w-3.5 h-3.5"></i>
+                <span>Unduh Cadangan Database (.json)</span>
+              </button>
+            </div>
+          </div>
+
         </div>
       </div>
+
+      <!-- 5. RECENT CLIENT BOOKINGS TABLE WITH FILTER TABS -->
+      <div class="bg-white rounded-2xl border border-[#E7E2DA] overflow-hidden shadow-sm">
+        <div class="p-4 sm:px-6 border-b border-stone-100 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div>
+            <h3 class="font-serif font-bold text-base text-stone-900">Pemesanan Terbaru Masuk</h3>
+            <p class="text-xs text-stone-500 mt-0.5">Daftar booking terbaru dari formulir klien dan admin</p>
+          </div>
+          <div class="flex flex-wrap items-center gap-2">
+            <div class="inline-flex rounded-lg border border-stone-200 p-0.5 bg-[#FAF8F5] text-xs">
+              <button type="button" onclick="setDashboardRecentFilter('all')" id="tab-recent-all" class="px-2.5 py-1 rounded-md font-semibold text-stone-800 bg-white shadow-sm">
+                Semua
+              </button>
+              <button type="button" onclick="setDashboardRecentFilter('client_form')" id="tab-recent-client_form" class="px-2.5 py-1 rounded-md text-stone-600 hover:text-stone-900">
+                Form Klien
+              </button>
+              <button type="button" onclick="setDashboardRecentFilter('wedding')" id="tab-recent-wedding" class="px-2.5 py-1 rounded-md text-stone-600 hover:text-stone-900">
+                Wedding
+              </button>
+              <button type="button" onclick="setDashboardRecentFilter('reguler')" id="tab-recent-reguler" class="px-2.5 py-1 rounded-md text-stone-600 hover:text-stone-900">
+                Reguler
+              </button>
+            </div>
+            <button type="button" onclick="switchAdminTab('bookings')" class="btn-secondary btn-sm">
+              <span>Lihat Semua di Tabel &rarr;</span>
+            </button>
+          </div>
+        </div>
+        <div id="dashboard-recent-bookings" class="divide-y divide-stone-100">
+          <!-- Populated dynamically by renderDashboardRecentBookings() -->
+        </div>
+      </div>
+
     </section>
 
     <!-- ============================================================ -->
@@ -619,8 +820,8 @@
     <!-- TAB 3: KALENDER JADWAL & SINKRONISASI GOOGLE CALENDAR API v3 -->
     <!-- ============================================================ -->
     <section id="admin-tab-calendar" class="admin-tab-content hidden space-y-4">
-      <!-- Panel Sinkronisasi Google Calendar API v3 (Events, Acl, CalendarList, Calendars, Freebusy, Colors, Settings, Channels) -->
-      <div class="bg-white p-4 sm:p-5 rounded-2xl border border-[#E7E2DA] space-y-3.5">
+      <!-- Panel Sinkronisasi Google Calendar API v3 (Disembunyikan — berjalan 100% otomatis di latar belakang) -->
+      <div class="hidden bg-white p-4 sm:p-5 rounded-2xl border border-[#E7E2DA] space-y-3.5">
         <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-3">
           <div class="space-y-1">
             <div class="flex flex-wrap items-center gap-2">
@@ -667,43 +868,61 @@
               <span>Quick Add (API v3)</span>
             </button>
           </form>
-          <div class="flex flex-wrap items-center gap-2 text-[11px] text-stone-600">
-            <span class="px-2.5 py-1 rounded-lg bg-terracotta-50 text-terracotta-800 border border-terracotta-200 font-semibold">
-              <span class="inline-block w-2 h-2 rounded-full bg-[#dc2127] mr-1"></span>Hari-H Wedding (Color 11)
-            </span>
-            <span class="px-2.5 py-1 rounded-lg bg-blue-50 text-blue-800 border border-blue-200 font-semibold">
-              <span class="inline-block w-2 h-2 rounded-full bg-[#5484ed] mr-1"></span>H-7 Fitting (Color 9)
-            </span>
-            <span class="px-2.5 py-1 rounded-lg bg-amber-50 text-amber-800 border border-amber-200 font-semibold">
-              <span class="inline-block w-2 h-2 rounded-full bg-[#ffb878] mr-1"></span>H-1 Fitting (Color 6)
-            </span>
-          </div>
         </div>
       </div>
 
       <div class="bg-white p-4 sm:p-6 rounded-2xl border border-[#E7E2DA] space-y-4">
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-stone-100">
-          <div>
-            <h2 id="cal-month-year-title" class="font-serif text-xl font-bold text-stone-900">Bulan Tahun</h2>
-            <p class="text-xs text-stone-500">Klik tanggal untuk menambah jadwal atau klik event untuk sinkronisasi Google Calendar.</p>
+        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-3 pb-3 border-b border-stone-100">
+          <div class="space-y-1">
+            <div class="flex flex-wrap items-center gap-2">
+              <h2 id="cal-month-year-title" class="font-serif text-xl font-bold text-stone-900">Bulan Tahun</h2>
+              <span class="px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 font-bold text-[10px] uppercase tracking-wider inline-flex items-center gap-1">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                <span>Auto-Sync Google Calendar Aktif</span>
+              </span>
+            </div>
+            <p class="text-xs text-stone-500">Klik tanggal untuk menambah jadwal atau klik event untuk detail &amp; sinkronisasi otomatis Google Calendar.</p>
           </div>
           <div class="flex flex-wrap items-center gap-2">
-            <div class="inline-flex items-center rounded-xl border border-stone-200 bg-[#FAF8F5] p-0.5 h-[36px]">
-              <button onclick="changeCalendarMonth(-1)" class="p-1.5 rounded-lg hover:bg-white text-stone-700">
+            <div class="inline-flex items-center rounded-xl border border-[#E2DDD5] bg-[#FAF8F5] p-0.5 h-[36px]">
+              <button type="button" onclick="changeCalendarMonth(-1)" title="Bulan Sebelumnya" class="h-[30px] w-[30px] inline-flex items-center justify-center rounded-lg hover:bg-white text-stone-700 transition">
                 <i data-lucide="chevron-left" class="w-4 h-4"></i>
               </button>
-              <button onclick="resetCalendarToToday()" class="px-3 py-1 text-xs font-semibold text-stone-700 hover:bg-white rounded-lg">
-                Hari Ini
+              <button type="button" onclick="resetCalendarToToday()" class="h-[30px] px-3 inline-flex items-center justify-center text-xs font-semibold text-stone-700 hover:bg-white rounded-lg transition">
+                <span>Hari Ini</span>
               </button>
-              <button onclick="changeCalendarMonth(1)" class="p-1.5 rounded-lg hover:bg-white text-stone-700">
+              <button type="button" onclick="changeCalendarMonth(1)" title="Bulan Berikutnya" class="h-[30px] w-[30px] inline-flex items-center justify-center rounded-lg hover:bg-white text-stone-700 transition">
                 <i data-lucide="chevron-right" class="w-4 h-4"></i>
               </button>
             </div>
-            <button onclick="exportAllToGoogleCalendarICS()" class="btn-secondary btn-sm">
+            <button type="button" onclick="openBookingModal()" class="btn-primary btn-sm">
+              <i data-lucide="calendar-plus"></i>
+              <span>Tambah Jadwal</span>
+            </button>
+            <button type="button" onclick="exportAllToGoogleCalendarICS()" class="btn-secondary btn-sm">
               <i data-lucide="download"></i>
               <span>Export .ICS</span>
             </button>
           </div>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-2 text-[11px] text-stone-600">
+          <span class="px-2.5 py-1 rounded-lg bg-terracotta-50 text-terracotta-800 border border-terracotta-200 font-semibold inline-flex items-center gap-1.5">
+            <span class="inline-block w-2 h-2 rounded-full bg-[#dc2127]"></span>
+            <span>Hari-H Wedding</span>
+          </span>
+          <span class="px-2.5 py-1 rounded-lg bg-blue-50 text-blue-800 border border-blue-200 font-semibold inline-flex items-center gap-1.5">
+            <span class="inline-block w-2 h-2 rounded-full bg-[#5484ed]"></span>
+            <span>Reminder H-7 Fitting</span>
+          </span>
+          <span class="px-2.5 py-1 rounded-lg bg-amber-50 text-amber-800 border border-amber-200 font-semibold inline-flex items-center gap-1.5">
+            <span class="inline-block w-2 h-2 rounded-full bg-[#ffb878]"></span>
+            <span>Reminder H-1 Fitting</span>
+          </span>
+          <span class="px-2.5 py-1 rounded-lg bg-emerald-50 text-emerald-800 border border-emerald-200 font-semibold inline-flex items-center gap-1.5">
+            <span class="inline-block w-2 h-2 rounded-full bg-[#51b749]"></span>
+            <span>Rias Reguler</span>
+          </span>
         </div>
 
         <div class="overflow-x-auto custom-scrollbar">
@@ -1187,8 +1406,8 @@
         </div>
       </div>
 
-      <!-- Konfigurasi & Sinkronisasi Google Calendar API v3 -->
-      <div class="bg-white p-5 sm:p-6 rounded-2xl border border-[#E7E2DA] space-y-4">
+      <!-- Konfigurasi & Sinkronisasi Google Calendar API v3 (Disembunyikan — berjalan 100% otomatis di latar belakang) -->
+      <div class="hidden bg-white p-5 sm:p-6 rounded-2xl border border-[#E7E2DA] space-y-4">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
           <div>
             <span class="text-[10px] font-bold uppercase tracking-widest text-terracotta-600">Google Workspace Calendar API v3</span>
@@ -2336,8 +2555,13 @@
             <span>Sekaligus unduh file Google Kalender (.ICS H-7 &amp; H-1) saat disimpan</span>
           </label>
           <div class="flex items-center gap-2">
-            <button type="button" onclick="closeFittingReminderModal()" class="px-5 py-2.5 rounded-xl border border-stone-200 text-stone-600 font-semibold">Batal</button>
-            <button type="submit" class="px-6 py-2.5 rounded-xl bg-terracotta-600 hover:bg-terracotta-700 text-white font-semibold">Simpan Reminder Fitting</button>
+            <button type="button" onclick="closeFittingReminderModal()" class="btn-secondary">
+              <span>Batal</span>
+            </button>
+            <button type="submit" class="btn-primary">
+              <i data-lucide="check"></i>
+              <span>Simpan Reminder Fitting</span>
+            </button>
           </div>
         </div>
       </form>
@@ -2350,12 +2574,12 @@
       <div class="px-4 py-3 bg-[#FAF8F5] border-b border-[#E7E2DA] flex items-center justify-between gap-2">
         <span id="photo-lightbox-caption" class="font-serif font-bold text-sm text-stone-900 truncate">Preview Foto</span>
         <div class="flex items-center gap-2">
-          <a id="photo-lightbox-download" href="#" download="Foto_Carissa.jpg" class="px-3 py-1 rounded-lg bg-white border border-stone-200 hover:bg-stone-100 text-stone-700 text-xs font-semibold flex items-center gap-1">
-            <i data-lucide="download" class="w-3.5 h-3.5"></i>
+          <a id="photo-lightbox-download" href="#" download="Foto_Carissa.jpg" class="btn-secondary btn-sm">
+            <i data-lucide="download"></i>
             <span>Unduh Foto</span>
           </a>
-          <button type="button" onclick="closePhotoLightbox()" class="p-1 rounded-lg text-stone-500 hover:text-stone-900">
-            <i data-lucide="x" class="w-5 h-5"></i>
+          <button type="button" onclick="closePhotoLightbox()" class="btn-icon-only btn-sm">
+            <i data-lucide="x" class="w-4 h-4"></i>
           </button>
         </div>
       </div>
@@ -2372,6 +2596,17 @@
   <!-- JAVASCRIPT ENGINE                                              -->
   <!-- ============================================================== -->
   <script>
+    // cPanel & Subfolder Resilient API Fetch Interceptor
+    const _originalFetch = window.fetch;
+    window.fetch = function(input, init) {
+      if (typeof input === 'string' && input.startsWith('/api/')) {
+        const pathname = window.location.pathname;
+        const dir = pathname.substring(0, pathname.lastIndexOf('/') + 1);
+        input = dir + input.substring(1);
+      }
+      return _originalFetch.call(this, input, init);
+    };
+
     const STORAGE_KEY_BOOKINGS = 'carisa_bookings';
     const STORAGE_KEY_PACKAGES = 'carisa_master_packages';
     const STORAGE_KEY_USERS = 'carisa_master_users';
@@ -3028,10 +3263,10 @@
       globalMenus = getStorage(STORAGE_KEY_GLOBAL_MENUS, DEFAULT_GLOBAL_MENUS);
       fittingCustomColumns = getStorage(STORAGE_KEY_FIT_COLS, []);
       bookings = getStorage(STORAGE_KEY_BOOKINGS, getStorage(LEGACY_STORAGE_KEY, []));
-      fittings = getStorage(STORAGE_KEY_FITTINGS, getStorage(LEGACY_FITTINGS_KEY, DEFAULT_FITTINGS));
-      fittingReminders = getStorage(STORAGE_KEY_FITTING_REMINDERS, DEFAULT_FITTING_REMINDERS);
-      woEvents = getStorage(STORAGE_KEY_WO_EVENTS, DEFAULT_WO_EVENTS);
-      vendorTransfers = getStorage(STORAGE_KEY_VENDOR_TRANSFERS, DEFAULT_VENDOR_TRANSFERS);
+      fittings = getStorage(STORAGE_KEY_FITTINGS, getStorage(LEGACY_FITTINGS_KEY, []));
+      fittingReminders = getStorage(STORAGE_KEY_FITTING_REMINDERS, []);
+      woEvents = getStorage(STORAGE_KEY_WO_EVENTS, []);
+      vendorTransfers = getStorage(STORAGE_KEY_VENDOR_TRANSFERS, []);
 
       // Ensure all default roles exist
       DEFAULT_ROLES_CONFIG.forEach(defRole => {
@@ -3041,11 +3276,6 @@
       });
       ensureVendorMenuInRoles();
       setStorage(STORAGE_KEY_ROLES, rolesConfig);
-
-      // Ensure default sample booking if empty
-      if (!bookings || bookings.length === 0) {
-        loadDefaultSampleData();
-      }
 
       // Automatically sync all Wedding events (Booking Wedding / Fitting / WO) into H-7 & H-1 reminders for Super Admin & Role Fitting
       syncFittingRemindersFromEvents(false);
@@ -3294,6 +3524,9 @@
           })
         });
       } catch (e) {}
+      if (typeof syncAllToGoogleCalendarApiV3 === 'function') {
+        syncAllToGoogleCalendarApiV3(false);
+      }
     }
 
     // ==============================================================
@@ -3678,19 +3911,60 @@
     }
 
     // ==============================================================
-    // DASHBOARD & KPI
+    // DASHBOARD & KPI (MODERN ANTI-SLOP LUXURY EDITORIAL ENGINE)
     // ==============================================================
+    let currentDashboardRecentFilter = 'all';
+
+    function updateDashboardLiveDate() {
+      const el = document.getElementById('dashboard-live-date');
+      if (!el) return;
+      const now = new Date();
+      const days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+      const dayName = days[now.getDay()];
+      const day = String(now.getDate()).padStart(2, '0');
+      const month = MONTH_NAMES[now.getMonth()];
+      const year = now.getFullYear();
+      const hours = String(now.getHours()).padStart(2, '0');
+      const mins = String(now.getMinutes()).padStart(2, '0');
+      el.innerHTML = `
+        <i data-lucide="calendar" class="w-3.5 h-3.5 text-stone-400"></i>
+        <span>${dayName}, ${day} ${month} ${year} &bull; ${hours}:${mins} WIB</span>
+      `;
+      if (window.lucide) window.lucide.createIcons();
+    }
+
     function setKpiQuickFilter(type) {
       const monthSelect = document.getElementById('kpi-month-select');
       const yearSelect = document.getElementById('kpi-year-select');
+      const now = new Date();
+
       if (type === 'all') {
         if (monthSelect) monthSelect.value = 'all';
         if (yearSelect) yearSelect.value = 'all';
+      } else if (type === 'current') {
+        if (monthSelect) monthSelect.value = String(now.getMonth() + 1);
+        if (yearSelect) yearSelect.value = String(now.getFullYear());
       }
       calculateMonthlyKPI();
     }
 
+    function setDashboardRecentFilter(tab) {
+      currentDashboardRecentFilter = tab;
+      ['all', 'client_form', 'wedding', 'reguler'].forEach(t => {
+        const btn = document.getElementById('tab-recent-' + t);
+        if (!btn) return;
+        if (t === tab) {
+          btn.className = 'px-2.5 py-1 rounded-md font-semibold text-stone-900 bg-white shadow-sm';
+        } else {
+          btn.className = 'px-2.5 py-1 rounded-md text-stone-600 hover:text-stone-900';
+        }
+      });
+      renderDashboardRecentBookings();
+    }
+
     function calculateMonthlyKPI() {
+      updateDashboardLiveDate();
+
       const selectedMonth = document.getElementById('kpi-month-select')?.value || 'all';
       const selectedYear = document.getElementById('kpi-year-select')?.value || 'all';
 
@@ -3709,23 +3983,329 @@
       let totalOmset = 0;
       let totalRemaining = 0;
 
+      let countLunas = 0;
+      let countDp = 0;
+      let countPending = 0;
+      let countBatal = 0;
+
       filtered.forEach(b => {
-        if (b.payment_status !== 'batal') {
-          const price = parseNumericValue(b.total_price);
-          const dp = parseNumericValue(b.dp_amount);
-          totalOmset += price;
-          totalDp += dp;
-          totalRemaining += Math.max(0, price - dp);
+        const pStatus = (b.payment_status || 'pending').toLowerCase();
+        if (pStatus === 'batal') {
+          countBatal++;
+          return;
         }
+
+        if (pStatus === 'lunas') countLunas++;
+        else if (pStatus === 'dp') countDp++;
+        else countPending++;
+
+        const price = parseNumericValue(b.total_price);
+        const dp = parseNumericValue(b.dp_amount);
+        totalOmset += price;
+        totalDp += dp;
+        totalRemaining += Math.max(0, price - dp);
       });
 
-      document.getElementById('kpi-filtered-bookings').textContent = totalBookings;
-      document.getElementById('kpi-filtered-booking-sub').textContent = `${weddingCount} Wedding • ${regulerCount} Reguler`;
-      document.getElementById('kpi-filtered-dp').textContent = formatRupiahWithCommas(totalDp);
-      document.getElementById('kpi-filtered-omset').textContent = formatRupiahWithCommas(totalOmset);
-      document.getElementById('kpi-filtered-remaining').textContent = formatRupiahWithCommas(totalRemaining);
+      // Update 4 Metric Cards
+      const elBookings = document.getElementById('kpi-filtered-bookings');
+      if (elBookings) elBookings.textContent = totalBookings;
 
+      const elSub = document.getElementById('kpi-filtered-booking-sub');
+      if (elSub) {
+        elSub.innerHTML = `
+          <span class="px-2 py-0.5 rounded bg-white border border-stone-200 text-stone-800 font-semibold text-[11px]">${weddingCount} Wedding</span>
+          <span class="px-2 py-0.5 rounded bg-white border border-stone-200 text-stone-600 text-[11px]">${regulerCount} Reguler</span>
+        `;
+      }
+
+      const elDp = document.getElementById('kpi-filtered-dp');
+      if (elDp) elDp.textContent = formatRupiahWithCommas(totalDp);
+
+      const elDpPercent = document.getElementById('kpi-filtered-dp-percent');
+      if (elDpPercent) {
+        const pct = totalOmset > 0 ? Math.round((totalDp / totalOmset) * 100) : 0;
+        elDpPercent.textContent = `${pct}% realisasi uang muka dari total nilai paket`;
+      }
+
+      const elOmset = document.getElementById('kpi-filtered-omset');
+      if (elOmset) elOmset.textContent = formatRupiahWithCommas(totalOmset);
+
+      const elRemaining = document.getElementById('kpi-filtered-remaining');
+      if (elRemaining) elRemaining.textContent = formatRupiahWithCommas(totalRemaining);
+
+      // Payment Status Distribution Bar & Legend
+      const activeTotal = totalBookings > 0 ? totalBookings : 1;
+      const pctLunas = totalBookings > 0 ? Math.round((countLunas / activeTotal) * 100) : 0;
+      const pctDp = totalBookings > 0 ? Math.round((countDp / activeTotal) * 100) : 0;
+      const pctPending = totalBookings > 0 ? Math.round((countPending / activeTotal) * 100) : 0;
+      const pctBatal = totalBookings > 0 ? Math.round((countBatal / activeTotal) * 100) : 0;
+
+      const barLunas = document.getElementById('bar-lunas');
+      const barDp = document.getElementById('bar-dp');
+      const barPending = document.getElementById('bar-pending');
+      const barBatal = document.getElementById('bar-batal');
+
+      if (barLunas) barLunas.style.width = pctLunas + '%';
+      if (barDp) barDp.style.width = pctDp + '%';
+      if (barPending) barPending.style.width = pctPending + '%';
+      if (barBatal) barBatal.style.width = pctBatal + '%';
+
+      const elRatioSummary = document.getElementById('dashboard-ratio-summary');
+      if (elRatioSummary) elRatioSummary.textContent = `${totalBookings} Total Pemesanan`;
+
+      const elLegend = document.getElementById('dashboard-payment-legend');
+      if (elLegend) {
+        elLegend.innerHTML = `
+          <div class="flex items-center gap-1.5 p-1.5 rounded bg-stone-50 border border-stone-100">
+            <span class="w-2.5 h-2.5 rounded-sm bg-emerald-700"></span>
+            <span class="text-stone-600">Lunas:</span>
+            <span class="font-bold text-stone-900 ml-auto">${countLunas} (${pctLunas}%)</span>
+          </div>
+          <div class="flex items-center gap-1.5 p-1.5 rounded bg-stone-50 border border-stone-100">
+            <span class="w-2.5 h-2.5 rounded-sm bg-amber-600"></span>
+            <span class="text-stone-600">Sudah DP:</span>
+            <span class="font-bold text-stone-900 ml-auto">${countDp} (${pctDp}%)</span>
+          </div>
+          <div class="flex items-center gap-1.5 p-1.5 rounded bg-stone-50 border border-stone-100">
+            <span class="w-2.5 h-2.5 rounded-sm bg-stone-400"></span>
+            <span class="text-stone-600">Belum DP:</span>
+            <span class="font-bold text-stone-900 ml-auto">${countPending} (${pctPending}%)</span>
+          </div>
+          <div class="flex items-center gap-1.5 p-1.5 rounded bg-stone-50 border border-stone-100">
+            <span class="w-2.5 h-2.5 rounded-sm bg-rose-600"></span>
+            <span class="text-stone-600">Batal:</span>
+            <span class="font-bold text-stone-900 ml-auto">${countBatal} (${pctBatal}%)</span>
+          </div>
+        `;
+      }
+
+      renderSmartAlerts();
+      renderUpcomingScheduleAgenda();
       renderDashboardRecentBookings();
+    }
+
+    function renderSmartAlerts() {
+      const container = document.getElementById('dashboard-smart-alerts');
+      if (!container) return;
+
+      const now = new Date();
+      now.setHours(0, 0, 0, 0);
+
+      // 1. Klien Menunggu Verifikasi DP (Dari Form Klien / Status Pending)
+      const pendingDpList = bookings.filter(b => {
+        const pStat = (b.payment_status || 'pending').toLowerCase();
+        const dpVal = parseNumericValue(b.dp_amount);
+        return pStat !== 'batal' && (pStat === 'pending' || dpVal === 0);
+      });
+
+      // 2. Tagihan Pelunasan H-7 Wedding (Dalam 7 hari ke depan belum lunas)
+      const h7WeddingList = bookings.filter(b => {
+        if (!b.event_date || b.category !== 'wedding') return false;
+        const pStat = (b.payment_status || '').toLowerCase();
+        if (pStat === 'lunas' || pStat === 'batal') return false;
+        const evDate = new Date(b.event_date + 'T00:00:00');
+        const diffDays = Math.ceil((evDate - now) / (1000 * 60 * 60 * 24));
+        return diffDays >= 0 && diffDays <= 7;
+      });
+
+      // 3. Persiapan H-1 Jadwal Besok
+      const h1TomorrowList = bookings.filter(b => {
+        if (!b.event_date) return false;
+        if ((b.payment_status || '').toLowerCase() === 'batal') return false;
+        const evDate = new Date(b.event_date + 'T00:00:00');
+        const diffDays = Math.ceil((evDate - now) / (1000 * 60 * 60 * 24));
+        return diffDays === 1;
+      });
+
+      const alerts = [];
+
+      if (pendingDpList.length > 0) {
+        alerts.push(`
+          <div class="p-3 rounded-xl bg-amber-50/80 border border-amber-200/80 flex items-start gap-3">
+            <span class="w-7 h-7 rounded-lg bg-amber-200/70 text-amber-800 flex items-center justify-center flex-shrink-0 mt-0.5">
+              <i data-lucide="alert-circle" class="w-4 h-4"></i>
+            </span>
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center justify-between gap-2">
+                <h4 class="text-xs font-bold text-amber-950">${pendingDpList.length} Booking Perlu Verifikasi DP</h4>
+                <button type="button" onclick="switchAdminTab('bookings')" class="text-[11px] font-semibold text-amber-800 underline hover:text-amber-950">
+                  Periksa Sekarang &rarr;
+                </button>
+              </div>
+              <p class="text-[11px] text-amber-800 mt-0.5">
+                Pemesanan baru dari klien siap dicek bukti transfernya untuk diamankan tanggal acaranya.
+              </p>
+            </div>
+          </div>
+        `);
+      }
+
+      if (h7WeddingList.length > 0) {
+        alerts.push(`
+          <div class="p-3 rounded-xl bg-rose-50/80 border border-rose-200/80 flex items-start gap-3">
+            <span class="w-7 h-7 rounded-lg bg-rose-200/70 text-rose-800 flex items-center justify-center flex-shrink-0 mt-0.5">
+              <i data-lucide="bell-ring" class="w-4 h-4"></i>
+            </span>
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center justify-between gap-2">
+                <h4 class="text-xs font-bold text-rose-950">${h7WeddingList.length} Wedding Mendekati H-7 Pelunasan</h4>
+                <button type="button" onclick="switchAdminTab('calendar')" class="text-[11px] font-semibold text-rose-800 underline hover:text-rose-950">
+                  Buka Reminder &rarr;
+                </button>
+              </div>
+              <p class="text-[11px] text-rose-800 mt-0.5">
+                Kirim pengingat pelunasan via WhatsApp sesuai SOP H-7 studio.
+              </p>
+            </div>
+          </div>
+        `);
+      }
+
+      if (h1TomorrowList.length > 0) {
+        alerts.push(`
+          <div class="p-3 rounded-xl bg-blue-50/80 border border-blue-200/80 flex items-start gap-3">
+            <span class="w-7 h-7 rounded-lg bg-blue-200/70 text-blue-800 flex items-center justify-center flex-shrink-0 mt-0.5">
+              <i data-lucide="sparkles" class="w-4 h-4"></i>
+            </span>
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center justify-between gap-2">
+                <h4 class="text-xs font-bold text-blue-950">${h1TomorrowList.length} Acara Terjadwal Besok (H-1)</h4>
+                <button type="button" onclick="switchAdminTab('calendar')" class="text-[11px] font-semibold text-blue-800 underline hover:text-blue-950">
+                  Cek Kesiapan &rarr;
+                </button>
+              </div>
+              <p class="text-[11px] text-blue-800 mt-0.5">
+                Pastikan gaun dan tim MUA siap bertugas tepat waktu.
+              </p>
+            </div>
+          </div>
+        `);
+      }
+
+      if (alerts.length === 0) {
+        container.innerHTML = `
+          <div class="p-3 rounded-xl bg-[#FAF8F5] border border-[#E7E2DA] flex items-center justify-between text-xs text-stone-600">
+            <div class="flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-emerald-600"></span>
+              <span>Seluruh jadwal dan pembayaran operasional dalam status terkendali. Tidak ada peringatan mendesak.</span>
+            </div>
+            <button type="button" onclick="switchAdminTab('calendar')" class="font-semibold text-terracotta-700 hover:text-terracotta-900 text-xs">
+              Lihat Kalender &rarr;
+            </button>
+          </div>
+        `;
+      } else {
+        container.innerHTML = `<div class="grid grid-cols-1 md:grid-cols-${Math.min(alerts.length, 3)} gap-3">${alerts.join('')}</div>`;
+      }
+
+      if (window.lucide) window.lucide.createIcons();
+    }
+
+    function renderUpcomingScheduleAgenda() {
+      const container = document.getElementById('dashboard-upcoming-agenda');
+      if (!container) return;
+      container.innerHTML = '';
+
+      const now = new Date();
+      now.setHours(0, 0, 0, 0);
+
+      // Filter active bookings and sort chronologically
+      const upcoming = bookings
+        .filter(b => b.event_date && (b.payment_status || '').toLowerCase() !== 'batal')
+        .map(b => {
+          const evDate = new Date(b.event_date + 'T00:00:00');
+          const diffDays = Math.ceil((evDate - now) / (1000 * 60 * 60 * 24));
+          return { ...b, diffDays };
+        })
+        .sort((a, b) => {
+          if (a.diffDays >= 0 && b.diffDays >= 0) return a.diffDays - b.diffDays;
+          if (a.diffDays >= 0 && b.diffDays < 0) return -1;
+          if (a.diffDays < 0 && b.diffDays >= 0) return 1;
+          return b.diffDays - a.diffDays;
+        })
+        .slice(0, 5);
+
+      if (upcoming.length === 0) {
+        container.innerHTML = `
+          <div class="py-10 text-center space-y-2">
+            <div class="w-10 h-10 rounded-full bg-stone-100 text-stone-400 mx-auto flex items-center justify-center">
+              <i data-lucide="calendar" class="w-5 h-5"></i>
+            </div>
+            <p class="text-xs font-medium text-stone-600">Belum ada agenda acara mendatang.</p>
+            <button type="button" onclick="openBookingModal()" class="btn-secondary btn-sm mt-1">
+              <span>+ Tambah Acara Baru</span>
+            </button>
+          </div>
+        `;
+        if (window.lucide) window.lucide.createIcons();
+        return;
+      }
+
+      upcoming.forEach(b => {
+        const clientTitle = b.category === 'wedding' && b.client_cpp && b.client_cpp !== '-'
+          ? `The Wedding of ${b.client_cpp} & ${b.client_cpw}`
+          : (b.client_cpw ? `Rias: ${b.client_cpw}` : (b.account_name || 'Klien'));
+
+        let badgeHtml = '';
+        if (b.diffDays === 0) {
+          badgeHtml = `<span class="px-2.5 py-1 rounded-md text-[10.5px] font-bold bg-emerald-700 text-white tracking-wide">HARI INI</span>`;
+        } else if (b.diffDays === 1) {
+          badgeHtml = `<span class="px-2.5 py-1 rounded-md text-[10.5px] font-bold bg-amber-600 text-white tracking-wide">BESOK</span>`;
+        } else if (b.diffDays > 1 && b.diffDays <= 7) {
+          badgeHtml = `<span class="px-2.5 py-1 rounded-md text-[10.5px] font-bold bg-[#9A5B3E] text-white">H-${b.diffDays}</span>`;
+        } else if (b.diffDays > 7) {
+          badgeHtml = `<span class="px-2 py-0.5 rounded-md text-[10.5px] font-semibold bg-stone-100 text-stone-700 border border-stone-200">H-${b.diffDays}</span>`;
+        } else {
+          badgeHtml = `<span class="px-2 py-0.5 rounded-md text-[10px] font-medium bg-stone-100 text-stone-400">Selesai</span>`;
+        }
+
+        const isLunas = (b.payment_status || '').toLowerCase() === 'lunas';
+        const statusPill = isLunas
+          ? `<span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200">Lunas</span>`
+          : `<span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-amber-50 text-amber-800 border border-amber-200">Sudah DP</span>`;
+
+        const cleanPhone = (b.phone || '').replace(/[^0-9]/g, '');
+        const waLink = cleanPhone ? `https://wa.me/${cleanPhone.startsWith('0') ? '62' + cleanPhone.substring(1) : cleanPhone}` : '#';
+
+        const div = document.createElement('div');
+        div.className = 'py-3 px-2 sm:px-3 flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:bg-[#FAF8F5] rounded-xl transition';
+        div.innerHTML = `
+          <div class="flex items-start gap-3 min-w-0">
+            <div class="pt-0.5 flex-shrink-0">${badgeHtml}</div>
+            <div class="space-y-0.5 min-w-0">
+              <div class="flex items-center gap-2 flex-wrap">
+                <span class="font-bold text-stone-900 text-xs sm:text-sm truncate">${clientTitle}</span>
+                ${statusPill}
+              </div>
+              <p class="text-[11.5px] text-stone-600 flex items-center gap-1.5 flex-wrap">
+                <span class="font-medium text-stone-900">${formatDateIndo(b.event_date)}</span>
+                <span>&bull;</span>
+                <span>${b.event_time || '08:00'} WIB</span>
+                <span>&bull;</span>
+                <span class="truncate max-w-[200px] text-stone-500">${b.package_name || 'Paket MUA'}</span>
+              </p>
+              <p class="text-[11px] text-stone-400 truncate max-w-md">${b.address || 'Studio Carissa'}</p>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-2 self-start sm:self-center flex-shrink-0">
+            ${cleanPhone ? `
+              <a href="${waLink}" target="_blank" class="btn-secondary btn-sm" title="Chat Klien via WhatsApp">
+                <i data-lucide="message-circle" class="w-3.5 h-3.5 text-emerald-600"></i>
+                <span class="hidden sm:inline">WhatsApp</span>
+              </a>
+            ` : ''}
+            <button type="button" onclick="toggleActionDropdown(event, 'booking', '${b.id}')" data-action-dropdown-trigger="booking:${b.id}" class="btn-action-trigger">
+              <i data-lucide="sliders-horizontal" class="trigger-lead-icon"></i>
+              <span>Aksi</span>
+              <i data-lucide="chevron-down" class="trigger-chevron"></i>
+            </button>
+          </div>
+        `;
+        container.appendChild(div);
+      });
+
+      if (window.lucide) window.lucide.createIcons();
     }
 
     function renderDashboardRecentBookings() {
@@ -3733,31 +4313,58 @@
       if (!container) return;
       container.innerHTML = '';
 
-      const recent = bookings.slice(0, 5);
+      let list = bookings.slice();
+      if (currentDashboardRecentFilter === 'client_form') {
+        list = list.filter(b => b.source === 'client_form');
+      } else if (currentDashboardRecentFilter === 'wedding') {
+        list = list.filter(b => b.category === 'wedding');
+      } else if (currentDashboardRecentFilter === 'reguler') {
+        list = list.filter(b => b.category === 'reguler');
+      }
+
+      const recent = list.slice(0, 6);
       if (recent.length === 0) {
-        container.innerHTML = `<div class="p-6 text-center text-xs text-stone-400">Belum ada booking masuk.</div>`;
+        container.innerHTML = `<div class="p-8 text-center text-xs text-stone-400">Belum ada booking pada filter ini.</div>`;
         return;
       }
 
       recent.forEach(b => {
         const clientTitle = b.category === 'wedding' && b.client_cpp && b.client_cpp !== '-'
           ? `${b.client_cpw} & ${b.client_cpp}`
-          : b.client_cpw;
+          : (b.client_cpw || b.account_name || 'Klien');
         const isFromClient = b.source === 'client_form';
 
+        const pStat = (b.payment_status || 'pending').toLowerCase();
+        let statusBadge = '';
+        if (pStat === 'lunas') {
+          statusBadge = '<span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200">Lunas</span>';
+        } else if (pStat === 'dp') {
+          statusBadge = '<span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-amber-50 text-amber-800 border border-amber-200">Sudah DP</span>';
+        } else if (pStat === 'batal') {
+          statusBadge = '<span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-rose-50 text-rose-800 border border-rose-200">Batal</span>';
+        } else {
+          statusBadge = '<span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-stone-100 text-stone-600 border border-stone-200">Belum DP</span>';
+        }
+
         const div = document.createElement('div');
-        div.className = 'p-4 sm:px-6 flex flex-col sm:flex-row sm:items-center justify-between gap-2 hover:bg-[#FAF8F5] transition text-xs';
+        div.className = 'p-4 sm:px-6 flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:bg-[#FAF8F5] transition text-xs';
         div.innerHTML = `
-          <div class="space-y-0.5">
-            <div class="flex items-center gap-2">
+          <div class="space-y-1 min-w-0">
+            <div class="flex items-center gap-2 flex-wrap">
               <span class="font-bold text-stone-900 text-sm">${clientTitle}</span>
               ${isFromClient ? '<span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">Form Klien</span>' : ''}
-              <span class="px-2 py-0.5 rounded text-[10px] font-medium bg-stone-100 text-stone-600 uppercase">${b.category}</span>
+              <span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-stone-100 text-stone-700 uppercase">${b.category}</span>
+              ${statusBadge}
             </div>
-            <p class="text-stone-500">${formatDateIndo(b.event_date)} (${b.event_time || '08:00'} WIB) &bull; ${b.package_name} &bull; ${b.address}</p>
+            <p class="text-stone-500 text-[11.5px] truncate">
+              ${formatDateIndo(b.event_date)} (${b.event_time || '08:00'} WIB) &bull; <span class="font-medium text-stone-700">${b.package_name || '-'}</span> &bull; ${b.address || '-'}
+            </p>
           </div>
-          <div class="flex items-center gap-2.5 self-start sm:self-center">
-            <span class="font-bold text-stone-900">Rp ${formatNumberWithCommas(b.total_price)}</span>
+          <div class="flex items-center gap-3 self-start sm:self-center flex-shrink-0">
+            <div class="text-right">
+              <div class="font-bold text-stone-900 text-sm">Rp ${formatNumberWithCommas(b.total_price)}</div>
+              <div class="text-[10.5px] text-stone-400">DP: Rp ${formatNumberWithCommas(b.dp_amount || 0)}</div>
+            </div>
             <button type="button" onclick="toggleActionDropdown(event, 'booking', '${b.id}')" data-action-dropdown-trigger="booking:${b.id}" class="btn-action-trigger">
               <i data-lucide="sliders-horizontal" class="trigger-lead-icon"></i>
               <span>Pilih Aksi</span>
@@ -3767,7 +4374,35 @@
         `;
         container.appendChild(div);
       });
+
       if (window.lucide) window.lucide.createIcons();
+    }
+
+    function downloadDatabaseBackup() {
+      const fullData = {
+        studio_settings: studioSettings,
+        master_users: masterUsers,
+        master_packages: packages,
+        bookings: bookings,
+        fittings: fittings,
+        fitting_reminders: fittingReminders,
+        wo_events: woEvents,
+        vendor_transfers: vendorTransfers,
+        exported_at: new Date().toISOString()
+      };
+      const jsonStr = JSON.stringify(fullData, null, 2);
+      const blob = new Blob([jsonStr], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `backup_carissa_wedding_${new Date().toISOString().split('T')[0]}.json`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      if (typeof showToast === 'function') {
+        showToast('Cadangan database (.json) berhasil diunduh');
+      }
     }
 
     // ==============================================================
@@ -5566,11 +6201,12 @@
 
       closeFittingModal();
       syncFittingRemindersFromEvents(false);
+      if (typeof syncAllToGoogleCalendarApiV3 === 'function') syncAllToGoogleCalendarApiV3(false);
       renderFittingSection();
       renderFittingRemindersSection();
       renderInteractiveCalendar();
       renderRemindersSection();
-      showToast('Data fitting disimpan & Reminder H-7 / H-1 (Super Admin & Role Fitting) diperbarui');
+      showToast('Data fitting disimpan & tersinkron otomatis ke Google Calendar API v3');
       if (typeof showAutoWeddingCalendarToast === 'function') {
         showAutoWeddingCalendarToast(eventTitle);
       }
@@ -5583,11 +6219,12 @@
         setStorage(LEGACY_FITTINGS_KEY, fittings);
         fetch(`/api/fittings/${encodeURIComponent(id)}`, { method: 'DELETE' }).catch(() => {});
         syncFittingRemindersFromEvents(false);
+        if (typeof syncAllToGoogleCalendarApiV3 === 'function') syncAllToGoogleCalendarApiV3(false);
         renderFittingSection();
         renderFittingRemindersSection();
         renderInteractiveCalendar();
         renderRemindersSection();
-        showToast('Data fitting dihapus');
+        showToast('Data fitting dihapus & Google Calendar API v3 diperbarui');
       }
     }
 
@@ -6145,10 +6782,11 @@
       setStorage(STORAGE_KEY_FITTING_REMINDERS, fittingReminders);
       const autoDl = document.getElementById('frem-auto-download-ics')?.checked;
       closeFittingReminderModal();
+      if (typeof syncAllToGoogleCalendarApiV3 === 'function') syncAllToGoogleCalendarApiV3(false);
       renderFittingRemindersSection();
       renderInteractiveCalendar();
       renderRemindersSection();
-      showToast(editId ? 'Data Reminder Wedding H-7 & H-1 berhasil diubah' : 'Reminder Wedding H-7 & H-1 berhasil ditambahkan');
+      showToast(editId ? 'Data Reminder Wedding H-7 & H-1 berhasil diubah & tersinkron otomatis' : 'Reminder Wedding H-7 & H-1 berhasil ditambahkan & tersinkron otomatis');
 
       if (autoDl && targetRecord) {
         exportSingleFittingReminderICS(targetRecord.id);
@@ -6160,10 +6798,11 @@
       fittingReminders = fittingReminders.filter(x => x.id !== id);
       setStorage(STORAGE_KEY_FITTING_REMINDERS, fittingReminders);
       fetch(`/api/fitting-reminders/${encodeURIComponent(id)}`, { method: 'DELETE' }).catch(() => {});
+      if (typeof syncAllToGoogleCalendarApiV3 === 'function') syncAllToGoogleCalendarApiV3(false);
       renderFittingRemindersSection();
       renderInteractiveCalendar();
       renderRemindersSection();
-      showToast('Reminder berhasil dihapus');
+      showToast('Reminder berhasil dihapus & Google Calendar API v3 diperbarui');
     }
 
     // Automatically sync all Wedding inputs (Wedding Bookings, Fitting Events, WO Events) into H-7 & H-1 reminders for Super Admin & Role Fitting
@@ -6327,13 +6966,16 @@
           <br>&bull; <strong>Role Fitting:</strong> ${fittingUser.email}
         </p>
         <div class="flex flex-wrap items-center gap-1.5 pt-1">
-          <button type="button" onclick="openFittingGoogleCalendarUrl('${rem.id}', 'h7')" class="px-2.5 py-1.5 rounded-lg bg-blue-700 hover:bg-blue-800 text-white font-semibold text-[11px] inline-flex items-center gap-1">
-            <span>+ Google Kalender H-7</span>
+          <button type="button" onclick="openFittingGoogleCalendarUrl('${rem.id}', 'h7')" class="btn-secondary btn-sm">
+            <i data-lucide="calendar-plus" class="text-blue-600"></i>
+            <span>Google Kalender H-7</span>
           </button>
-          <button type="button" onclick="openFittingGoogleCalendarUrl('${rem.id}', 'h1')" class="px-2.5 py-1.5 rounded-lg bg-terracotta-600 hover:bg-terracotta-700 text-white font-semibold text-[11px] inline-flex items-center gap-1">
-            <span>+ Google Kalender H-1</span>
+          <button type="button" onclick="openFittingGoogleCalendarUrl('${rem.id}', 'h1')" class="btn-primary btn-sm">
+            <i data-lucide="calendar-check-2"></i>
+            <span>Google Kalender H-1</span>
           </button>
-          <button type="button" onclick="exportSingleFittingReminderICS('${rem.id}')" class="px-2.5 py-1.5 rounded-lg bg-stone-100 hover:bg-stone-200 text-stone-800 font-semibold text-[11px]">
+          <button type="button" onclick="exportSingleFittingReminderICS('${rem.id}')" class="btn-secondary btn-sm">
+            <i data-lucide="download"></i>
             <span>.ICS (H-7 &amp; H-1)</span>
           </button>
         </div>
@@ -7300,10 +7942,11 @@
 
       setStorage(STORAGE_KEY_VENDOR_TRANSFERS, vendorTransfers);
       closeVendorTransferModal();
+      if (typeof syncAllToGoogleCalendarApiV3 === 'function') syncAllToGoogleCalendarApiV3(false);
       renderVendorSection();
       showToast(savedCount > 1
-        ? `${savedCount} data transferan vendor berhasil disimpan`
-        : 'Data transferan vendor berhasil disimpan');
+        ? `${savedCount} data transferan vendor berhasil disimpan & tersinkron otomatis`
+        : 'Data transferan vendor berhasil disimpan & tersinkron otomatis');
     }
 
     function deleteVendorTransfer(id) {
@@ -7311,8 +7954,9 @@
       vendorTransfers = vendorTransfers.filter(x => x.id !== id);
       setStorage(STORAGE_KEY_VENDOR_TRANSFERS, vendorTransfers);
       fetch(`/api/vendor-transfers/${encodeURIComponent(id)}`, { method: 'DELETE' }).catch(() => {});
+      if (typeof syncAllToGoogleCalendarApiV3 === 'function') syncAllToGoogleCalendarApiV3(false);
       renderVendorSection();
-      showToast('Data transferan vendor dihapus');
+      showToast('Data transferan vendor dihapus & Google Calendar API v3 diperbarui');
     }
 
     function openVendorDetailModal(id) {
@@ -7553,10 +8197,14 @@
       }
 
       setStorage(STORAGE_KEY_WO_EVENTS, woEvents);
+      syncFittingRemindersFromEvents(false);
+      if (typeof syncAllToGoogleCalendarApiV3 === 'function') syncAllToGoogleCalendarApiV3(false);
       resetWoEventForm();
       renderWoEventsTable();
       populateVendorWoDropdown();
-      showToast('Data WO berhasil disimpan');
+      renderInteractiveCalendar();
+      renderRemindersSection();
+      showToast('Data WO berhasil disimpan & tersinkron otomatis ke Google Calendar API v3');
     }
 
     function deleteWoEvent(id) {
@@ -7564,9 +8212,13 @@
       woEvents = woEvents.filter(x => x.id !== id);
       setStorage(STORAGE_KEY_WO_EVENTS, woEvents);
       fetch(`/api/wo-events/${encodeURIComponent(id)}`, { method: 'DELETE' }).catch(() => {});
+      syncFittingRemindersFromEvents(false);
+      if (typeof syncAllToGoogleCalendarApiV3 === 'function') syncAllToGoogleCalendarApiV3(false);
       renderWoEventsTable();
       populateVendorWoDropdown();
-      showToast('Data acara WO dihapus');
+      renderInteractiveCalendar();
+      renderRemindersSection();
+      showToast('Data acara WO dihapus & Google Calendar API v3 diperbarui');
     }
 
     function exportSingleVendorTransferPDF(id) {
@@ -8309,10 +8961,11 @@
 
       setStorage(STORAGE_KEY_PACKAGES, packages);
       setStorage(LEGACY_PACKAGES_KEY, packages);
+      if (typeof syncAllToGoogleCalendarApiV3 === 'function') syncAllToGoogleCalendarApiV3(false);
       closePackageModal();
       renderPricelistSection();
       populateAdminPackageDatalist();
-      showToast('Paket pernikahan berhasil disimpan');
+      showToast('Paket pernikahan berhasil disimpan & disinkronkan');
     }
 
     function deletePackage(id) {
@@ -8322,6 +8975,7 @@
         setStorage(STORAGE_KEY_PACKAGES, packages);
         setStorage(LEGACY_PACKAGES_KEY, packages);
         fetch('/api/packages/' + encodeURIComponent(id), { method: 'DELETE' }).catch(() => {});
+        if (typeof syncAllToGoogleCalendarApiV3 === 'function') syncAllToGoogleCalendarApiV3(false);
         renderPricelistSection();
         populateAdminPackageDatalist();
         showToast('Paket dihapus');
@@ -9520,6 +10174,72 @@
         primaryEvents.push(h7Event, h1Event);
         fittingEvents.push(h7Event, h1Event);
       });
+
+      // 5. Build WO Events (Hari-H Project WO)
+      if (Array.isArray(woEvents)) {
+        woEvents.forEach(w => {
+          if (!w.event_date) return;
+          const woEv = {
+            kind: 'calendar#event',
+            etag: `"ev-wo-${w.id}"`,
+            id: `gcal_wo_${w.id}`,
+            status: 'confirmed',
+            summary: `[HARI-H WO] ${w.event_title || w.wo_code || 'Acara WO'} (${w.wo_name || 'WO'})`,
+            description: `Kode WO: ${w.wo_code || w.id}\nMitra WO: ${w.wo_name || '-'}\nAcara: ${w.event_title || '-'}\nPaket: ${w.package_name || '-'}`,
+            location: w.address || (studioSettings && studioSettings.address) || 'Bandung',
+            colorId: '11',
+            creator: { email: superAdmin.email, displayName: superAdmin.name },
+            organizer: { email: superAdmin.email, displayName: 'Carissa Wedding Organizer' },
+            start: { dateTime: `${w.event_date}T08:00:00+07:00`, timeZone: 'Asia/Jakarta' },
+            end: { dateTime: `${w.event_date}T15:00:00+07:00`, timeZone: 'Asia/Jakarta' },
+            attendees: [
+              { email: superAdmin.email, displayName: `${superAdmin.name} (Super Admin)`, responseStatus: 'accepted', organizer: true },
+              { email: fittingUser.email, displayName: `${fittingUser.name} (Role Fitting)`, responseStatus: 'accepted' }
+            ],
+            extendedProperties: {
+              private: {
+                source: 'auto_wo_event',
+                wo_id: w.id,
+                wo_code: w.wo_code || ''
+              }
+            }
+          };
+          primaryEvents.push(woEv);
+        });
+      }
+
+      // 6. Build Vendor Transfers Schedule
+      if (Array.isArray(vendorTransfers)) {
+        vendorTransfers.forEach(vt => {
+          const tDate = vt.transfer_date || vt.event_date;
+          if (!tDate) return;
+          const vtEv = {
+            kind: 'calendar#event',
+            etag: `"ev-vtr-${vt.id}"`,
+            id: `gcal_vtr_${vt.id}`,
+            status: 'confirmed',
+            summary: `[TRANSFER VENDOR] ${vt.vendor_name || 'Vendor'} — ${vt.event_title || '-'}`,
+            description: `Kode Transfer: ${vt.transfer_code || vt.id}\nVendor: ${vt.vendor_name || '-'} (${vt.vendor_category || '-'})\nRekening: ${vt.bank_name || '-'} ${vt.account_number || ''} a.n. ${vt.account_holder || '-'}\nNominal Transfer: ${formatRupiah(parseNumericValue(vt.transfer_amount))}\nStatus: ${(vt.payment_status || 'dp').toUpperCase()}`,
+            location: vt.event_location || (studioSettings && studioSettings.address) || 'Bandung',
+            colorId: '5',
+            creator: { email: superAdmin.email, displayName: superAdmin.name },
+            organizer: { email: superAdmin.email, displayName: 'Carissa Wedding Organizer' },
+            start: { dateTime: `${tDate}T10:00:00+07:00`, timeZone: 'Asia/Jakarta' },
+            end: { dateTime: `${tDate}T11:00:00+07:00`, timeZone: 'Asia/Jakarta' },
+            attendees: [
+              { email: superAdmin.email, displayName: `${superAdmin.name} (Super Admin)`, responseStatus: 'accepted', organizer: true }
+            ],
+            extendedProperties: {
+              private: {
+                source: 'auto_vendor_transfer',
+                transfer_id: vt.id,
+                transfer_code: vt.transfer_code || ''
+              }
+            }
+          };
+          primaryEvents.push(vtEv);
+        });
+      }
 
       state.events.primary = primaryEvents;
       state.events.fitting_calendar = fittingEvents;

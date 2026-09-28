@@ -492,6 +492,29 @@ function getDatabase() {
 function saveDatabase(data) {
   syncAppToGoogleCalendarV3(data);
   fs.writeFileSync(DB_FILE, JSON.stringify(data, null, 2));
+  const cfg = data?.studio_settings?.gcal_api_config;
+  if (cfg && cfg.access_token && cfg.auto_sync !== false) {
+    const calId = cfg.calendar_id || 'primary';
+    const evList = (data?.google_calendar_v3?.events && data.google_calendar_v3.events['primary']) || [];
+    evList.slice(0, 10).forEach(ev => {
+      callRemoteGoogleCalendarApi(
+        'POST',
+        `/calendars/${encodeURIComponent(calId)}/events`,
+        cfg.access_token,
+        cfg.api_key || '',
+        {
+          summary: ev.summary,
+          description: ev.description,
+          location: ev.location,
+          colorId: ev.colorId,
+          start: ev.start,
+          end: ev.end,
+          attendees: ev.attendees,
+          reminders: ev.reminders
+        }
+      ).catch(() => {});
+    });
+  }
 }
 
 // ==============================================================
@@ -972,16 +995,97 @@ function syncAppToGoogleCalendarV3(db) {
     syncedEvents.push(evH7, evH1);
   });
 
+  // 4C. Sync WO Events (Hari-H Project WO)
+  woList.forEach(w => {
+    if (!w.event_date) return;
+    const evWo = {
+      kind: 'calendar#event',
+      id: `gcal_wo_${w.id}`,
+      status: 'confirmed',
+      created: w.created_at || new Date().toISOString(),
+      updated: new Date().toISOString(),
+      summary: `[HARI-H WO] ${w.event_title || w.wo_code || 'Acara WO'} (${w.wo_name || 'WO'})`,
+      description: [
+        `Kode WO: ${w.wo_code || w.id}`,
+        `Mitra WO: ${w.wo_name || '-'}`,
+        `Acara: ${w.event_title || '-'}`,
+        `Paket: ${w.package_name || '-'}`
+      ].join('\n'),
+      location: w.address || db.studio_settings.studio_address || 'Bandung',
+      colorId: '11',
+      creator: { email: superAdmin.email, displayName: superAdmin.name },
+      organizer: { email: superAdmin.email, displayName: superAdmin.name, self: true },
+      start: { dateTime: `${w.event_date}T08:00:00+07:00`, timeZone: 'Asia/Jakarta' },
+      end: { dateTime: `${w.event_date}T15:00:00+07:00`, timeZone: 'Asia/Jakarta' },
+      iCalUID: `${w.id}@carissawedding.com`,
+      attendees: attendeesSuperAndFitting,
+      extendedProperties: {
+        private: {
+          source: 'app_wo_event',
+          wo_id: w.id,
+          wo_code: w.wo_code || '',
+          event_type: 'wo_hari_h'
+        }
+      }
+    };
+    evWo.htmlLink = buildGoogleWebRenderUrl(evWo);
+    syncedEvents.push(evWo);
+  });
+
+  // 4D. Sync Vendor Transfers Schedule
+  const vendorTransfersList = Array.isArray(db.vendor_transfers) ? db.vendor_transfers : [];
+  vendorTransfersList.forEach(vt => {
+    const tDate = vt.transfer_date || vt.event_date;
+    if (!tDate) return;
+    const evVt = {
+      kind: 'calendar#event',
+      id: `gcal_vtr_${vt.id}`,
+      status: 'confirmed',
+      created: vt.created_at || new Date().toISOString(),
+      updated: new Date().toISOString(),
+      summary: `[TRANSFER VENDOR] ${vt.vendor_name || 'Vendor'} — ${vt.event_title || '-'}`,
+      description: [
+        `Kode Transfer: ${vt.transfer_code || vt.id}`,
+        `Vendor: ${vt.vendor_name || '-'} (${vt.vendor_category || '-'})`,
+        `Rekening: ${vt.bank_name || '-'} ${vt.account_number || ''} a.n. ${vt.account_holder || '-'}`,
+        `Nominal Transfer: Rp ${Number(vt.transfer_amount || 0).toLocaleString('id-ID')}`,
+        `Status: ${(vt.payment_status || 'dp').toUpperCase()}`
+      ].join('\n'),
+      location: vt.event_location || db.studio_settings.studio_address || 'Bandung',
+      colorId: '5',
+      creator: { email: superAdmin.email, displayName: superAdmin.name },
+      organizer: { email: superAdmin.email, displayName: superAdmin.name, self: true },
+      start: { dateTime: `${tDate}T10:00:00+07:00`, timeZone: 'Asia/Jakarta' },
+      end: { dateTime: `${tDate}T11:00:00+07:00`, timeZone: 'Asia/Jakarta' },
+      iCalUID: `${vt.id}@carissawedding.com`,
+      attendees: [attendeesSuperAndFitting[0]],
+      extendedProperties: {
+        private: {
+          source: 'app_vendor_transfer',
+          transfer_id: vt.id,
+          transfer_code: vt.transfer_code || '',
+          event_type: 'vendor_transfer'
+        }
+      }
+    };
+    evVt.htmlLink = buildGoogleWebRenderUrl(evVt);
+    syncedEvents.push(evVt);
+  });
+
   gcal.events[primaryCalId] = [...manualEvents, ...syncedEvents];
   const fittingEventsFiltered = syncedEvents.filter(e =>
     e.extendedProperties?.private?.event_type === 'wedding_h7' ||
     e.extendedProperties?.private?.event_type === 'wedding_h1' ||
-    e.extendedProperties?.private?.event_type === 'wedding_hari_h'
+    e.extendedProperties?.private?.event_type === 'wedding_hari_h' ||
+    e.extendedProperties?.private?.event_type === 'wo_hari_h'
   );
   gcal.events[fittingCalId] = fittingEventsFiltered;
   gcal.events['fitting_calendar'] = fittingEventsFiltered;
   gcal.calendars['fitting_calendar'] = gcal.calendars[fittingCalId];
   gcal.acl['fitting_calendar'] = gcal.acl[primaryCalId];
+  if (db.studio_settings && db.studio_settings.gcal_api_config) {
+    db.studio_settings.gcal_api_config.last_synced_at = new Date().toISOString();
+  }
 
   return changed;
 }
@@ -1084,7 +1188,11 @@ function serveStaticFile(res, filePath) {
 // HTTP SERVER HANDLER
 // ==============================================================
 const server = http.createServer(async (req, res) => {
-  const parsedUrl = url.parse(req.url, true);
+  const whatwgUrl = new URL(req.url || '/', 'http://localhost');
+  const parsedUrl = {
+    pathname: whatwgUrl.pathname,
+    query: Object.fromEntries(whatwgUrl.searchParams.entries())
+  };
   let pathname = decodeURIComponent(parsedUrl.pathname);
   const method = req.method.toUpperCase();
 
