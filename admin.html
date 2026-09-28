@@ -9810,6 +9810,32 @@
 
     function exportFittingListToPDF(list, filename) {
       const customThs = fittingCustomColumns.map(c => `<th style="padding: 7px 8px; border: 1px solid #D6CFC5; text-align: left;">${c.label}</th>`).join('');
+
+      const allPhotos = [];
+      list.forEach((f, fitIdx) => {
+        const photos = getFittingPhotosArray(f);
+        const catLabel = getCategoryLabel(f.category);
+        const sessLabel = f.session_type || 'Akad';
+        photos.forEach((src, pIdx) => {
+          allPhotos.push({
+            src: src,
+            fullName: f.full_name || '-',
+            eventTitle: f.event_title || '-',
+            eventDate: f.event_date ? formatDateIndo(f.event_date) : '',
+            category: catLabel,
+            session: sessLabel,
+            itemName: f.item_name || 'Busana',
+            clothingSize: f.clothing_size || '-',
+            selopSize: f.selop_size || '',
+            colorTheme: f.color_theme || '',
+            notes: f.notes || '',
+            photoNum: pIdx + 1,
+            totalPhotos: photos.length,
+            fitIdx: fitIdx + 1
+          });
+        });
+      });
+
       const rows = list.map(f => {
         const customTds = fittingCustomColumns.map(c => `<td style="padding: 7px 8px; border: 1px solid #E7E2DA;">${(f.custom_fields && f.custom_fields[c.key]) || '-'}</td>`).join('');
         const ortuCpw = [f.ayah_cpw, f.ibu_cpw].filter(Boolean).join(' & ');
@@ -9822,12 +9848,12 @@
           : '';
         const photos = getFittingPhotosArray(f);
         const photoTdHtml = photos.length > 0
-          ? `<img src="${photos[0]}" alt="Foto" style="width: 44px; height: 44px; object-fit: cover; border-radius: 6px; border: 1px solid #D6CFC5; display: inline-block;" />`
-          : '-';
+          ? `<span style="display: inline-block; padding: 2.5px 7px; border-radius: 4px; background: #FAF8F5; border: 1px solid #D6CFC5; font-size: 8.5px; font-weight: 700; color: #9A5B3E; white-space: nowrap;">&#128247; ${photos.length} Foto</span>`
+          : `<span style="color: #A8A29E; font-size: 9px;">-</span>`;
         const sessLabel = f.session_type || 'Akad';
         const selopNote = f.selop_size ? `<div style="margin-top: 2px; font-size: 8.5px; color: #44403C; font-weight: 700;">Selop: ${f.selop_size}</div>` : '';
         return `
-          <tr>
+          <tr style="page-break-inside: avoid;">
             <td style="padding: 7px 8px; border: 1px solid #E7E2DA;"><strong>${f.event_title || '-'}</strong><br><span style="font-size: 9px; color: #78716C;">${formatDateIndo(f.event_date)}</span>${parentNote}</td>
             <td style="padding: 7px 8px; border: 1px solid #E7E2DA;"><strong>${getCategoryLabel(f.category)}</strong><br><span style="font-size: 8.5px; color: #9A5B3E; font-weight: 700; text-transform: uppercase;">${sessLabel}</span></td>
             <td style="padding: 7px 8px; border: 1px solid #E7E2DA; font-weight: 700;">${f.full_name || '-'}</td>
@@ -9841,16 +9867,78 @@
       }).join('');
 
       const fittingSubtitle = `
-        <div style="border-top: 1px solid #E7E2DA; margin-top: 12px; padding-top: 8px; display: flex; justify-content: space-between; font-family: 'Inter', Arial, sans-serif; font-size: 10px; color: #57534E;">
-          <div><strong>DOKUMEN DATA FITTING BUSANA (AKAD &amp; RESEPSI)</strong></div>
+        <div style="border-top: 1.5px solid #9A5B3E; margin-top: 12px; padding-top: 8px; display: flex; justify-content: space-between; align-items: center; font-family: 'Inter', Arial, sans-serif; font-size: 10px; color: #57534E;">
+          <div><strong style="color: #1C1917; font-size: 11px;">DOKUMEN DATA FITTING BUSANA (AKAD &amp; RESEPSI)</strong></div>
           <div>Total Data: <strong>${list.length} Busana</strong> &bull; Tgl Cetak: ${new Date().toLocaleDateString('id-ID')}</div>
         </div>
       `;
 
+      const galleryHtml = allPhotos.length > 0 ? `
+        <div style="margin-top: 24px; page-break-inside: auto;">
+          <div style="border-top: 2px solid #9A5B3E; padding-top: 10px; margin-bottom: 14px; display: flex; justify-content: space-between; align-items: center; page-break-inside: avoid;">
+            <div>
+              <span style="font-family: 'Inter', Arial, sans-serif; font-size: 11px; font-weight: 800; color: #1C1917; text-transform: uppercase; letter-spacing: 0.5px;">
+                &#128247; DOKUMENTASI FOTO BUSANA &amp; FITTING RESMI
+              </span>
+              <div style="font-size: 9px; color: #78716C; margin-top: 2px;">
+                Lampiran dokumentasi foto busana, kebaya, jas, dan kelengkapan fitting
+              </div>
+            </div>
+            <div style="font-size: 9.5px; font-weight: 700; background: #FAF8F5; border: 1px solid #D6CFC5; padding: 4px 10px; border-radius: 4px; color: #9A5B3E;">
+              Total ${allPhotos.length} Dokumentasi Foto
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;">
+            ${allPhotos.map((item, idx) => `
+              <div style="border: 1px solid #D6CFC5; border-radius: 8px; overflow: hidden; background: #FFFFFF; box-shadow: 0 1px 3px rgba(0,0,0,0.05); page-break-inside: avoid; display: flex; flex-direction: column;">
+                <div style="width: 100%; height: 180px; background: #F5F5F4; display: flex; align-items: center; justify-content: center; overflow: hidden; border-bottom: 1px solid #E7E2DA;">
+                  <img src="${item.src}" alt="${item.itemName}" style="width: 100%; height: 100%; object-fit: cover;" />
+                </div>
+                <div style="padding: 8px 10px; font-size: 9px; line-height: 1.4; color: #1C1917; flex: 1; display: flex; flex-direction: column; justify-content: space-between;">
+                  <div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                      <span style="font-weight: 800; color: #9A5B3E; text-transform: uppercase; font-size: 8.5px; background: #FAF8F5; padding: 1.5px 6px; border-radius: 3px; border: 1px solid #E7E2DA;">${item.category} &bull; ${item.session}</span>
+                      <span style="font-size: 8px; color: #78716C; font-weight: 600;">Foto #${idx + 1}${item.totalPhotos > 1 ? ` (${item.photoNum}/${item.totalPhotos})` : ''}</span>
+                    </div>
+                    <div style="font-size: 11px; font-weight: 800; color: #1C1917; margin-bottom: 2px;">${item.fullName}</div>
+                    <div style="font-weight: 600; color: #44403C; font-size: 9.5px;">${item.itemName}</div>
+                  </div>
+                  <div style="margin-top: 6px; padding-top: 5px; border-top: 1px dashed #D6CFC5; font-size: 8.5px; color: #57534E;">
+                    <div style="display: flex; justify-content: space-between;">
+                      <span>Ukuran: <strong style="color: #9A5B3E;">${item.clothingSize}</strong></span>
+                      ${item.selopSize ? `<span>Selop: <strong>${item.selopSize}</strong></span>` : ''}
+                    </div>
+                    ${item.colorTheme ? `<div style="margin-top: 2px; color: #78716C;">Warna: ${item.colorTheme}</div>` : ''}
+                    ${item.notes ? `<div style="margin-top: 2px; color: #78716C; font-style: italic;">Ket: ${item.notes}</div>` : ''}
+                  </div>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      ` : '';
+
+      const signaturesHtml = `
+        <div style="margin-top: 24px; display: flex; justify-content: space-between; font-size: 9.5px; color: #44403C; page-break-inside: avoid;">
+          <div style="text-align: center; width: 180px;">
+            <div>Klien / Perwakilan Keluarga,</div>
+            <div style="height: 48px;"></div>
+            <div style="border-bottom: 1px solid #78716C; font-weight: 700; padding-bottom: 2px;">(............................................)</div>
+          </div>
+          <div style="text-align: center; width: 180px;">
+            <div>Bandung, ${new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}</div>
+            <div style="font-weight: 600; color: #78716C; font-size: 9px;">Bagian Fitting &amp; Busana Carissa,</div>
+            <div style="height: 36px;"></div>
+            <div style="border-bottom: 1px solid #78716C; font-weight: 700; padding-bottom: 2px;">( Tim Fitting Carissa WO )</div>
+          </div>
+        </div>
+      `;
+
       const html = `
-        <div style="padding: 24px; font-family: 'Inter', Arial, sans-serif; color: #1C1917; background: #FFFFFF;">
+        <div style="padding: 20px 24px; font-family: 'Inter', Arial, sans-serif; color: #1C1917; background: #FFFFFF;">
           ${buildDefaultCarissaHeaderHtml(fittingSubtitle)}
-          <table style="width: 100%; border-collapse: collapse; font-size: 10px;">
+          <table style="width: 100%; border-collapse: collapse; font-size: 10px; page-break-inside: auto;">
             <thead>
               <tr style="background: #FAF8F5; color: #1C1917;">
                 <th style="padding: 7px 8px; border: 1px solid #D6CFC5; text-align: left;">Acara &amp; Data Ortu</th>
@@ -9859,12 +9947,14 @@
                 <th style="padding: 7px 8px; border: 1px solid #D6CFC5; text-align: left;">Busana / Baju</th>
                 <th style="padding: 7px 8px; border: 1px solid #D6CFC5; text-align: center;">Ukuran &amp; Selop</th>
                 <th style="padding: 7px 8px; border: 1px solid #D6CFC5; text-align: center;">Foto</th>
-                <th style="padding: 7px 8px; border: 1px solid #D6CFC5; text-align: left;">Warna & Catatan</th>
+                <th style="padding: 7px 8px; border: 1px solid #D6CFC5; text-align: left;">Warna &amp; Catatan</th>
                 ${customThs}
               </tr>
             </thead>
             <tbody>${rows}</tbody>
           </table>
+          ${galleryHtml}
+          ${signaturesHtml}
         </div>
       `;
 
@@ -9873,11 +9963,12 @@
       if (typeof html2pdf !== 'undefined') {
         showToast('Mengunduh PDF Fitting...');
         html2pdf().set({
-          margin: 8,
+          margin: [8, 8, 8, 8],
           filename: filename,
           image: { type: 'jpeg', quality: 0.98 },
           html2canvas: { scale: 2, useCORS: true, logging: false },
-          jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+          jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+          pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
         }).from(container).save();
       } else {
         const printArea = document.getElementById('print-container');
@@ -9892,59 +9983,97 @@
       const rem = Math.max(0, parseNumericValue(b.total_price) - parseNumericValue(b.dp_amount));
       const clientName = b.category === 'wedding' && b.client_cpp && b.client_cpp !== '-' ? `${b.client_cpw} & ${b.client_cpp}` : b.client_cpw;
 
-      const invoiceSubtitle = `
-        <div style="border-top: 1px solid #E7E2DA; margin-top: 12px; padding-top: 8px; display: flex; justify-content: space-between; font-family: 'Inter', Arial, sans-serif; font-size: 10.5px; color: #57534E;">
-          <div><strong>INVOICE &amp; BUKTI RESERVASI RESMI</strong></div>
-          <div>Kode: <strong style="color: #9A5B3E;">${b.booking_code || b.id}</strong> &bull; Tanggal Acara: ${formatDateIndo(b.event_date)}</div>
-        </div>
-      `;
-
       const html = `
-        <div style="padding: 28px; font-family: 'Inter', Arial, sans-serif; color: #1C1917; background: #FFFFFF;">
-          ${buildDefaultCarissaHeaderHtml(invoiceSubtitle)}
+        <div style="width: 100%; max-width: 760px; margin: 0 auto; padding: 18px 22px; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: #1C1917; background: #FFFFFF; box-sizing: border-box; page-break-inside: avoid;">
+          <!-- Header Carissa Kompak & Resmi -->
+          <div style="text-align: center; margin-bottom: 12px;">
+            <div style="display: inline-block;">
+              <img src="${CARISSA_LOGO_DATA_URI}" alt="CARISSA" style="width: 130px; height: auto; display: block; margin: 0 auto;" />
+            </div>
+            <div style="font-family: 'Times New Roman', Times, serif; font-size: 11.5px; color: #292524; margin-top: 6px; line-height: 1.45;">
+              <div>Jl. Cipasir Pancasila RT 03/09 Ds. Linggar Kec. Rancaekek Kab. Bandung</div>
+              <div style="margin-top: 2px;">Contact Person: 081394218860 (WhatsApp) &bull; IG: @carissa.weddingorganizer</div>
+            </div>
+            <div style="border-top: 1.5px solid #9A5B3E; margin-top: 10px; padding-top: 7px; display: flex; justify-content: space-between; align-items: center; font-size: 10px; color: #57534E;">
+              <div>
+                <strong style="color: #1C1917; font-size: 11px; letter-spacing: 0.5px;">INVOICE &amp; BUKTI RESERVASI RESMI</strong>
+              </div>
+              <div>
+                No: <strong style="color: #9A5B3E; font-size: 11px;">${b.booking_code || b.id}</strong> &bull; Tgl Acara: <strong>${formatDateIndo(b.event_date)}</strong>
+              </div>
+            </div>
+          </div>
 
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 18px; font-size: 11px;">
-            <div style="padding: 12px; background: #FAF8F5; border: 1px solid #E7E2DA; border-radius: 8px;">
-              <div style="font-weight: 700; margin-bottom: 6px; color: #9A5B3E; text-transform: uppercase; font-size: 10px;">Informasi Klien</div>
+          <!-- Grid Data Klien & Jadwal -->
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; font-size: 10px; line-height: 1.5;">
+            <div style="padding: 9px 12px; background: #FAF8F5; border: 1px solid #E7E2DA; border-radius: 6px;">
+              <div style="font-weight: 800; margin-bottom: 5px; color: #9A5B3E; text-transform: uppercase; font-size: 9.5px; letter-spacing: 0.3px;">Informasi Klien</div>
               <div><strong>Nama Klien:</strong> ${clientName}</div>
-              <div><strong>Nama Rekening DP:</strong> ${b.account_name || '-'}</div>
               <div><strong>No. WhatsApp:</strong> ${b.phone || '-'}</div>
               <div><strong>Instagram:</strong> @${(b.instagram || '-').replace(/^@/, '')}</div>
+              <div><strong>Atas Nama Rekening DP:</strong> ${b.account_name || '-'}</div>
             </div>
-            <div style="padding: 12px; background: #FAF8F5; border: 1px solid #E7E2DA; border-radius: 8px;">
-              <div style="font-weight: 700; margin-bottom: 6px; color: #9A5B3E; text-transform: uppercase; font-size: 10px;">Jadwal & Lokasi</div>
-              <div><strong>Tanggal:</strong> ${formatDateIndo(b.event_date)} (${b.event_time || '08:00'} WIB)</div>
-              <div><strong>Kategori:</strong> ${b.category.toUpperCase()}</div>
-              <div><strong>Penataan:</strong> ${b.hair_style || '-'}</div>
+            <div style="padding: 9px 12px; background: #FAF8F5; border: 1px solid #E7E2DA; border-radius: 6px;">
+              <div style="font-weight: 800; margin-bottom: 5px; color: #9A5B3E; text-transform: uppercase; font-size: 9.5px; letter-spacing: 0.3px;">Jadwal &amp; Lokasi Acara</div>
+              <div><strong>Hari / Tanggal:</strong> ${formatDateIndo(b.event_date)} (${b.event_time || '08:00'} WIB)</div>
+              <div><strong>Kategori:</strong> ${(b.category || 'wedding').toUpperCase()}</div>
+              <div><strong>Penataan Busana/Rias:</strong> ${b.hair_style || '-'}</div>
               <div><strong>Lokasi:</strong> ${b.address || '-'}</div>
             </div>
           </div>
 
-          <table style="width: 100%; border-collapse: collapse; font-size: 11px; margin-bottom: 18px;">
+          <!-- Tabel Rincian Biaya -->
+          <table style="width: 100%; border-collapse: collapse; font-size: 10.5px; margin-bottom: 12px; border: 1px solid #E7E2DA; border-radius: 6px; overflow: hidden; page-break-inside: avoid;">
             <thead>
-              <tr style="background: #FAF8F5; border-bottom: 1px solid #D6CFC5;">
-                <th style="padding: 10px; text-align: left;">Deskripsi Paket Layanan</th>
-                <th style="padding: 10px; text-align: right;">Nominal</th>
+              <tr style="background: #FAF8F5; border-bottom: 1.5px solid #D6CFC5; color: #44403C; font-size: 10px; text-transform: uppercase;">
+                <th style="padding: 7px 10px; text-align: left;">Deskripsi Layanan &amp; Paket</th>
+                <th style="padding: 7px 10px; text-align: right; width: 160px;">Nominal (Rp)</th>
               </tr>
             </thead>
             <tbody>
               <tr style="border-bottom: 1px solid #E7E2DA;">
-                <td style="padding: 10px;"><strong>${b.package_name}</strong></td>
-                <td style="padding: 10px; text-align: right; font-weight: 700;">Rp ${formatNumberWithCommas(b.total_price)}</td>
+                <td style="padding: 7px 10px;"><strong>${b.package_name || 'Paket Layanan Wedding'}</strong></td>
+                <td style="padding: 7px 10px; text-align: right; font-weight: 700;">Rp ${formatNumberWithCommas(b.total_price)}</td>
               </tr>
-              <tr style="border-bottom: 1px solid #E7E2DA; background: #F0FDF4;">
-                <td style="padding: 10px; color: #15803D; font-weight: 600;">Uang Muka (DP) Diterima</td>
-                <td style="padding: 10px; text-align: right; color: #15803D; font-weight: 700;">- Rp ${formatNumberWithCommas(b.dp_amount)}</td>
+              <tr style="border-bottom: 1.5px solid #D6CFC5; background: #F0FDF4;">
+                <td style="padding: 7px 10px; color: #15803D; font-weight: 600;">Uang Muka (DP) Diterima</td>
+                <td style="padding: 7px 10px; text-align: right; color: #15803D; font-weight: 700;">- Rp ${formatNumberWithCommas(b.dp_amount)}</td>
               </tr>
-              <tr style="background: #FAF8F5; font-size: 12px;">
-                <td style="padding: 12px 10px; font-weight: 800;">SISA PELUNASAN</td>
-                <td style="padding: 12px 10px; text-align: right; font-weight: 800; color: #9A5B3E;">Rp ${formatNumberWithCommas(rem)}</td>
+              <tr style="background: #FFFBEB; border-top: 1.5px solid #F59E0B;">
+                <td style="padding: 8px 10px; font-weight: 800; font-size: 11px; color: #1C1917;">SISA PELUNASAN</td>
+                <td style="padding: 8px 10px; text-align: right; font-weight: 800; font-size: 12px; color: #9A5B3E;">Rp ${formatNumberWithCommas(rem)}</td>
               </tr>
             </tbody>
           </table>
 
-          <div style="font-size: 10px; color: #57534E; padding: 10px 12px; border: 1px solid #E7E2DA; border-radius: 8px;">
-            <strong>Rekening Pembayaran Resmi:</strong> ${studioSettings.bank}
+          <!-- Rekening Pembayaran & Status Badge -->
+          <div style="display: flex; gap: 10px; align-items: stretch; margin-bottom: 14px; page-break-inside: avoid;">
+            <div style="flex: 1; padding: 8px 12px; background: #FAF8F5; border: 1px solid #E7E2DA; border-radius: 6px; font-size: 9.5px; color: #57534E; line-height: 1.45;">
+              <div style="font-weight: 700; color: #1C1917; margin-bottom: 2px;">Rekening Pembayaran Resmi:</div>
+              <div style="font-weight: 800; color: #9A5B3E; font-size: 10px;">${studioSettings.bank || 'BCA 1234567890 a/n Carissa Wedding'}</div>
+              <div style="font-size: 8.5px; color: #78716C; margin-top: 3px;">*Pelunasan diselesaikan paling lambat H-3 sebelum tanggal pelaksanaan acara.</div>
+            </div>
+            <div style="width: 170px; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 8px 10px; border-radius: 6px; border: 1px dashed ${rem === 0 ? '#10B981' : '#3B82F6'}; background: ${rem === 0 ? '#ECFDF5' : '#EFF6FF'}; text-align: center;">
+              <span style="font-size: 8.5px; text-transform: uppercase; font-weight: 700; color: ${rem === 0 ? '#047857' : '#1D4ED8'}; letter-spacing: 0.5px;">Status Pembayaran</span>
+              <span style="font-size: 12px; font-weight: 800; color: ${rem === 0 ? '#059669' : '#2563EB'}; margin-top: 2px;">
+                ${rem === 0 ? '&#10003; LUNAS' : (parseNumericValue(b.dp_amount) > 0 ? '&#9898; SUDAH DP' : '&#9888; BELUM DP')}
+              </span>
+            </div>
+          </div>
+
+          <!-- Tanda Tangan Resmi -->
+          <div style="display: flex; justify-content: space-between; font-size: 9.5px; color: #44403C; page-break-inside: avoid; padding-top: 4px;">
+            <div style="text-align: center; width: 170px;">
+              <div>Klien / Calon Pengantin,</div>
+              <div style="height: 42px;"></div>
+              <div style="border-bottom: 1px solid #78716C; font-weight: 700; padding-bottom: 2px;">${clientName}</div>
+            </div>
+            <div style="text-align: center; width: 170px;">
+              <div>Bandung, ${new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}</div>
+              <div style="font-weight: 600; color: #78716C; font-size: 9px;">Manajemen Carissa WO,</div>
+              <div style="height: 32px;"></div>
+              <div style="border-bottom: 1px solid #78716C; font-weight: 700; padding-bottom: 2px;">${studioSettings.name || 'Carissa Wedding Organizer'}</div>
+            </div>
           </div>
         </div>
       `;
@@ -9954,11 +10083,12 @@
       if (typeof html2pdf !== 'undefined') {
         showToast('Mengunduh PDF Invoice...');
         html2pdf().set({
-          margin: 10,
+          margin: [6, 6, 6, 6],
           filename: `Invoice_${b.booking_code || b.id}.pdf`,
           image: { type: 'jpeg', quality: 0.98 },
-          html2canvas: { scale: 2, useCORS: true, logging: false },
-          jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+          html2canvas: { scale: 2, useCORS: true, logging: false, scrollX: 0, scrollY: 0, windowWidth: 780 },
+          jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+          pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
         }).from(container).save();
       } else {
         const printArea = document.getElementById('print-container');
