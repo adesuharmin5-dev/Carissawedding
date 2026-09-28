@@ -43,6 +43,15 @@
       "phone": "083165107695",
       "password": "carissa123",
       "isSyncActive": false
+    },
+    {
+      "id": "usr_ade_suharmin",
+      "name": "ade suharmin",
+      "role": "Super Admin",
+      "email": "adesuharmin12@gmail.com",
+      "phone": "081321197196",
+      "password": "ade12345",
+      "isSyncActive": true
     }
   ],
   "master_packages": [

@@ -2491,7 +2491,7 @@
         </div>
         <div class="pt-2 flex items-center justify-end gap-2">
           <button type="button" onclick="closeMasterUserModal()" class="btn-secondary">Batal</button>
-          <button type="submit" id="btn-save-master-user" class="btn-primary">Simpan User</button>
+          <button type="button" id="btn-save-master-user" onclick="handleSaveMasterUser(event)" class="btn-primary">Simpan User</button>
         </div>
       </form>
     </div>
@@ -3207,6 +3207,14 @@
         email: 'fitting.carisa@gmail.com',
         phone: '083165107695',
         password: 'carissa123'
+      },
+      {
+        id: 'usr_ade_suharmin',
+        name: 'ade suharmin',
+        role: 'Super Admin',
+        email: 'adesuharmin12@gmail.com',
+        phone: '081321197196',
+        password: 'ade12345'
       }
     ];
 
