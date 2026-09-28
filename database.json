@@ -32,6 +32,7 @@
       "role": "Super Admin",
       "email": "admin.carisamakeup@gmail.com",
       "phone": "089643574766",
+      "password": "carissa123",
       "isSyncActive": true
     },
     {
@@ -40,6 +41,7 @@
       "role": "Akses User (Khusus Fitting)",
       "email": "fitting.carisa@gmail.com",
       "phone": "083165107695",
+      "password": "carissa123",
       "isSyncActive": false
     },
     {
@@ -48,6 +50,7 @@
       "role": "Lead MUA & Owner",
       "email": "carisa.owner@gmail.com",
       "phone": "083165107695",
+      "password": "carissa123",
       "isSyncActive": false
     },
     {
@@ -56,6 +59,7 @@
       "role": "Finance & DP",
       "email": "keuangan.carisa@gmail.com",
       "phone": "081234567890",
+      "password": "carissa123",
       "isSyncActive": false
     }
   ],

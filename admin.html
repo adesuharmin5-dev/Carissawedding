@@ -409,9 +409,8 @@
       <!-- Login Form -->
       <form onsubmit="handleAdminEmailLogin(event)" class="space-y-4">
         <div>
-          <label for="login-email-input" class="block text-xs font-semibold text-stone-700 mb-1.5 flex items-center justify-between">
-            <span>Email Staf / Akun</span>
-            <span class="text-[10px] font-normal text-stone-400">admin.carisamakeup@gmail.com</span>
+          <label for="login-email-input" class="block text-xs font-semibold text-stone-700 mb-1.5">
+            Email Pengguna / Staf
           </label>
           <div class="relative">
             <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-stone-400">
@@ -421,17 +420,15 @@
               type="email" 
               id="login-email-input" 
               required 
-              value="admin.carisamakeup@gmail.com" 
-              placeholder="nama@carisamakeup.com" 
+              placeholder="Masukkan email terdaftar" 
               class="w-full pl-9 pr-3.5 py-2.5 rounded-xl border border-stone-300 text-sm focus:outline-none focus:border-terracotta-600 focus:ring-1 focus:ring-terracotta-600 transition" 
             />
           </div>
         </div>
 
         <div>
-          <label for="login-password-input" class="block text-xs font-semibold text-stone-700 mb-1.5 flex items-center justify-between">
-            <span>Kata Sandi / PIN</span>
-            <span class="text-[10px] font-normal text-stone-400">Default: carissa123</span>
+          <label for="login-password-input" class="block text-xs font-semibold text-stone-700 mb-1.5">
+            Kata Sandi
           </label>
           <div class="relative">
             <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-stone-400">
@@ -441,7 +438,6 @@
               type="password" 
               id="login-password-input" 
               required 
-              value="carissa123"
               placeholder="Masukkan kata sandi" 
               class="w-full pl-9 pr-10 py-2.5 rounded-xl border border-stone-300 text-sm focus:outline-none focus:border-terracotta-600 focus:ring-1 focus:ring-terracotta-600 transition" 
             />
@@ -471,17 +467,6 @@
           <span>Masuk ke Panel Admin</span>
         </button>
       </form>
-
-      <!-- Quick Role Selector -->
-      <div class="pt-4 border-t border-stone-200 space-y-2.5">
-        <div class="flex items-center justify-between">
-          <p class="text-[11px] font-bold text-stone-600 uppercase tracking-wider">Akses Cepat Berdasarkan Role:</p>
-          <span class="text-[10px] text-stone-400">1-Klik Masuk</span>
-        </div>
-        <div id="quick-login-roles-list" class="grid grid-cols-1 sm:grid-cols-2 gap-2">
-          <!-- Populated dynamically from masterUsers -->
-        </div>
-      </div>
 
       <!-- Studio Direct Links -->
       <div class="pt-3 border-t border-stone-100 flex items-center justify-between text-xs text-stone-500">
@@ -1449,6 +1434,7 @@
                 <th class="py-3 px-4">Role Akses</th>
                 <th class="py-3 px-4">Email Login</th>
                 <th class="py-3 px-4">No. WhatsApp</th>
+                <th class="py-3 px-4">Kata Sandi</th>
                 <th class="py-3 px-4">Menu yang Diizinkan</th>
                 <th class="py-3 px-4 text-right">Aksi</th>
               </tr>
@@ -2086,6 +2072,16 @@
         <div>
           <label class="block font-semibold text-stone-700 mb-1">Email Login <span class="text-rose-600">*</span></label>
           <input type="email" id="master-user-email" required placeholder="email@carisa.com" class="w-full px-3.5 py-2.5 rounded-xl border border-stone-300 font-mono" />
+        </div>
+        <div>
+          <label class="block font-semibold text-stone-700 mb-1">Kata Sandi / Password Login <span class="text-rose-600">*</span></label>
+          <div class="relative">
+            <input type="password" id="master-user-password" required placeholder="Masukkan kata sandi akun" class="w-full pl-3.5 pr-10 py-2.5 rounded-xl border border-stone-300 font-mono text-xs focus:outline-none focus:border-terracotta-600" />
+            <button type="button" onclick="toggleMasterUserPasswordVisibility()" title="Tampilkan/Sembunyikan Sandi" class="absolute inset-y-0 right-0 pr-3 flex items-center text-stone-400 hover:text-stone-600 cursor-pointer">
+              <i id="master-user-pass-icon" data-lucide="eye" class="w-4 h-4"></i>
+            </button>
+          </div>
+          <p class="text-[10px] text-stone-400 mt-1">Kata sandi ini digunakan staf untuk masuk ke panel admin.</p>
         </div>
         <div>
           <label class="block font-semibold text-stone-700 mb-1">Nomor WhatsApp</label>
@@ -2799,42 +2795,48 @@
         name: 'Admin Carissa (Official)',
         role: 'Super Admin',
         email: 'admin.carisamakeup@gmail.com',
-        phone: '089643574766'
+        phone: '089643574766',
+        password: 'carissa123'
       },
       {
         id: 'usr_2',
         name: 'Carissa (Lead MUA & Owner)',
         role: 'Lead MUA & Owner',
         email: 'carisa.owner@gmail.com',
-        phone: '083165107695'
+        phone: '083165107695',
+        password: 'carissa123'
       },
       {
         id: 'usr_cs',
         name: 'Admin CS & Booking',
         role: 'Admin Booking & CS',
         email: 'cs.carisa@gmail.com',
-        phone: '081394218860'
+        phone: '081394218860',
+        password: 'carissa123'
       },
       {
         id: 'usr_fitting',
         name: 'Staf Fitting Busana',
         role: 'Akses User (Khusus Fitting)',
         email: 'fitting.carisa@gmail.com',
-        phone: '083165107695'
+        phone: '083165107695',
+        password: 'carissa123'
       },
       {
         id: 'usr_3',
         name: 'Finance & Kasir DP',
         role: 'Finance & DP',
         email: 'keuangan.carisa@gmail.com',
-        phone: '081234567890'
+        phone: '081234567890',
+        password: 'carissa123'
       },
       {
         id: 'usr_crew',
         name: 'Tim WO & Crew Lapangan',
         role: 'Crew & Tim WO',
         email: 'wo.carisa@gmail.com',
-        phone: '085712345678'
+        phone: '085712345678',
+        password: 'carissa123'
       }
     ];
 
@@ -3721,11 +3723,8 @@
     }
 
     function handleQuickRoleSwitch(newRoleName) {
-      if (!currentUserSession) {
-        currentUserSession = { id: 'usr_1', name: 'Admin', role: newRoleName, email: 'admin.carisamakeup@gmail.com' };
-      } else {
-        currentUserSession.role = newRoleName;
-      }
+      if (!currentUserSession) return;
+      currentUserSession.role = newRoleName;
       sessionStorage.setItem(STORAGE_KEY_SESSION, JSON.stringify(currentUserSession));
       localStorage.setItem(STORAGE_KEY_SESSION, JSON.stringify(currentUserSession));
       applyUserRolePermissions(currentUserSession);
@@ -3957,7 +3956,7 @@
     }
 
     function showLoginPasswordHint() {
-      alert("Informasi Kredensial Login Admin:\n\nDefault kata sandi instalasi adalah: carissa123\n\nAnda juga dapat mengklik salah satu tombol 'Akses Cepat Berdasarkan Role' di bawah untuk langsung masuk sesuai role staf.");
+      alert("Informasi Bantuan Login:\n\nJika Anda lupa kata sandi akun atau belum memiliki akun terdaftar, silakan hubungi Super Admin Carissa untuk bantuan akses.");
     }
 
     function showLoginError(msg) {
@@ -3977,41 +3976,9 @@
     }
 
     function renderQuickLoginButtons() {
+      // Akses cepat berdasarkan role ditiadakan sesuai persyaratan keamanan
       const container = document.getElementById('quick-login-roles-list');
-      if (!container) return;
-      container.innerHTML = '';
-
-      const roleIcons = {
-        'Super Admin': 'shield-check',
-        'Lead MUA & Owner': 'crown',
-        'Admin Booking & CS': 'message-circle',
-        'Akses User (Khusus Fitting)': 'scissors',
-        'Finance & DP': 'wallet',
-        'Crew & Tim WO': 'users'
-      };
-
-      masterUsers.forEach(u => {
-        const btn = document.createElement('button');
-        btn.type = 'button';
-        btn.onclick = () => quickFillLogin(u.email);
-        btn.className = 'p-2.5 rounded-xl border border-stone-200 hover:border-terracotta-600 hover:bg-[#FAF8F5] flex items-center justify-between text-left transition group cursor-pointer';
-
-        const iconName = roleIcons[u.role] || 'user';
-        btn.innerHTML = `
-          <div class="flex items-center gap-2.5 min-w-0">
-            <div class="w-7 h-7 rounded-lg bg-stone-100 group-hover:bg-terracotta-100 group-hover:text-terracotta-700 text-stone-600 flex items-center justify-center flex-shrink-0 transition">
-              <i data-lucide="${iconName}" class="w-3.5 h-3.5"></i>
-            </div>
-            <div class="min-w-0">
-              <div class="font-bold text-xs text-stone-900 group-hover:text-terracotta-700 truncate">${u.role}</div>
-              <div class="text-[11px] text-stone-500 truncate">${u.name}</div>
-            </div>
-          </div>
-          <i data-lucide="arrow-right" class="w-3.5 h-3.5 text-stone-300 group-hover:text-terracotta-600 transition flex-shrink-0"></i>
-        `;
-        container.appendChild(btn);
-      });
-      if (window.lucide) window.lucide.createIcons();
+      if (container) container.innerHTML = '';
     }
 
     function checkAdminSession() {
@@ -4023,20 +3990,25 @@
         currentUserSession = null;
         if (appContainer) appContainer.classList.add('hidden');
         if (loginScreen) loginScreen.classList.remove('hidden');
-        renderQuickLoginButtons();
         return false;
       }
 
       try {
         const parsed = JSON.parse(sessionStr);
-        if (parsed && parsed.role) {
-          currentUserSession = parsed;
-          if (loginScreen) loginScreen.classList.add('hidden');
-          if (appContainer) appContainer.classList.remove('hidden');
-          applyUserRolePermissions(currentUserSession);
-          return true;
+        if (parsed && parsed.role && parsed.email) {
+          // Validasi apakah email masih terdaftar di masterUsers
+          const isStillValidUser = masterUsers.some(u => (u.email || '').toLowerCase() === (parsed.email || '').toLowerCase());
+          if (isStillValidUser) {
+            currentUserSession = parsed;
+            if (loginScreen) loginScreen.classList.add('hidden');
+            if (appContainer) appContainer.classList.remove('hidden');
+            applyUserRolePermissions(currentUserSession);
+            return true;
+          } else {
+            throw new Error('Akun pengguna tidak lagi terdaftar');
+          }
         } else {
-          throw new Error('Invalid session');
+          throw new Error('Format sesi tidak valid');
         }
       } catch (e) {
         currentUserSession = null;
@@ -4044,7 +4016,6 @@
         localStorage.removeItem(STORAGE_KEY_SESSION);
         if (appContainer) appContainer.classList.add('hidden');
         if (loginScreen) loginScreen.classList.remove('hidden');
-        renderQuickLoginButtons();
         return false;
       }
     }
@@ -4072,33 +4043,33 @@
         return;
       }
 
-      const studioPass = (studioSettings && studioSettings.admin_password) ? String(studioSettings.admin_password) : 'carissa123';
-      const allowedPasswords = ['carissa123', 'admin123', 'carissa2026', studioPass];
+      // 1. Validasi: Apakah email terdaftar di daftar masterUsers?
+      const matched = masterUsers.find(u => (u.email || '').toLowerCase() === inputEmail);
+      if (!matched) {
+        showLoginError('Email tidak terdaftar dalam sistem. Akses login ditolak.');
+        if (emailInput) emailInput.focus();
+        return;
+      }
 
-      if (!allowedPasswords.includes(inputPass)) {
-        showLoginError('Kata sandi yang Anda masukkan salah. Gunakan default: carissa123');
+      // 2. Validasi: Periksa kecocokan kata sandi akun pengguna
+      const expectedPassword = (matched.password !== undefined && matched.password !== null && String(matched.password).trim() !== '')
+        ? String(matched.password).trim()
+        : ((studioSettings && studioSettings.admin_password) ? String(studioSettings.admin_password).trim() : 'carissa123');
+
+      if (inputPass !== expectedPassword) {
+        showLoginError('Kata sandi yang Anda masukkan salah. Silakan coba lagi.');
         if (passInput) passInput.select();
         return;
       }
 
-      const matched = masterUsers.find(u => (u.email || '').toLowerCase() === inputEmail);
-      if (matched) {
-        currentUserSession = {
-          id: matched.id,
-          name: matched.name,
-          role: matched.role,
-          email: matched.email,
-          phone: matched.phone || ''
-        };
-      } else {
-        currentUserSession = {
-          id: 'usr_' + Date.now(),
-          name: inputEmail.split('@')[0],
-          role: 'Super Admin',
-          email: inputEmail,
-          phone: ''
-        };
-      }
+      // 3. Login berhasil: simpan sesi sesuai role pengguna terdaftar
+      currentUserSession = {
+        id: matched.id,
+        name: matched.name,
+        role: matched.role,
+        email: matched.email,
+        phone: matched.phone || ''
+      };
 
       sessionStorage.setItem(STORAGE_KEY_SESSION, JSON.stringify(currentUserSession));
       if (rememberCheckbox && rememberCheckbox.checked) {
@@ -4121,13 +4092,7 @@
     }
 
     function quickFillLogin(email) {
-      const emailInput = document.getElementById('login-email-input');
-      const passInput = document.getElementById('login-password-input');
-      if (emailInput) emailInput.value = email;
-      const defaultPass = (studioSettings && studioSettings.admin_password) ? studioSettings.admin_password : 'carissa123';
-      if (passInput) passInput.value = defaultPass;
-      hideLoginError();
-      handleAdminEmailLogin({ preventDefault: () => {} });
+      // Deprecated / dinonaktifkan
     }
 
     function handleAdminLogout() {
@@ -4141,7 +4106,8 @@
       if (appContainer) appContainer.classList.add('hidden');
       if (loginScreen) {
         loginScreen.classList.remove('hidden');
-        renderQuickLoginButtons();
+        const emailInput = document.getElementById('login-email-input');
+        if (emailInput) emailInput.value = '';
         const passInput = document.getElementById('login-password-input');
         if (passInput) passInput.value = '';
         hideLoginError();
@@ -9828,6 +9794,9 @@
           </td>
           <td class="py-3 px-4 font-mono text-stone-700">${u.email}</td>
           <td class="py-3 px-4 text-stone-600">${u.phone || '-'}</td>
+          <td class="py-3 px-4 font-mono">
+            <span class="px-2 py-0.5 rounded bg-stone-100 border border-stone-200 text-stone-700 text-[11px] font-medium font-mono">${u.password || 'carissa123'}</span>
+          </td>
           <td class="py-3 px-4 text-stone-500 max-w-xs truncate" title="${allowed}">${allowed || '-'}</td>
           <td class="py-3 px-4 text-right whitespace-nowrap">
             <button type="button" onclick="toggleActionDropdown(event, 'user', '${u.id}')" data-action-dropdown-trigger="user:${u.id}" class="btn-action-trigger">
@@ -9860,6 +9829,7 @@
       document.getElementById('master-user-modal-title').textContent = 'Tambah Akun User';
       document.getElementById('master-user-name').value = '';
       document.getElementById('master-user-email').value = '';
+      document.getElementById('master-user-password').value = '';
       document.getElementById('master-user-phone').value = '';
       document.getElementById('master-user-modal').classList.remove('hidden');
     }
@@ -9873,8 +9843,23 @@
       document.getElementById('master-user-name').value = u.name;
       document.getElementById('master-user-role').value = u.role;
       document.getElementById('master-user-email').value = u.email;
+      document.getElementById('master-user-password').value = u.password || 'carissa123';
       document.getElementById('master-user-phone').value = u.phone || '';
       document.getElementById('master-user-modal').classList.remove('hidden');
+    }
+
+    function toggleMasterUserPasswordVisibility() {
+      const input = document.getElementById('master-user-password');
+      const icon = document.getElementById('master-user-pass-icon');
+      if (!input) return;
+      if (input.type === 'password') {
+        input.type = 'text';
+        if (icon) icon.setAttribute('data-lucide', 'eye-off');
+      } else {
+        input.type = 'password';
+        if (icon) icon.setAttribute('data-lucide', 'eye');
+      }
+      if (window.lucide) window.lucide.createIcons();
     }
 
     function closeMasterUserModal() {
@@ -9887,12 +9872,13 @@
       const name = document.getElementById('master-user-name').value.trim();
       const role = document.getElementById('master-user-role').value;
       const email = document.getElementById('master-user-email').value.trim();
+      const password = document.getElementById('master-user-password').value.trim() || 'carissa123';
       const phone = document.getElementById('master-user-phone').value.trim();
 
       if (id) {
         const idx = masterUsers.findIndex(x => x.id === id);
         if (idx !== -1) {
-          masterUsers[idx] = { ...masterUsers[idx], name, role, email, phone };
+          masterUsers[idx] = { ...masterUsers[idx], name, role, email, password, phone };
           fetch('/api/users/' + encodeURIComponent(id), {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
@@ -9900,7 +9886,7 @@
           }).catch(() => {});
         }
       } else {
-        const newUser = { id: 'usr_' + Date.now(), name, role, email, phone };
+        const newUser = { id: 'usr_' + Date.now(), name, role, email, password, phone };
         masterUsers.push(newUser);
         fetch('/api/users', {
           method: 'POST',
